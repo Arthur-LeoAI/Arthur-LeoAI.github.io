@@ -135,8 +135,9 @@ function Header() {
           JL<span>JIAMING LI</span>
         </a>
         <nav aria-label="Main navigation">
-          <a href="/#work">Work</a>
           <a href="/#about">About</a>
+          <a href="/#experience">Experience</a>
+          <a href="/#work">Work</a>
           <a href="/#contact">
             Contact <ArrowUpRight size={14} />
           </a>
@@ -259,7 +260,7 @@ function Experience() {
   return (
     <section className="experience section" id="experience">
       <div className="section-heading">
-        <span className="micro">03 / EXPERIENCE</span>
+        <span className="micro">02 / EXPERIENCE</span>
         <h2>
           Grounded in
           <br />
@@ -348,7 +349,7 @@ function Work() {
   return (
     <section className="work section" id="work">
       <div className="section-heading">
-        <span className="micro">02 / SELECTED WORK</span>
+        <span className="micro">03 / SELECTED WORK</span>
         <h2>
           Different problems.
           <br />
@@ -452,8 +453,8 @@ function Sidebar() {
       </p>
       <nav aria-label="Archive navigation">
         <a href="/#about">01 — About me</a>
-        <a href="/#work">02 — Selected work</a>
-        <a href="/#experience">03 — Experience</a>
+        <a href="/#experience">02 — Experience</a>
+        <a href="/#work">03 — Selected work</a>
         <a href="/#contact">04 — Get in touch</a>
       </nav>
       <div className="sidebar-bottom">
@@ -575,8 +576,8 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
         ) : (
           <>
             <About />
-            <Work />
             <Experience />
+            <Work />
           </>
         )}
         <Footer />
