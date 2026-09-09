@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, useState } from 'react';
 // Static exports use native document navigation and pre-sized local images.
 /* oxlint-disable next/no-html-link-for-pages, next/no-img-element */
 import {
@@ -180,14 +180,13 @@ function Footer() {
 }
 function About() {
   return (
-    <section className="about-section section" id="about">
-      <div className="section-heading">
-        <span className="micro">03 / THE PERSON BEHIND THE WORK</span>
-        <h2>
-          Curiosity, with
-          <br />
-          <em>a practical side.</em>
-        </h2>
+    <section className="about-section section profile-first" id="about">
+      <div className="profile-heading">
+        <span className="micro accent">01 / MEET JIAMING</span>
+        <h1>
+          Jiaming Li<span className="accent">.</span>
+        </h1>
+        <p className="profile-role">Data Analyst / Business Data Analyst</p>
       </div>
       <div className="about-grid">
         <div className="portrait-wrap">
@@ -196,11 +195,23 @@ function About() {
             alt="Jiaming Li"
             width="540"
             height="680"
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
           />
           <span className="portrait-label">JIAMING LI</span>
         </div>
         <div className="about-copy">
+          <div className="profile-actions">
+            <a className="primary-button" href="#work">
+              Explore my work <ArrowDown size={18} />
+            </a>
+            <a className="text-link" href={`mailto:${profile.email}`}>
+              Contact me <ArrowUpRight size={18} />
+            </a>
+            <a className="text-link" href="/jiaming-li-resume.pdf" download>
+              Résumé ↓
+            </a>
+          </div>
           <p className="large-copy">
             I like understanding why things work the way they do. Then finding a
             way to make them work better.
@@ -248,7 +259,7 @@ function Experience() {
   return (
     <section className="experience section" id="experience">
       <div className="section-heading">
-        <span className="micro">02 / EXPERIENCE</span>
+        <span className="micro">03 / EXPERIENCE</span>
         <h2>
           Grounded in
           <br />
@@ -337,7 +348,7 @@ function Work() {
   return (
     <section className="work section" id="work">
       <div className="section-heading">
-        <span className="micro">01 / SELECTED WORK</span>
+        <span className="micro">02 / SELECTED WORK</span>
         <h2>
           Different problems.
           <br />
@@ -429,94 +440,6 @@ function Work() {
     </section>
   );
 }
-function Hero() {
-  return (
-    <section className="hero">
-      <div className="hero-meta micro">
-        <span>
-          <i /> AVAILABLE FOR OPPORTUNITIES
-        </span>
-        <span>DATA · BUSINESS · PRODUCT</span>
-      </div>
-      <div className="hero-main">
-        <div>
-          <p className="hero-intro">Jiaming Li / Data Analyst</p>
-          <h1>
-            From complexity
-            <br />
-            to{' '}
-            <em>
-              clarity<span className="accent">.</span>
-            </em>
-          </h1>
-          <p className="hero-description">
-            I turn data, questions and business context
-            <br className="desktop-break" /> into practical tools for better
-            decisions.
-          </p>
-          <div className="hero-actions">
-            <a className="primary-button" href="#work">
-              Explore my work <ArrowDown size={18} />
-            </a>
-            <a className="text-link" href={`mailto:${profile.email}`}>
-              Let’s talk <ArrowUpRight size={18} />
-            </a>
-          </div>
-        </div>
-        <div className="hero-chart" aria-hidden="true">
-          <svg viewBox="0 0 440 400">
-            <defs>
-              <linearGradient id="line" x1="0" y1="1" x2="1" y2="0">
-                <stop stopColor="#2367ff" />
-                <stop offset="1" stopColor="#83f5d1" />
-              </linearGradient>
-            </defs>
-            {[70, 130, 190, 250, 310].map((y) => (
-              <path key={y} d={`M25 ${y}H420`} className="gridline" />
-            ))}
-            {[70, 140, 210, 280, 350, 420].map((x) => (
-              <path key={x} d={`M${x} 25V350`} className="gridline" />
-            ))}
-            {[0, 1, 2, 3, 4, 5, 6].map((n) => (
-              <path
-                key={n}
-                className="data-line"
-                style={{ '--delay': `${n * 0.15}s` } as CSSProperties}
-                d={`M25 ${310 - n * 17} C100 ${290 - n * 20} 110 ${340 - n * 10} 175 ${240 - n * 13} S280 ${270 - n * 17} 330 ${145 - n * 12} S380 ${100 - n * 7} 420 ${48 + n * 6}`}
-              />
-            ))}
-            <circle cx="330" cy="145" r="6" fill="#86f5d6" />
-            <text x="25" y="380">
-              OBSERVE
-            </text>
-            <text x="180" y="380">
-              QUESTION
-            </text>
-            <text x="350" y="380">
-              BUILD
-            </text>
-          </svg>
-          <span className="chart-note">A PRACTICE OF FINDING SIGNAL</span>
-        </div>
-      </div>
-      <div className="hero-bottom">
-        <span>
-          Mathematical thinking.
-          <br />
-          Business perspective. Product craft.
-        </span>
-        <span>
-          BASED IN CHINA
-          <br />
-          OPEN TO INTERNATIONAL RELOCATION
-        </span>
-        <a href="#work" aria-label="Scroll to selected work">
-          <ArrowDown size={24} />
-        </a>
-      </div>
-    </section>
-  );
-}
 function Sidebar() {
   return (
     <aside className="archive-sidebar">
@@ -528,9 +451,9 @@ function Sidebar() {
         <br />& practical tool builder.
       </p>
       <nav aria-label="Archive navigation">
-        <a href="/#work">01 — Selected work</a>
-        <a href="/#experience">02 — Experience</a>
-        <a href="/#about">03 — About me</a>
+        <a href="/#about">01 — About me</a>
+        <a href="/#work">02 — Selected work</a>
+        <a href="/#experience">03 — Experience</a>
         <a href="/#contact">04 — Get in touch</a>
       </nav>
       <div className="sidebar-bottom">
@@ -651,10 +574,9 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
           </>
         ) : (
           <>
-            <Hero />
+            <About />
             <Work />
             <Experience />
-            <About />
           </>
         )}
         <Footer />
