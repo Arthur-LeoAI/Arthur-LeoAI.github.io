@@ -3,7 +3,7 @@ export const profile = {
   email: 'arthur.jiaming.li@gmail.com',
   github: 'https://github.com/Arthur-LeoAI',
   linkedin: 'https://www.linkedin.com/in/arthurjiamingli',
-  story: 'https://jiaming-li-portfolio.alive-teal-4784.chatgpt.site',
+  story: 'https://jiaming-li-portfolio.arthurli2025.chatgpt.site',
   archive: 'https://arthur-leoai.github.io',
 };
 export const projects = [
