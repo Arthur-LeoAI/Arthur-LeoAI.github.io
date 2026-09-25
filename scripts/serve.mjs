@@ -26,6 +26,9 @@ http
       '.css': 'text/css',
       '.svg': 'image/svg+xml',
       '.jpg': 'image/jpeg',
+      '.webp': 'image/webp',
+      '.png': 'image/png',
+      '.mp4': 'video/mp4',
       '.pdf': 'application/pdf',
       '.rsc': 'text/x-component',
     };

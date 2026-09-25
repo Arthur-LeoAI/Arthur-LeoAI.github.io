@@ -429,6 +429,34 @@ a:hover {
   border-color: #708bb5;
   color: var(--ink);
 }
+.project-image {
+  margin: 0;
+}
+.project-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #e8edf3;
+}
+.project-image figcaption {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 14px 0 0;
+}
+.project-image.compact {
+  margin: 0 20px;
+}
+.project-image.compact img {
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top center;
+  border: 1px solid var(--line);
+}
+.project-image.compact figcaption {
+  min-height: 66px;
+  padding: 13px 5px 0;
+}
 .card-top {
   display: flex;
   justify-content: space-between;
@@ -712,22 +740,40 @@ footer h2 span {
   color: var(--ink);
 }
 .case-body {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8%;
+  display: block;
   padding-top: 40px;
 }
-.case-visual {
-  position: sticky;
-  top: 40px;
-  height: max-content;
+.case-intro,
+.case-result {
+  max-width: 760px;
 }
-.case-visual .diagram {
+.interface-walkthrough {
+  margin: 90px 0;
+}
+.gallery-heading {
+  max-width: 680px;
+  margin-bottom: 35px;
+}
+.gallery-heading h2 {
+  font-size: 32px;
+  margin: 10px 0 12px;
+}
+.gallery-heading p {
   margin: 0;
-  min-height: 380px;
+  color: var(--muted);
 }
-.case-visual .diagram-nodes {
-  padding: 80px 0;
+.project-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 30px;
+  align-items: start;
+}
+.project-gallery > .project-image:first-child {
+  grid-column: 1 / -1;
+}
+.project-gallery .project-image img {
+  border: 1px solid var(--line);
+  border-radius: 3px;
 }
 .case-narrative h2 {
   font-size: 32px;
@@ -1001,12 +1047,7 @@ details[open] summary svg {
   border-radius: 120px 120px 4px 4px;
 }
 .archive .case-body {
-  grid-template-columns: 1fr;
-  gap: 50px;
-}
-.archive .case-visual {
-  position: static;
-  max-width: 600px;
+  display: block;
 }
 .archive .case-narrative {
   max-width: 680px;
@@ -1187,17 +1228,7 @@ details[open] summary svg {
     gap: 18px;
   }
   .case-body {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .case-visual {
-    position: static;
-  }
-  .case-visual .diagram-nodes {
-    padding: 30px 0;
-  }
-  .case-visual .diagram {
-    min-height: 300px;
+    display: block;
   }
   .archive-sidebar {
     position: static;
@@ -1252,6 +1283,9 @@ details[open] summary svg {
   .site-header {
     padding: 0 6%;
     gap: 20px;
+  }
+  .site-header nav a:nth-child(4) {
+    display: none;
   }
   .site-header nav {
     gap: 16px;
@@ -1330,6 +1364,22 @@ details[open] summary svg {
   }
   .card-copy p {
     min-height: 0;
+  }
+  .project-image.compact {
+    margin: 0 12px;
+  }
+  .project-image.compact figcaption {
+    min-height: 0;
+  }
+  .interface-walkthrough {
+    margin: 60px 0;
+  }
+  .project-gallery {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+  .project-gallery > .project-image:first-child {
+    grid-column: auto;
   }
   .experience-row {
     grid-template-columns: 1fr;

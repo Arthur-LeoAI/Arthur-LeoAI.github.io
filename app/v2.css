@@ -1,0 +1,354 @@
+/* Shared cinematic layer; content remains readable without motion or video. */
+footer h2 { overflow-wrap:anywhere; }
+.contact-email { max-width:100%; overflow-wrap:anywhere; display:inline-block; }
+.contact-email svg { display:inline-block; margin-left:12px; vertical-align:middle; }
+.site-header {
+  height: auto;
+  min-height: 92px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.site-header nav {
+  flex-wrap: wrap;
+}
+.archive-sidebar nav {
+  flex-wrap: wrap;
+}
+.case-demo {
+  max-width: 720px;
+  margin: 60px auto 0;
+}
+.profile-first.section,
+.archive .profile-first.section {
+  padding: 0;
+}
+.profile-landscape {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 64px 6% 100px;
+  color: #fff;
+  background: #15242c;
+  min-height: 720px;
+}
+.nature-background {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.nature-background img,
+.nature-background video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+.nature-background:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 17, 25, 0.83),
+      rgba(5, 17, 25, 0.48) 55%,
+      rgba(5, 17, 25, 0.33)
+    ),
+    linear-gradient(0deg, rgba(5, 17, 25, 0.65), transparent 60%);
+}
+.profile-landscape .profile-heading {
+  max-width: 1000px;
+  position: relative;
+}
+.profile-landscape .profile-heading h1 {
+  font-size: clamp(52px, 7.4vw, 110px);
+  margin: 20px 0;
+  animation: rise 0.6s both;
+}
+.profile-landscape .profile-role {
+  color: #fff;
+  font-size: 21px;
+  animation: rise 0.6s 0.1s both;
+}
+.profile-landscape .accent {
+  color: #99d6ff;
+}
+.profile-landscape p {
+  color: #e0e9ef;
+}
+.profile-landscape .about-grid {
+  grid-template-columns: 170px minmax(0, 690px);
+  gap: 40px;
+  margin-top: 40px;
+}
+.profile-landscape .portrait-wrap img {
+  aspect-ratio: 4/5;
+  object-fit: cover;
+  border: 1px solid #ffffff45;
+  border-radius: 8px;
+}
+.profile-landscape .portrait-label {
+  color: #d2e5ed;
+}
+.profile-landscape .large-copy {
+  font-size: clamp(22px, 2.1vw, 29px);
+  line-height: 1.45;
+  color: white;
+}
+.profile-landscape .about-copy {
+  animation: rise 0.6s 0.25s both;
+}
+.profile-landscape .text-link {
+  color: #fff;
+}
+.profile-landscape .primary-button {
+  background: #d6efff;
+  color: #102434;
+}
+.landscape-controls {
+  position: absolute;
+  bottom: 22px;
+  left: 6%;
+  right: 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: #e2eaf0;
+}
+.landscape-controls button {
+  background: #071a27c9;
+  color: #fff;
+  border: 1px solid #ffffff70;
+  padding: 10px 15px;
+  border-radius: 24px;
+  font: inherit;
+  cursor: pointer;
+  min-height: 40px;
+}
+.profile-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding: 42px 6%;
+  background: linear-gradient(125deg, var(--bg), var(--panel));
+}
+.profile-details .education {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.profile-details .skills {
+  align-content: center;
+}
+.archive .profile-landscape {
+  min-height: 580px;
+  padding-top: 38px;
+}
+.archive .profile-landscape .profile-heading h1 {
+  font-size: clamp(48px, 6vw, 80px);
+}
+.archive .profile-landscape .about-grid {
+  grid-template-columns: 125px minmax(0, 1fr);
+  gap: 28px;
+  margin-top: 24px;
+}
+.archive .profile-landscape .large-copy {
+  font-size: 23px;
+}
+.experience-detail ul {
+  margin: 16px 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+.experience-detail li {
+  padding: 4px 0;
+}
+.story .experience-row {
+  position: relative;
+  padding-left: 32px;
+  border-left: 1px solid var(--line);
+}
+.story .experience-row:before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 42px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 6px var(--bg);
+}
+nav a[aria-current='location'] {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 7px;
+}
+.image-open {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  padding: 0;
+  cursor: zoom-in;
+}
+.image-open img,
+.project-card img {
+  transition: transform 0.45s ease;
+}
+.image-open:hover img,
+.project-card:hover img {
+  transform: scale(1.025);
+}
+.image-hint {
+  display: block;
+  font-size: 13px;
+  color: var(--accent);
+  margin-top: 8px;
+}
+.image-dialog[data-slot] {
+  width: min(1150px, 94vw);
+  max-width: 94vw;
+  max-height: 92dvh;
+  overflow: auto;
+  padding: 24px;
+  background: #f4f7fa;
+  color: #122332;
+}
+.image-dialog > img {
+  width: 100%;
+  height: auto;
+  max-height: 66dvh;
+  object-fit: contain;
+  background: #e5e9ed;
+}
+.image-dialog [data-slot='dialog-description'] {
+  color: #405266;
+  font-size: 15px;
+}
+.gallery-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.gallery-controls button {
+  padding: 10px 18px;
+  border: 1px solid #879bac;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.credential-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.credential-card {
+  border: 1px solid var(--line);
+  padding: 24px;
+  border-radius: 12px;
+}
+:focus-visible {
+  outline: 3px solid #55b9ff;
+  outline-offset: 5px;
+}
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+}
+@media (max-width: 800px) {
+  .experience-row .experience-detail {
+    grid-column: 2;
+  }
+  .profile-landscape,
+  .archive .profile-landscape {
+    min-height: 0;
+    padding: 35px 6% 105px;
+  }
+  .profile-landscape .about-grid,
+  .archive .profile-landscape .about-grid {
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 24px;
+  }
+  .profile-details {
+    gap: 30px;
+  }
+  .site-header nav {
+    gap: 14px;
+  }
+}
+@media (max-width: 520px) {
+  .experience-row .experience-detail,
+  .archive .experience-row .experience-detail {
+    grid-column: 1 / -1;
+  }
+  .profile-landscape .profile-heading h1,
+  .archive .profile-landscape .profile-heading h1 {
+    font-size: 52px;
+  }
+  .profile-landscape .profile-role {
+    font-size: 16px;
+  }
+  .profile-landscape .about-grid,
+  .archive .profile-landscape .about-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .profile-landscape .portrait-wrap {
+    width: 88px;
+  }
+  .profile-landscape .portrait-wrap img {
+    aspect-ratio: 1;
+    object-position: 50% 25%;
+  }
+  .profile-landscape .large-copy,
+  .archive .profile-landscape .large-copy {
+    font-size: 21px;
+  }
+  .profile-landscape .about-copy > p:not(.large-copy) {
+    font-size: 15px;
+  }
+  .landscape-controls {
+    bottom: 18px;
+  }
+  .profile-details,
+  .credential-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .site-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .site-header nav {
+    gap: 12px;
+  }
+  .site-header nav a {
+    font-size: 13px;
+  }
+  .image-dialog[data-slot] {
+    padding: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

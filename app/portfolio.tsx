@@ -11,7 +11,15 @@ import {
   Check,
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
-import { profile, projects, experience } from '@/lib/content';
+import NatureBackground from './nature-background';
+import './v2.css';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { profile, projects, experience, certificates } from '@/lib/content';
 
 const archive = process.env.NEXT_PUBLIC_EDITION === 'archive';
 const options = [
@@ -94,34 +102,132 @@ export function DecisionLab() {
     </div>
   );
 }
-function Diagram({ project }: { project: (typeof projects)[number] }) {
+type ProjectImageData = (typeof projects)[number]['featuredImage'];
+function Gallery({ images }: { images: ProjectImageData[] }) {
+  const [selected, setSelected] = useState<number | null>(null);
+  const trigger = useRef<HTMLButtonElement | null>(null);
+  const step = (direction: number) =>
+    setSelected((current) =>
+      current === null
+        ? null
+        : (current + direction + images.length) % images.length,
+    );
   return (
-    <div
-      className={`diagram diagram-${project.id}`}
-      aria-label={`${project.title} system diagram`}
-    >
-      <div className="diagram-caption micro">
-        {project.id === 'mcda' ? 'MODEL STRUCTURE' : 'SYSTEM OVERVIEW'}{' '}
-        <span>↗</span>
-      </div>
-      <div className="diagram-nodes">
-        {project.steps.map((step, i) => (
-          <div className="node-wrap" key={step}>
-            <div className="diagram-node">
-              <span className="node-num">0{i + 1}</span>
-              <strong>{step}</strong>
-              <span className="node-detail">
-                {project.stack[i] || 'Workflow'}
-              </span>
-            </div>
-            {i < 2 && <span className="connector">↓</span>}
+    <>
+      <div className="project-gallery">
+        {images.map((image, index) => (
+          <div key={image.src}>
+            <button
+              className="image-open"
+              aria-label={`Enlarge screenshot ${index + 1}: ${image.alt}`}
+              onClick={(event) => {
+                trigger.current = event.currentTarget;
+                setSelected(index);
+              }}
+            >
+              <ProjectImage image={image} />
+              <span className="image-hint">View full size ↗</span>
+            </button>
           </div>
         ))}
       </div>
-      <span className="diagram-foot">
-        Simplified workflow · not a product screenshot
-      </span>
-    </div>
+      <Dialog
+        open={selected !== null}
+        onOpenChange={(open) => {
+          if (!open) setSelected(null);
+        }}
+      >
+        <DialogContent
+          className="image-dialog"
+          finalFocus={trigger}
+          onKeyDown={(event) => {
+            if (event.key === 'ArrowRight') {
+              event.preventDefault();
+              step(1);
+            }
+            if (event.key === 'ArrowLeft') {
+              event.preventDefault();
+              step(-1);
+            }
+          }}
+        >
+          <DialogTitle>
+            Interface walkthrough · {(selected ?? 0) + 1} / {images.length}
+          </DialogTitle>
+          {selected !== null && (
+            <>
+              <img
+                src={images[selected].src}
+                alt={images[selected].alt}
+                width={images[selected].width}
+                height={images[selected].height}
+              />
+              <DialogDescription>{images[selected].caption}</DialogDescription>
+            </>
+          )}
+          <div className="gallery-controls">
+            <button onClick={() => step(-1)}>← Previous</button>
+            <button onClick={() => step(1)}>Next →</button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+function Credentials() {
+  if (!certificates.length) return null;
+  const cards = (items: typeof certificates) =>
+    items.map((item) => (
+      <article className="credential-card" key={item.name}>
+        <span className="micro">
+          {item.issuer} · {item.date}
+        </span>
+        <h3>{item.name}</h3>
+        {item.url && (
+          <a href={item.url} target="_blank" rel="noreferrer">
+            Verify credential ↗
+          </a>
+        )}
+      </article>
+    ));
+  return (
+    <section className="section credentials" id="credentials">
+      <div className="section-heading">
+        <span className="micro">04 / CONTINUED LEARNING</span>
+        <h2>Learning, applied.</h2>
+      </div>
+      <div className="credential-grid">{cards(certificates.slice(0, 4))}</div>
+      {certificates.length > 4 && (
+        <details>
+          <summary>More credentials</summary>
+          {cards(certificates.slice(4))}
+        </details>
+      )}
+    </section>
+  );
+}
+function ProjectImage({
+  image,
+  eager = false,
+  compact = false,
+}: {
+  image: ProjectImageData;
+  eager?: boolean;
+  compact?: boolean;
+}) {
+  return (
+    <figure className={compact ? 'project-image compact' : 'project-image'}>
+      <img
+        src={image.src}
+        alt={image.alt}
+        width={image.width}
+        height={image.height}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchPriority={eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+      <figcaption>{image.caption}</figcaption>
+    </figure>
   );
 }
 function Header() {
@@ -182,75 +288,78 @@ function Footer() {
 function About() {
   return (
     <section className="about-section section profile-first" id="about">
-      <div className="profile-heading">
-        <span className="micro accent">01 / MEET JIAMING</span>
-        <h1>
-          Jiaming Li<span className="accent">.</span>
-        </h1>
-        <p className="profile-role">Data Analyst / Business Data Analyst</p>
-      </div>
-      <div className="about-grid">
-        <div className="portrait-wrap">
-          <img
-            src="/portrait.jpg"
-            alt="Jiaming Li"
-            width="540"
-            height="680"
-            loading="eager"
-            fetchPriority="high"
-          />
-          <span className="portrait-label">JIAMING LI</span>
+      <div className="profile-landscape">
+        <NatureBackground />
+        <div className="profile-heading">
+          <span className="micro accent">01 / MEET JIAMING</span>
+          <h1>
+            Jiaming Li<span className="accent">.</span>
+          </h1>
+          <p className="profile-role">Data Analyst / Business Data Analyst</p>
         </div>
-        <div className="about-copy">
-          <div className="profile-actions">
-            <a className="primary-button" href="#work">
-              Explore my work <ArrowDown size={18} />
-            </a>
-            <a className="text-link" href={`mailto:${profile.email}`}>
-              Contact me <ArrowUpRight size={18} />
-            </a>
-            <a className="text-link" href="/jiaming-li-resume.pdf" download>
-              Résumé ↓
-            </a>
+        <div className="about-grid">
+          <div className="portrait-wrap">
+            <img
+              src="/portrait.jpg"
+              alt="Jiaming Li"
+              width="540"
+              height="680"
+              loading="eager"
+              fetchPriority="high"
+            />
+            <span className="portrait-label">JIAMING LI</span>
           </div>
-          <p className="large-copy">
-            I like understanding why things work the way they do. Then finding a
-            way to make them work better.
-          </p>
-          <p>
-            My background brings together applied mathematics, interactive media
-            and European e-commerce. I connect analytical thinking with useful,
-            tangible tools.
-          </p>
-          <p>
-            Having studied in Ireland, I value collaborative, international
-            environments. I’m based in China and open to relocation, with
-            Ireland as my preferred destination. Employer sponsorship would be
-            required.
-          </p>
-          <div className="education">
-            <span className="micro">EDUCATION</span>
-            <strong>MSc Computer Science (Interactive Media)</strong>
-            <span>University College Cork · 2024–2026</span>
-            <strong>BSc Applied Mathematics</strong>
-            <span>
-              Taiyuan University of Science and Technology · 2020–2024
-            </span>
+          <div className="about-copy">
+            <div className="profile-actions">
+              <a className="primary-button" href="#work">
+                Explore my work <ArrowDown size={18} />
+              </a>
+              <a className="text-link" href={`mailto:${profile.email}`}>
+                Contact me <ArrowUpRight size={18} />
+              </a>
+              <a className="text-link" href="/jiaming-li-resume.pdf" download>
+                Résumé ↓
+              </a>
+            </div>
+            <p className="large-copy">
+              I like understanding why things work the way they do. Then finding
+              a way to make them work better.
+            </p>
+            <p>
+              My background brings together applied mathematics, interactive
+              media and European e-commerce. I connect analytical thinking with
+              useful, tangible tools.
+            </p>
+            <p>
+              Having studied in Ireland, I value collaborative, international
+              environments. I’m based in China and open to relocation, with
+              Ireland as my preferred destination. Employer sponsorship would be
+              required.
+            </p>
           </div>
-          <div className="skills">
-            {[
-              'Python',
-              'SQL',
-              'Excel',
-              'Power BI',
-              'Tableau',
-              'JavaScript',
-              'Data visualisation',
-              'Business analysis',
-            ].map((x) => (
-              <span key={x}>{x}</span>
-            ))}
-          </div>
+        </div>
+      </div>
+      <div className="profile-details">
+        <div className="education">
+          <span className="micro">EDUCATION</span>
+          <strong>MSc Computer Science (Interactive Media)</strong>
+          <span>University College Cork · 2024–2026</span>
+          <strong>BSc Applied Mathematics</strong>
+          <span>Taiyuan University of Science and Technology · 2020–2024</span>
+        </div>
+        <div className="skills">
+          {[
+            'Python',
+            'SQL',
+            'Excel',
+            'Power BI',
+            'Tableau',
+            'JavaScript',
+            'Data visualisation',
+            'Business analysis',
+          ].map((x) => (
+            <span key={x}>{x}</span>
+          ))}
         </div>
       </div>
     </section>
@@ -274,7 +383,19 @@ function Experience() {
             <h3>{x.role}</h3>
             <span>{x.company}</span>
           </div>
-          <p>{x.text}</p>
+          <div className="experience-detail">
+            <p>{x.text}</p>
+            <ul>
+              {x.highlights.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            {x.project && (
+              <a className="text-link" href={`/work/${x.project}/`}>
+                Explore the related project ↗
+              </a>
+            )}
+          </div>
         </article>
       ))}
     </section>
@@ -307,7 +428,7 @@ function ProjectCard({ p }: { p: (typeof projects)[number] }) {
         </span>
         <ArrowUpRight />
       </div>
-      <Diagram project={p} />
+      <ProjectImage image={p.featuredImage} compact />
       <div className="card-copy">
         <span className="micro">{p.context}</span>
         <h3>{p.title}</h3>
@@ -487,7 +608,31 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
         el.classList.add('reveal');
         observer.observe(el);
       });
-    return () => observer.disconnect();
+    const sections = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        'main > section[id], main > footer[id]',
+      ),
+    );
+    const updateNavigation = () => {
+      const active =
+        [...sections]
+          .reverse()
+          .find(
+            (section) =>
+              section.getBoundingClientRect().top <= innerHeight * 0.4,
+          ) ?? sections[0];
+      document.querySelectorAll('nav a[href^="/#"]').forEach((link) => {
+        if (link.getAttribute('href') === `/#${active?.id}`)
+          link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    };
+    updateNavigation();
+    window.addEventListener('scroll', updateNavigation, { passive: true });
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', updateNavigation);
+    };
   }, []);
   return (
     <div id="top" className={archive ? 'edition archive' : 'edition story'}>
@@ -525,10 +670,7 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
               </div>
             </section>
             <section className="case-body section">
-              <div className="case-visual">
-                {p.id === 'mcda' ? <DecisionLab /> : <Diagram project={p} />}
-              </div>
-              <div className="case-narrative">
+              <div className="case-narrative case-intro">
                 <h2>The question</h2>
                 <p className="large-copy">{p.problem}</p>
                 <h3>My contribution</h3>
@@ -543,6 +685,28 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
                     </span>
                   ))}
                 </div>
+              </div>
+              <section
+                className="interface-walkthrough"
+                aria-labelledby="interface-heading"
+              >
+                <div className="gallery-heading">
+                  <span className="micro accent">WORKING INTERFACES</span>
+                  <h2 id="interface-heading">Interface walkthrough</h2>
+                  <p>
+                    Screens captured from the running project. Each note
+                    explains what the view shows and what I contributed.
+                  </p>
+                </div>
+                <Gallery images={[p.featuredImage, ...p.gallery]} />
+                {p.id === 'mcda' && (
+                  <div className="case-demo">
+                    <h3>Explore a synthetic scenario</h3>
+                    <DecisionLab />
+                  </div>
+                )}
+              </section>
+              <div className="case-narrative case-result">
                 <h3>What exists today</h3>
                 <p>{p.outcome}</p>
                 <details>
@@ -578,6 +742,7 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
             <About />
             <Experience />
             <Work />
+            <Credentials />
           </>
         )}
         <Footer />
