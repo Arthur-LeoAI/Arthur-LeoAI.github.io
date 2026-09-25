@@ -325,21 +325,16 @@ function About() {
               I like understanding why things work the way they do. Then finding
               a way to make them work better.
             </p>
-            <p>
-              My background brings together applied mathematics, interactive
-              media and European e-commerce. I connect analytical thinking with
-              useful, tangible tools.
-            </p>
-            <p>
-              Having studied in Ireland, I value collaborative, international
-              environments. I’m based in China and open to relocation, with
-              Ireland as my preferred destination. Employer sponsorship would be
-              required.
-            </p>
           </div>
         </div>
+        <a className="scroll-discover" href="#background">Scroll to discover <ArrowDown size={18} /></a>
       </div>
-      <div className="profile-details">
+      <div className="profile-details" id="background">
+        <div className="profile-biography">
+          <span className="micro">BACKGROUND & PERSPECTIVE</span>
+          <p>My background brings together applied mathematics, interactive media and European e-commerce. I connect analytical thinking with useful, tangible tools.</p>
+          <p>Having studied in Ireland, I value collaborative, international environments. I’m based in China and open to relocation, with Ireland as my preferred destination. Employer sponsorship would be required.</p>
+        </div>
         <div className="education">
           <span className="micro">EDUCATION</span>
           <strong>MSc Computer Science (Interactive Media)</strong>
@@ -603,7 +598,7 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
       { threshold: 0.08 },
     );
     document
-      .querySelectorAll('.section-heading,.experience-row,.story-step')
+      .querySelectorAll('.section-heading,.experience-row,.story-step,.profile-details > div,.project-grid > div')
       .forEach((el) => {
         el.classList.add('reveal');
         observer.observe(el);
@@ -614,6 +609,8 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
       ),
     );
     const updateNavigation = () => {
+      const landscape = document.querySelector('.profile-landscape');
+      document.querySelector('.edition')?.classList.toggle('hero-passed', !!landscape && landscape.getBoundingClientRect().bottom <= 0);
       const active =
         [...sections]
           .reverse()
@@ -635,7 +632,7 @@ export default function Portfolio({ projectId }: { projectId?: string }) {
     };
   }, []);
   return (
-    <div id="top" className={archive ? 'edition archive' : 'edition story'}>
+    <div id="top" className={`edition ${archive ? 'archive' : 'story'} ${p ? 'case-page' : 'home-page'}`}>
       {archive ? (
         <>
           <a className="skip" href="#main">

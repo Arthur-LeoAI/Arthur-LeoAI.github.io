@@ -339,6 +339,48 @@ nav a[aria-current='location'] {
     padding: 18px;
   }
 }
+/* Full-viewport arrival, followed by ordinary document scrolling. */
+.home-page .profile-landscape {
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:120px 6% 110px;
+}
+.home-page.story > .site-header {
+  position:absolute;
+  inset:0 0 auto;
+  z-index:5;
+  background:transparent;
+  border-color:#ffffff22;
+  color:#fff;
+}
+.home-page.archive > main { margin-left:0; }
+.home-page.archive .profile-landscape { min-height:100svh; padding-top:70px; }
+.home-page.archive > .archive-sidebar { visibility:hidden; opacity:0; z-index:10; transition:opacity .4s ease,visibility .4s; }
+.home-page.archive.hero-passed > .archive-sidebar { visibility:visible; opacity:1; }
+.home-page.archive main > :not(#about),.home-page.archive .profile-details { margin-left:240px; }
+.profile-biography { grid-column:1 / -1; max-width:850px; }
+.profile-biography p:first-of-type { margin-top:20px; font-size:22px; }
+.scroll-discover { display:inline-flex; align-items:center; align-self:flex-start; gap:14px; margin-top:32px; color:#fff; font-size:14px; }
+.scroll-discover svg { animation:discover-cue 2.5s ease-in-out 2; }
+@keyframes discover-cue { 50% { transform:translateY(5px); } }
+@media(max-width:1100px) and (min-width:801px) {
+ .home-page.archive main > :not(#about),.home-page.archive .profile-details { margin-left:200px; }
+}
+@media(max-width:800px) {
+ .home-page.archive main > :not(#about),.home-page.archive .profile-details { margin-left:0; }
+ .home-page.archive > .archive-sidebar { position:fixed; inset:0 0 auto; }
+ .home-page .profile-landscape { padding-top:120px; padding-bottom:120px; }
+ .home-page.archive .profile-landscape { padding-top:45px; }
+}
+@media(max-width:520px) {
+ .home-page .profile-landscape .about-grid { margin-top:20px; }
+ .home-page .profile-landscape .profile-heading { margin-bottom:8px; }
+ .home-page .profile-landscape .large-copy { font-size:19px; }
+ .home-page .scroll-discover { margin-top:16px; }
+ .home-page .profile-landscape { padding-bottom:130px; }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *:before,
