@@ -2,17 +2,28 @@ import type { Metadata } from 'next';
 import './globals.css';
 export const metadata: Metadata = {
   icons: { icon: '/favicon.svg' },
-  title: 'Jiaming Li — Data & Decisions',
+  title: 'Jiaming Li — Data Analyst',
   description:
-    'Data analyst combining business understanding, analytical thinking and product craft. Explore decision tools, real-time data systems and AI workflows.',
+    'Jiaming Li is a data analyst who turns messy business data into decisions. Open to data analyst roles worldwide · visa sponsorship needed.',
 };
+// Applies the saved language and hides reveal targets before first paint.
+const boot = `try{var l=localStorage.getItem('jl-site-lang');if(l==='zh')document.documentElement.lang='zh-CN'}catch(e){}if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motion='on'`;
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <script dangerouslySetInnerHTML={{ __html: boot }} />
+      </head>
       <body>{children}</body>
     </html>
   );

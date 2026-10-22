@@ -18,10 +18,16 @@ const result = spawnSync(
 );
 if (result.status !== 0) process.exit(result.status || 1);
 // vinext beta exports flat case files; directory entries make native static-host links portable.
-for (const id of ['mcda', 'drone', 'motai', 'connoisseur']) {
-  const target = `dist/client/work/${id}`;
+for (const page of [
+  'work/mcda',
+  'work/drone',
+  'work/motai',
+  'work/connoisseur',
+  'resume',
+]) {
+  const target = `dist/client/${page}`;
   mkdirSync(target, { recursive: true });
-  copyFileSync(`dist/client/work/${id}.html`, `${target}/index.html`);
+  copyFileSync(`dist/client/${page}.html`, `${target}/index.html`);
 }
 writeFileSync('dist/client/.nojekyll', '');
 const target = resolve(`outputs/${edition}`);

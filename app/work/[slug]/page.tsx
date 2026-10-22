@@ -11,8 +11,8 @@ export async function generateMetadata({
   const { slug } = await params;
   const p = projects.find((x) => x.id === slug);
   return {
-    title: `${p?.title || 'Project'} — Jiaming Li`,
-    description: p?.summary,
+    title: `${p?.title.en || 'Project'} — Jiaming Li`,
+    description: p?.summary.en,
   };
 }
 export default async function CasePage({

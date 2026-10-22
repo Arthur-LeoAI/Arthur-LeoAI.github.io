@@ -1,320 +1,593 @@
+// Single source of truth for facts and copy. Every user-facing string is { en, zh }.
+export type Lang = 'en' | 'zh';
+export type Text = Record<Lang, string>;
+export type TextList = Record<Lang, string[]>;
+export type Category = 'Data' | 'AI' | 'Product';
+
 export const profile = {
-  name: 'Jiaming Li',
+  name: { en: 'Jiaming Li', zh: '李嘉铭' } as Text,
   email: 'arthur.jiaming.li@gmail.com',
   github: 'https://github.com/Arthur-LeoAI',
   linkedin: 'https://www.linkedin.com/in/arthurjiamingli',
   story: 'https://jiaming-li-portfolio.arthurli2025.chatgpt.site',
   archive: 'https://arthur-leoai.github.io',
+  resumePdf: '/jiaming-li-resume.pdf',
 };
-export const projects = [
+
+type Image = { src: string; width: number; height: number; caption: Text };
+export type Project = {
+  id: string;
+  n: string;
+  cat: Category[];
+  repo: string;
+  image: Image;
+  title: Text;
+  tag: Text;
+  ctx: Text;
+  status: Text;
+  subtitle: Text;
+  summary: Text;
+  stack: string;
+  problem: Text;
+  contribution: Text;
+  approach: Text;
+  outcome: Text;
+  facts: TextList;
+  gallery: Image[];
+};
+
+export const projects: Project[] = [
   {
     id: 'mcda',
-    number: '01',
-    title: 'MCDA Tool',
-    subtitle: 'Making complex decisions tangible.',
-    category: ['Data'],
-    tag: 'DECISION INTELLIGENCE',
-    context: 'MaREI · Ireland',
-    status: 'Research project',
+    n: '01',
+    cat: ['Data'],
     repo: 'MCDA-Tool-2.0',
-    stack: ['JavaScript', 'D3.js', 'Excel', 'Node.js'],
-    featuredImage: {
+    image: {
       src: '/projects/mcda/mcda-overview.webp',
       width: 1440,
       height: 1000,
-      alt: 'MCDA interface showing synthetic alternatives, rankings and charts',
-      caption:
-        'Shows the working decision interface with public synthetic data; I built the adjustable ranking and visual analysis workflow.',
+      caption: {
+        en: 'MCDA interface showing synthetic alternatives, rankings and charts.',
+        zh: 'MCDA 界面：模拟方案、排序与图表。',
+      },
+    },
+    title: { en: 'MCDA Tool', zh: 'MCDA 决策工具' },
+    tag: { en: 'Decision intelligence', zh: '决策分析' },
+    ctx: { en: 'MaREI · Ireland', zh: 'MaREI · 爱尔兰' },
+    status: { en: 'Research project', zh: '科研项目' },
+    subtitle: {
+      en: 'Making complex decisions tangible.',
+      zh: '让复杂决策变得看得见、摸得着。',
+    },
+    summary: {
+      en: 'An interactive decision tool for exploring the trade-offs in end-of-life tyre recovery.',
+      zh: '交互式决策工具，用于比较废旧轮胎回收方案之间的取舍。',
+    },
+    stack: 'JavaScript · D3.js · Excel · Node.js',
+    problem: {
+      en: 'How do you compare recovery options when environmental, technical and economic priorities compete?',
+      zh: '当环境、技术和经济目标互相冲突时，如何比较不同的回收方案？',
+    },
+    contribution: {
+      en: 'I developed the interactive analysis tool during The End of Tire research project at MaREI, translating data and decision models into adjustable rankings.',
+      zh: '我在 MaREI 的 The End of Tire 研究项目中开发了这个交互式分析工具，把数据和决策模型转化为可调节的排序。',
+    },
+    approach: {
+      en: 'Structured Excel inputs, adjustable criteria and weights, value locking, and live weighted-sum visualisation make assumptions visible.',
+      zh: '结构化的 Excel 输入、可调的准则与权重、数值锁定和实时加权可视化，让每个假设都清晰可见。',
+    },
+    outcome: {
+      en: 'The research compared five alternatives within a team of more than seven people. The tool supports user-defined inputs; no time-saving or performance uplift is claimed.',
+      zh: '研究团队（7 人以上）用它比较了 5 种方案。工具支持用户自定义输入；不声称节省时间或提升绩效。',
+    },
+    facts: {
+      en: ['5 research alternatives', '7+ team members', 'Adjustable decision weights'],
+      zh: ['5 个研究方案', '7+ 团队成员', '可调决策权重'],
     },
     gallery: [
       {
         src: '/projects/mcda/mcda-input-ranking.webp',
         width: 696,
         height: 699,
-        alt: 'Synthetic MCDA input table beside a weighted ranking',
-        caption:
-          'Shows synthetic inputs and the live weighted ranking; I connected structured criteria to an immediately readable result.',
+        caption: {
+          en: 'Synthetic inputs beside the live weighted ranking.',
+          zh: '模拟输入数据与实时加权排序。',
+        },
       },
       {
         src: '/projects/mcda/mcda-weight-settings.webp',
         width: 696,
         height: 469,
-        alt: 'MCDA criterion weight controls using synthetic data',
-        caption:
-          'Shows criterion-weight controls for a synthetic scenario; I made priorities adjustable and visible instead of hiding them in a calculation.',
+        caption: {
+          en: 'Criterion-weight controls for a synthetic scenario.',
+          zh: '模拟场景下的准则权重控制。',
+        },
       },
       {
         src: '/projects/mcda/mcda-pareto-analysis.webp',
         width: 696,
         height: 673,
-        alt: 'Pareto analysis in the MCDA tool using synthetic alternatives',
-        caption:
-          'Shows a Pareto view of synthetic alternatives; I added a second lens for identifying trade-offs beyond a single score.',
+        caption: {
+          en: 'Pareto view for identifying trade-offs beyond a single score.',
+          zh: '帕累托视图，用于识别单一得分之外的取舍。',
+        },
       },
       {
         src: '/projects/mcda/mcda-topsis-method.webp',
         width: 696,
         height: 493,
-        alt: 'TOPSIS method selection and sensitivity controls in the MCDA tool',
-        caption:
-          'Shows TOPSIS and sensitivity controls on synthetic data; I exposed method choice so users can compare how assumptions affect ranking.',
+        caption: {
+          en: 'TOPSIS and sensitivity controls on synthetic data.',
+          zh: '基于模拟数据的 TOPSIS 与敏感性分析控制。',
+        },
       },
     ],
-    summary:
-      'An interactive decision tool for exploring the trade-offs in end-of-life tyre recovery.',
-    problem:
-      'How do you compare recovery options when environmental, technical and economic priorities compete?',
-    contribution:
-      'I developed the interactive analysis tool during The End of Tire research project at MaREI, translating data and decision models into adjustable rankings.',
-    approach:
-      'Structured Excel inputs, adjustable criteria and weights, value locking, and live weighted-sum visualisation make assumptions visible.',
-    outcome:
-      'The research compared five alternatives within a team of more than seven people. The tool supports user-defined inputs; no time-saving or performance uplift is claimed.',
-    next: 'Extend the case study with documented validation and additional sensitivity scenarios.',
-    facts: [
-      '5 research alternatives',
-      '7+ team members',
-      'Adjustable decision weights',
-    ],
-    steps: ['Excel inputs', 'Weighted model', 'Ranked alternatives'],
-    source: 'README.txt',
   },
   {
     id: 'drone',
-    number: '02',
-    title: 'Drone Monitoring',
-    subtitle: 'From telemetry to a clearer picture.',
-    category: ['Data'],
-    tag: 'REAL-TIME DATA',
-    context: 'Sun Yat-sen University',
-    status: 'Demonstration platform',
+    n: '02',
+    cat: ['Data'],
     repo: 'Drone-monitoring-platform-demo',
-    stack: ['React', 'WebSocket', 'InfluxDB', 'Docker'],
-    featuredImage: {
+    image: {
       src: '/projects/drone/drone-dashboard.webp',
       width: 1440,
       height: 1000,
-      alt: 'Drone monitoring dashboard displaying simulated telemetry',
-      caption:
-        'Shows a simulated flight across map, status and telemetry panels; I connected the incoming data flow to a continuously updated monitoring view.',
+      caption: {
+        en: 'Drone monitoring dashboard displaying simulated telemetry.',
+        zh: '无人机监控看板（模拟遥测数据）。',
+      },
+    },
+    title: { en: 'Drone Monitoring', zh: '无人机监控平台' },
+    tag: { en: 'Real-time data', zh: '实时数据' },
+    ctx: { en: 'Sun Yat-sen University', zh: '中山大学' },
+    status: { en: 'Demo + production platform', zh: '演示版 + 生产平台' },
+    subtitle: {
+      en: 'From telemetry to a clearer picture.',
+      zh: '从遥测数据到一目了然的画面。',
+    },
+    summary: {
+      en: 'A personal telemetry demo, plus a production monitoring platform I co-developed.',
+      zh: '个人遥测演示项目，以及我参与开发的生产监控平台。',
+    },
+    stack: 'React · WebSocket · InfluxDB · Docker',
+    problem: {
+      en: 'How can incoming drone telemetry become a useful, continuously updated monitoring view?',
+      zh: '如何把源源不断的无人机遥测数据变成有用、持续更新的监控视图？',
+    },
+    contribution: {
+      en: 'I built a personal real-time UAV telemetry demo and co-developed a separate production platform at Sun Yat-sen University, connecting ingestion, storage, flight analytics and dashboards.',
+      zh: '我独立开发了实时无人机遥测演示版，并在中山大学参与开发另一套生产平台，打通数据接入、存储、飞行分析与看板。',
+    },
+    approach: {
+      en: 'HTTP telemetry enters the API, is stored in InfluxDB and streamed over WebSocket to a React and Leaflet dashboard.',
+      zh: '遥测数据经 HTTP 进入 API，存入 InfluxDB，再通过 WebSocket 推送到 React + Leaflet 看板。',
+    },
+    outcome: {
+      en: 'The public demo includes a simulator and trajectory status. Screens shown here come from the demo with simulated data.',
+      zh: '公开演示版包含模拟器与轨迹状态。本页截图均来自演示版，使用模拟数据。',
+    },
+    facts: {
+      en: ['HTTP → WebSocket', 'Time-series storage', 'Map visualisation'],
+      zh: ['HTTP → WebSocket', '时序数据存储', '地图可视化'],
     },
     gallery: [
       {
         src: '/projects/drone/drone-flight-snapshot.webp',
         width: 494,
         height: 658,
-        alt: 'Drone flight status and telemetry using simulated data',
-        caption:
-          'Shows simulated flight status and changing telemetry; I organised operational signals into a compact scan-friendly panel.',
+        caption: {
+          en: 'Simulated flight status and changing telemetry.',
+          zh: '模拟飞行状态与实时遥测。',
+        },
       },
       {
         src: '/projects/drone/drone-map-trajectory.webp',
         width: 741,
         height: 658,
-        alt: 'Simulated drone trajectory and current position on a map panel',
-        caption:
-          'Shows a simulated route and current position; I linked location updates to a persistent trajectory view.',
+        caption: {
+          en: 'Simulated route and current position.',
+          zh: '模拟航线与当前位置。',
+        },
       },
       {
         src: '/projects/drone/drone-tablet.webp',
         width: 768,
         height: 1431,
-        alt: 'Responsive tablet layout of the simulated drone monitoring dashboard',
-        caption:
-          'Shows the same simulated monitoring flow at tablet width; I adapted the dense dashboard into a responsive vertical sequence.',
+        caption: {
+          en: 'The monitoring flow at tablet width.',
+          zh: '平板宽度下的监控界面。',
+        },
       },
     ],
-    summary:
-      'A telemetry pipeline connecting live data, time-series storage and a map dashboard.',
-    problem:
-      'How can incoming drone telemetry become a useful, continuously updated monitoring view?',
-    contribution:
-      'I worked on the data monitoring platform at Sun Yat-sen University, connecting data ingestion, storage and interactive dashboards.',
-    approach:
-      'HTTP telemetry enters the API, is stored in InfluxDB and streamed over WebSocket to a React and Leaflet dashboard.',
-    outcome:
-      'The public demo includes a simulator and trajectory status. It demonstrates the data flow rather than a verified production fleet or benchmark.',
-    next: 'Add documented load tests and clearer operational diagnostics.',
-    facts: ['HTTP → WebSocket', 'Time-series storage', 'Map visualisation'],
-    steps: ['Telemetry API', 'InfluxDB + stream', 'Live dashboard'],
-    source: 'README.md',
   },
   {
     id: 'motai',
-    number: '03',
-    title: 'MoTai',
-    subtitle: 'More structure. More room to create.',
-    category: ['AI', 'Product'],
-    tag: 'HUMAN-CENTRED AI',
-    context: 'Independent collaboration',
-    status: 'Actively maintained',
+    n: '03',
+    cat: ['AI', 'Product'],
     repo: 'MoTai-Story',
-    stack: ['Electron', 'JavaScript', 'Local JSON', 'AI APIs'],
-    featuredImage: {
+    image: {
       src: '/projects/motai/motai-writing-workspace.webp',
       width: 1440,
       height: 900,
-      alt: 'MoTai chapter-writing workspace with fictional portfolio content',
-      caption:
-        'Shows a chapter draft beside its story context; I developed the local-first workspace that keeps planning and writing connected.',
+      caption: {
+        en: 'MoTai chapter-writing workspace with fictional content.',
+        zh: 'MoTai 章节写作工作台（虚构内容）。',
+      },
+    },
+    title: { en: 'MoTai', zh: 'MoTai' },
+    tag: { en: 'Human-centred AI', zh: '以人为本的 AI' },
+    ctx: { en: 'Independent collaboration', zh: '独立合作项目' },
+    status: { en: 'Actively maintained', zh: '持续维护' },
+    subtitle: {
+      en: 'More structure. More room to create.',
+      zh: '结构更清晰，创作空间更大。',
+    },
+    summary: {
+      en: 'A local-first writing workspace that connects characters, world-building and AI-assisted chapters.',
+      zh: '本地优先的写作工作台，把人物、世界观与 AI 辅助章节连在一起。',
+    },
+    stack: 'Electron · JavaScript · Local JSON · AI APIs',
+    problem: {
+      en: 'How can AI support a long story without losing its characters, context or the writer’s control?',
+      zh: 'AI 如何辅助长篇创作，同时不丢失人物、上下文和作者的掌控？',
+    },
+    contribution: {
+      en: 'I began MoTai with a friend and developed AI-assisted writing workflows around story outlines, character settings and human review.',
+      zh: '我和朋友一起发起 MoTai，围绕故事大纲、人物设定和人工审阅开发了 AI 辅助写作流程。',
+    },
+    approach: {
+      en: 'A story bible, relationships and timeline supply context to configurable AI services. Content is stored locally with exports and backups.',
+      zh: '故事设定集、人物关系和时间线为可配置的 AI 服务提供上下文；内容本地存储，支持导出与备份。',
+    },
+    outcome: {
+      en: 'The desktop application supports planning and chapter writing in a connected workspace. AI services require a user-configured provider.',
+      zh: '桌面应用在同一工作台内支持规划与章节写作。AI 功能需用户自行配置服务商。',
+    },
+    facts: {
+      en: ['Local-first workspace', 'Configurable AI providers', 'Backup & export'],
+      zh: ['本地优先', '可配置 AI 服务商', '备份与导出'],
     },
     gallery: [
       {
         src: '/projects/motai/motai-story-bible.webp',
         width: 1440,
         height: 900,
-        alt: 'MoTai story bible containing fictional portfolio content',
-        caption:
-          'Shows the story bible for a fictional portfolio example; I structured premise, conflict, outline and chapter plans as reusable context.',
+        caption: {
+          en: 'Story bible for a fictional example.',
+          zh: '虚构示例的故事设定集。',
+        },
       },
       {
         src: '/projects/motai/motai-ai-workspace.webp',
         width: 1440,
         height: 900,
-        alt: 'MoTai AI-assisted writing panel without a configured provider',
-        caption:
-          'Shows the AI-assisted writing workspace with no provider configured; I kept AI optional so the core authoring flow remains local and usable.',
+        caption: {
+          en: 'AI-assisted writing panel, provider optional.',
+          zh: 'AI 辅助写作面板，服务商可选。',
+        },
       },
       {
         src: '/projects/motai/motai-export-workflow.webp',
         width: 1440,
         height: 900,
-        alt: 'MoTai export menu with document format options',
-        caption:
-          'Shows the export workflow across common document formats; I added a clear hand-off from the writing workspace to shareable files.',
+        caption: {
+          en: 'Export to common document formats.',
+          zh: '导出为常见文档格式。',
+        },
       },
     ],
-    summary:
-      'A local-first writing workspace that connects characters, world-building and AI-assisted chapters.',
-    problem:
-      'How can AI support a long story without losing its characters, context or the writer’s control?',
-    contribution:
-      'I began MoTai with a friend and developed AI-assisted writing workflows around story outlines, character settings and human review.',
-    approach:
-      'A story bible, relationships and timeline supply context to configurable AI services. Content is stored locally with exports and backups.',
-    outcome:
-      'The desktop application supports planning and chapter writing in a connected workspace. AI services require a user-configured provider.',
-    next: 'Continue improving continuity checks and the author’s ability to review generated content.',
-    facts: [
-      'Local-first workspace',
-      'Configurable AI providers',
-      'Backup & export',
-    ],
-    steps: ['Story context', 'AI-assisted draft', 'Author review'],
-    source: 'README.md',
   },
   {
     id: 'connoisseur',
-    number: '04',
-    title: 'Connoisseur',
-    subtitle: 'A clearer path from request to order.',
-    category: ['Product'],
-    tag: 'BUSINESS SYSTEMS',
-    context: 'Independent collaboration',
-    status: 'Mock-first MVP',
+    n: '04',
+    cat: ['Product'],
     repo: 'connoisseur',
-    stack: ['Next.js', 'TypeScript', 'Tailwind', 'Mock data'],
-    featuredImage: {
+    image: {
       src: '/projects/connoisseur/connoisseur-quote-timeline.webp',
       width: 1440,
       height: 1000,
-      alt: 'Connoisseur demo order showing a quotation and sourcing timeline',
-      caption:
-        'Shows a fictional order moving from quotation to fulfilment; I designed the customer view around decisions, payment state and progress.',
+      caption: {
+        en: 'Demo order showing a quotation and sourcing timeline.',
+        zh: '演示订单：报价与采购时间线。',
+      },
+    },
+    title: { en: 'Connoisseur', zh: 'Connoisseur' },
+    tag: { en: 'Business systems', zh: '业务系统' },
+    ctx: { en: 'Independent collaboration', zh: '独立合作项目' },
+    status: { en: 'Mock-first MVP', zh: 'MVP（模拟数据）' },
+    subtitle: {
+      en: 'A clearer path from request to order.',
+      zh: '从需求到订单，路径更清晰。',
+    },
+    summary: {
+      en: 'A sourcing workspace bringing requests, quotes and customer case histories together.',
+      zh: '把采购需求、报价与客户案例记录整合到一起的工作台。',
+    },
+    stack: 'Next.js · TypeScript · Tailwind · Mock data',
+    problem: {
+      en: 'How can a cross-border sourcing request stay understandable as it moves through quotes and fulfilment?',
+      zh: '跨境采购需求在报价和履约过程中，如何始终保持清晰可追踪？',
+    },
+    contribution: {
+      en: 'I began this project with a friend to organise international commerce information into a practical sourcing and procurement workflow.',
+      zh: '我和朋友一起发起这个项目，把跨境商务信息整理成实用的采购流程。',
+    },
+    approach: {
+      en: 'Customer cases connect requests, quotations, addresses and a timeline; an admin workspace supports the other side of the process.',
+      zh: '客户案例串联需求、报价、地址和时间线；后台工作台支撑流程的另一端。',
+    },
+    outcome: {
+      en: 'The current MVP uses in-memory data and mock payments. Supabase is a planned migration target, not a connected production database.',
+      zh: '当前 MVP 使用内存数据和模拟支付；计划迁移到 Supabase，尚未接入生产数据库。',
+    },
+    facts: {
+      en: ['Request → quote → order', 'Customer & admin views', 'Mock payments'],
+      zh: ['需求 → 报价 → 订单', '客户端与后台', '模拟支付'],
     },
     gallery: [
       {
         src: '/projects/connoisseur/connoisseur-home.webp',
         width: 1440,
         height: 1000,
-        alt: 'Connoisseur mock-first sourcing service home page',
-        caption:
-          'Shows the sourcing proposition and entry points; I framed the product around request-led procurement rather than a catalogue or cart.',
+        caption: {
+          en: 'Sourcing proposition and entry points.',
+          zh: '采购服务首页与入口。',
+        },
       },
       {
         src: '/projects/connoisseur/connoisseur-request-intake.webp',
         width: 1440,
         height: 1000,
-        alt: 'Connoisseur structured sourcing request form with fictional data',
-        caption:
-          'Shows the structured request flow with fictional data; I broke an ambiguous sourcing brief into reviewable information blocks.',
-      },
-      {
-        src: '/projects/connoisseur/connoisseur-request-contact.webp',
-        width: 1216,
-        height: 575,
-        alt: 'Connoisseur request contact section containing sanitized demo details',
-        caption:
-          'Shows the final contact and consent step with sanitized demo details; I kept submission gated behind an account while making the requirement explicit.',
+        caption: {
+          en: 'Structured request flow with fictional data.',
+          zh: '结构化需求表单（虚构数据）。',
+        },
       },
       {
         src: '/projects/connoisseur/connoisseur-account-overview.webp',
         width: 1440,
         height: 1000,
-        alt: 'Connoisseur demo account overview with fictional orders',
-        caption:
-          'Shows the buyer account with fictional orders and no personal customer data; I grouped requests, quotes and next actions into one operational view.',
+        caption: {
+          en: 'Buyer account with fictional orders.',
+          zh: '买家账户总览（虚构订单）。',
+        },
       },
     ],
-    summary:
-      'A sourcing workspace bringing requests, quotes and customer case histories together.',
-    problem:
-      'How can a cross-border sourcing request stay understandable as it moves through quotes and fulfilment?',
-    contribution:
-      'I began this project with a friend to organise international commerce information into a practical sourcing and procurement workflow.',
-    approach:
-      'Customer cases connect requests, quotations, addresses and a timeline; an admin workspace supports the other side of the process.',
-    outcome:
-      'The current MVP uses in-memory data and mock payments. Supabase is a planned migration target, not a connected production database.',
-    next: 'Validate the workflow, then migrate persistence and payments to production services.',
-    facts: [
-      'Request → quote → order',
-      'Customer & admin views',
-      'Mock payments',
-    ],
-    steps: ['Customer request', 'Quote & approval', 'Sourcing timeline'],
-    source: 'README.md',
   },
 ];
-export const experience = [
+
+export const experience: {
+  date: Text;
+  role: Text;
+  org: Text;
+  points: TextList;
+  project: string | null;
+}[] = [
   {
-    date: 'MAY 2026 — PRESENT',
-    role: 'E-commerce Operator Specialist',
-    company: 'Triple A internetshops GmbH',
-    highlights: [
-      'Review sales, traffic, fees and product performance across European marketplaces.',
-      'Manage marketplace operations across eight markets and approximately 2,000 SKUs per marketplace.',
-    ],
+    date: { en: 'May 2026 — Present', zh: '2026.05 — 至今' },
+    role: { en: 'E-commerce Operator Specialist', zh: '电商运营专员' },
+    org: {
+      en: 'Triple A internetshops GmbH · Shenzhen',
+      zh: 'Triple A internetshops GmbH · 深圳',
+    },
+    points: {
+      en: [
+        'Manage Amazon operations across eight European marketplaces, each with approximately 2,000 SKUs.',
+        'Analyse sales, traffic, fee, product and competitor data to identify optimisation opportunities.',
+        'Keyword, competitor and product research with Seller Central, Helium 10, Keepa and Amalytix.',
+      ],
+      zh: [
+        '负责亚马逊欧洲 8 个站点的日常运营，每个站点约 2,000 个 SKU。',
+        '分析销售、流量、费用、产品及竞品数据，发现优化机会。',
+        '使用 Seller Central、Helium 10、Keepa、Amalytix 开展关键词、竞品与选品分析。',
+      ],
+    },
     project: null,
-    text: 'European marketplace operations, with a focus on product and commercial performance.',
   },
   {
-    date: 'JAN — APR 2026',
-    role: 'Data Platform Full-stack Engineer',
-    company: 'Sun Yat-sen University',
-    highlights: [
-      'Connect telemetry ingestion, time-series storage and dashboard updates.',
-      'Present incoming signals through interactive maps and monitoring views.',
-    ],
+    date: { en: 'Jan — Apr 2026', zh: '2026.01 — 2026.04' },
+    role: { en: 'Data Platform Full-stack Engineer', zh: '数据平台全栈工程师' },
+    org: { en: 'Sun Yat-sen University · Shenzhen', zh: '中山大学 · 深圳' },
+    points: {
+      en: [
+        'Built a real-time monitoring platform covering ingestion, storage, analysis and reporting.',
+        'Time-series pipelines with InfluxDB and MySQL for monitoring and anomaly detection.',
+        'Interactive map and status dashboards for operational analysis.',
+      ],
+      zh: [
+        '搭建实时数据监控平台，覆盖数据接入、存储、分析与报表。',
+        '基于 InfluxDB 与 MySQL 开发时序数据管道，用于监控与异常检测。',
+        '开发交互式地图与状态看板，支持运营分析。',
+      ],
+    },
     project: 'drone',
-    text: 'Developed data ingestion, time-series analysis and interactive monitoring dashboards.',
   },
   {
-    date: 'MAY — SEP 2025',
-    role: 'Data Analyst Intern',
-    company: 'MaREI · Cork, Ireland',
-    highlights: [
-      'Clean and structure inputs for multi-criteria decision analysis.',
-      'Explore competing recovery options through adjustable weights and sensitivity analysis.',
-    ],
+    date: { en: 'May — Sep 2025', zh: '2025.05 — 2025.09' },
+    role: { en: 'Data Analyst & Research Assistant', zh: '数据分析师 / 研究助理' },
+    org: {
+      en: 'MaREI, University College Cork · Ireland',
+      zh: 'MaREI 研究中心，科克大学 · 爱尔兰',
+    },
+    points: {
+      en: [
+        'MCDA models to score and rank five tyre-recovery alternatives for a 7+ person research team.',
+        'Python pipelines for data cleaning, validation and sensitivity analysis.',
+        'Turned the Excel-based process into an interactive web tool.',
+      ],
+      zh: [
+        '构建 MCDA 模型，为 7 人以上研究团队评分排序 5 种轮胎回收方案。',
+        '用 Python 搭建数据清洗、校验与敏感性分析流程。',
+        '将基于 Excel 的流程改造为交互式网页工具。',
+      ],
+    },
     project: 'mcda',
-    text: 'Applied MCDA, data cleaning and sensitivity analysis to energy recovery decisions.',
   },
 ];
-// Populate only after credential details and verification URLs have been supplied.
-export const certificates: {
-  name: string;
-  issuer: string;
-  date: string;
-  url?: string;
-}[] = [];
+
+export const education: { deg: Text; school: Text; date: Text; note: Text }[] =
+  [
+    {
+      deg: {
+        en: 'MSc Computer Science (Interactive Media)',
+        zh: '计算机科学硕士（交互媒体）',
+      },
+      school: { en: 'University College Cork', zh: '爱尔兰科克大学' },
+      date: { en: 'Sep 2024 – Mar 2026', zh: '2024.09 – 2026.03' },
+      note: {
+        en: 'Second Class Honours (2:1), top 10%',
+        zh: '二等一荣誉（2:1），前 10%',
+      },
+    },
+    {
+      deg: {
+        en: 'BSc Applied Mathematics (Data Computation)',
+        zh: '应用数学学士（数据计算及应用）',
+      },
+      school: {
+        en: 'Taiyuan University of Science and Technology',
+        zh: '太原科技大学',
+      },
+      date: { en: 'Sep 2020 – Jun 2024', zh: '2020.09 – 2024.06' },
+      note: { en: 'Top 10% of cohort', zh: '专业前 10%' },
+    },
+  ];
+
+export const skills: Record<Lang, [string, string][]> = {
+  en: [
+    ['Data & BI', 'SQL · Python · Excel · Power BI · Tableau'],
+    ['E-commerce', 'Seller Central · Helium 10 · Keepa · Amalytix'],
+    ['Engineering', 'JavaScript/TypeScript · React · InfluxDB · Git'],
+  ],
+  zh: [
+    ['数据与 BI', 'SQL · Python · Excel · Power BI · Tableau'],
+    ['电商运营', 'Seller Central · Helium 10 · Keepa · Amalytix'],
+    ['工程开发', 'JavaScript/TypeScript · React · InfluxDB · Git'],
+  ],
+};
+
+// Interface copy shared by every page.
+export const ui = {
+  nav: {
+    experience: { en: 'Experience', zh: '经历' },
+    work: { en: 'Work', zh: '项目' },
+    about: { en: 'About', zh: '关于' },
+    contact: { en: 'Contact', zh: '联系' },
+  },
+  resume: { en: 'Résumé', zh: '简历' },
+  status: {
+    en: 'Open to data analyst roles worldwide · visa sponsorship needed',
+    zh: '正在寻找全球数据分析岗位 · 需工作签证担保',
+  },
+  // [before, accent, after]; a newline in `before` becomes a line break.
+  heroTitle: {
+    en: ['Jiaming Li is a data analyst who turns ', 'messy business data', ' into decisions.'],
+    zh: ['李嘉铭，数据分析师。\n把', '杂乱的业务数据', '变成可执行的决策。'],
+  } as TextList,
+  heroIntro: {
+    en: 'I currently analyse Amazon marketplace performance across eight European markets. Before that, I built decision tools and data pipelines at MaREI in Ireland and Sun Yat-sen University.',
+    zh: '目前负责亚马逊欧洲 8 个站点的运营与数据分析。此前在爱尔兰 MaREI 研究中心和中山大学搭建过决策工具与数据管道。',
+  },
+  seeWork: { en: 'See selected work ↓', zh: '查看项目 ↓' },
+  facts: [
+    {
+      label: { en: 'Now', zh: '现任' },
+      value: { en: 'E-commerce Operator, Triple A', zh: '电商运营专员，Triple A' },
+    },
+    {
+      label: { en: 'Scope', zh: '范围' },
+      value: {
+        en: '8 EU markets · ~2,000 SKUs each',
+        zh: '欧洲 8 站点 · 每站约 2,000 SKU',
+      },
+    },
+    {
+      label: { en: 'Education', zh: '学历' },
+      value: { en: 'MSc Computer Science, UCC', zh: '科克大学 计算机硕士' },
+    },
+    {
+      label: { en: 'Tools', zh: '工具' },
+      value: {
+        en: 'SQL · Python · Excel · Power BI',
+        zh: 'SQL · Python · Excel · Power BI',
+      },
+    },
+  ],
+  experienceTitle: { en: 'Experience', zh: '工作经历' },
+  relatedProject: { en: 'Related project: ', zh: '相关项目：' },
+  workTitle: { en: 'Selected work', zh: '精选项目' },
+  workIntro: {
+    en: 'Four projects at the intersection of data and product, from research questions to working systems.',
+    zh: '四个数据与产品交汇的项目，从研究问题到可运行的系统。',
+  },
+  aboutTitle: { en: 'About', zh: '关于我' },
+  about: {
+    en: 'My background brings together applied mathematics, interactive media and European e-commerce. Having studied in Ireland, I value collaborative, international teams. I’m based in China and open to relocating anywhere in the world where employer visa sponsorship is available.',
+    zh: '我的背景横跨应用数学、交互媒体与欧洲电商。在爱尔兰求学的经历让我习惯国际化、协作式的团队。目前在中国，愿意前往全球任何能提供工作签证担保的国家或地区工作。',
+  },
+  educationLabel: { en: 'Education', zh: '教育背景' },
+  skillsLabel: { en: 'Skills', zh: '技能' },
+  contactTitle: {
+    en: 'Have a problem worth exploring?',
+    zh: '有值得一起研究的问题？',
+  },
+  allProjects: { en: '← All projects', zh: '← 全部项目' },
+  viewSource: { en: 'View source on GitHub ↗', zh: '在 GitHub 查看源码 ↗' },
+  question: { en: 'The question', zh: '核心问题' },
+  contribution: { en: 'My contribution', zh: '我的工作' },
+  approach: { en: 'The approach', zh: '实现方式' },
+  walkthrough: { en: 'Interface walkthrough', zh: '界面一览' },
+  today: { en: 'What exists today', zh: '当前状态' },
+  stack: { en: 'Stack', zh: '技术栈' },
+  nextProject: { en: 'Next project', zh: '下一个项目' },
+  resumePage: {
+    back: { en: '← Jiaming Li', zh: '← 李嘉铭' },
+    download: { en: 'Download PDF ↓', zh: '下载 PDF ↓' },
+    headline: {
+      en: 'Data Analyst · Business & Marketplace Analytics',
+      zh: '数据分析师 · 商业与电商数据分析',
+    },
+    summary: {
+      en: 'Data analyst with an applied-mathematics and computer-science background. I currently analyse Amazon marketplace performance across eight European markets, and have built decision-support tools, data pipelines and dashboards in research and university settings.',
+      zh: '应用数学本科、计算机科学硕士。现负责亚马逊欧洲 8 个站点的运营与数据分析，曾在科研与高校项目中搭建决策支持工具、数据管道和可视化看板。',
+    },
+    location: {
+      en: 'Shenzhen · open to relocating worldwide (visa sponsorship needed)',
+      zh: '深圳 · 可前往全球工作（需工作签证担保）',
+    },
+    experience: { en: 'Experience', zh: '工作经历' },
+    projects: { en: 'Projects', zh: '项目经历' },
+    education: { en: 'Education', zh: '教育背景' },
+    skills: { en: 'Skills', zh: '专业技能' },
+    languages: { en: 'Languages', zh: '语言' },
+    languagesValue: {
+      en: 'English (IELTS 6.5), Chinese (native)',
+      zh: '英语（雅思 6.5），中文（母语）',
+    },
+  },
+  archive: {
+    tagline: {
+      en: 'Data analyst & practical tool builder.',
+      zh: '数据分析师，也是动手做工具的人。',
+    },
+    nav: [
+      { href: '#projects', label: { en: '01 — Projects', zh: '01 — 项目' } },
+      { href: '#experience', label: { en: '02 — Experience', zh: '02 — 经历' } },
+      { href: '/resume/', label: { en: '03 — Résumé', zh: '03 — 简历' } },
+    ],
+    open: { en: 'Open to opportunities', zh: '正在求职' },
+    title: { en: 'Project archive', zh: '项目档案' },
+    filters: {
+      All: { en: 'All', zh: '全部' },
+      Data: { en: 'Data', zh: '数据' },
+      AI: { en: 'AI', zh: 'AI' },
+      Product: { en: 'Product', zh: '产品' },
+    },
+  },
+  skip: { en: 'Skip to content', zh: '跳到正文' },
+  notFound: {
+    label: { en: '404 · Page not found', zh: '404 · 页面不存在' },
+    title: { en: 'A different direction.', zh: '换个方向看看。' },
+    back: { en: 'Return to Jiaming’s portfolio →', zh: '返回李嘉铭的作品集 →' },
+  },
+} satisfies Record<string, unknown>;

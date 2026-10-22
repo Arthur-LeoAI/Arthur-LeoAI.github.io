@@ -1,749 +1,657 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 // Static exports use native document navigation and pre-sized local images.
 /* oxlint-disable next/no-html-link-for-pages, next/no-img-element */
 import {
-  ArrowUpRight,
-  ArrowDown,
-  ArrowLeft,
-  Code2 as Github,
-  Plus,
-  Check,
-} from 'lucide-react';
-import { Slider } from '@/components/ui/slider';
-import NatureBackground from './nature-background';
-import './v2.css';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
-import { profile, projects, experience, certificates } from '@/lib/content';
+  profile,
+  projects,
+  experience,
+  education,
+  skills,
+  ui,
+  type Category,
+  type Project,
+  type Text,
+} from '@/lib/content';
+import HeroChart from './hero-chart';
+import { useLang } from './language';
+import { useSiteMotion } from './use-site-motion';
 
 const archive = process.env.NEXT_PUBLIC_EDITION === 'archive';
-const options = [
-  { name: 'Alternative A', values: [90, 35, 55] },
-  { name: 'Alternative B', values: [50, 90, 60] },
-  { name: 'Alternative C', values: [65, 55, 95] },
-  { name: 'Alternative D', values: [75, 70, 50] },
-  { name: 'Alternative E', values: [45, 80, 85] },
-];
-export function DecisionLab() {
-  const [weights, setWeights] = useState([50, 30, 20]);
-  const sum = weights.reduce((a, b) => a + b, 0);
-  const ranked = options
-    .map((x) => ({
-      ...x,
-      score: sum
-        ? x.values.reduce((v, n, i) => v + n * weights[i], 0) / sum
-        : 0,
-    }))
-    .sort((a, b) => b.score - a.score);
+const caseHref = (id: string) => `/work/${id}/`;
+const year = 2026;
+type T = (text: Text) => string;
+
+function LangToggle() {
+  const { lang, setLang } = useLang();
   return (
-    <div className="decision-lab">
-      <div className="lab-top">
-        <span className="micro">DECISION EXPLORER</span>
-        <span className="live-dot">Interactive</span>
-      </div>
-      <h3>What matters most?</h3>
-      <p>Change the priorities. Watch the decision shift.</p>
-      <div className="ranking" aria-label="Weighted alternative scores">
-        {ranked.map((x, i) => (
-          <div className="rank" key={x.name}>
-            <div>
-              <span>
-                {String(i + 1).padStart(2, '0')} / {x.name}
-              </span>
-              <strong>{x.score.toFixed(1)}</strong>
-            </div>
-            <div className="track">
-              <span style={{ width: `${x.score}%` }} />
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="sliders">
-        {['Environmental', 'Economic', 'Technical'].map((label, i) => (
-          <div className="weight" key={label}>
-            <label id={`weight-${i}`}>
-              {label}
-              <span>{weights[i]}</span>
-            </label>
-            <Slider
-              aria-labelledby={`weight-${i}`}
-              value={[weights[i]]}
-              min={0}
-              max={100}
-              step={5}
-              onValueChange={(v) =>
-                setWeights((old) =>
-                  old.map((w, j) =>
-                    j === i ? (Array.isArray(v) ? v[0] : v) : w,
-                  ),
-                )
-              }
-            />
-          </div>
-        ))}
-      </div>
-      <div className="lab-bottom">
-        <span>Synthetic data · weighted-sum model</span>
-        <button onClick={() => setWeights([50, 30, 20])}>Reset ↺</button>
-      </div>
-      <p className="sr-only" aria-live="polite">
-        {sum
-          ? `${ranked[0].name} leads with ${ranked[0].score.toFixed(1)} points.`
-          : 'Set at least one weight above zero.'}
-      </p>
-      {sum === 0 && (
-        <p>Set at least one weight above zero to compare alternatives.</p>
-      )}
-    </div>
+    <fieldset className="lang-toggle">
+      <legend className="sr-only">Language / 语言</legend>
+      <button aria-pressed={lang === 'en'} onClick={() => setLang('en')}>
+        EN
+      </button>
+      <button aria-pressed={lang === 'zh'} onClick={() => setLang('zh')}>
+        中文
+      </button>
+    </fieldset>
   );
 }
-type ProjectImageData = (typeof projects)[number]['featuredImage'];
-function Gallery({ images }: { images: ProjectImageData[] }) {
-  const [selected, setSelected] = useState<number | null>(null);
-  const trigger = useRef<HTMLButtonElement | null>(null);
-  const step = (direction: number) =>
-    setSelected((current) =>
-      current === null
-        ? null
-        : (current + direction + images.length) % images.length,
-    );
-  return (
-    <>
-      <div className="project-gallery">
-        {images.map((image, index) => (
-          <div key={image.src}>
-            <button
-              className="image-open"
-              aria-label={`Enlarge screenshot ${index + 1}: ${image.alt}`}
-              onClick={(event) => {
-                trigger.current = event.currentTarget;
-                setSelected(index);
-              }}
-            >
-              <ProjectImage image={image} />
-              <span className="image-hint">View full size ↗</span>
-            </button>
-          </div>
-        ))}
-      </div>
-      <Dialog
-        open={selected !== null}
-        onOpenChange={(open) => {
-          if (!open) setSelected(null);
-        }}
-      >
-        <DialogContent
-          className="image-dialog"
-          finalFocus={trigger}
-          onKeyDown={(event) => {
-            if (event.key === 'ArrowRight') {
-              event.preventDefault();
-              step(1);
-            }
-            if (event.key === 'ArrowLeft') {
-              event.preventDefault();
-              step(-1);
-            }
-          }}
-        >
-          <DialogTitle>
-            Interface walkthrough · {(selected ?? 0) + 1} / {images.length}
-          </DialogTitle>
-          {selected !== null && (
-            <>
-              <img
-                src={images[selected].src}
-                alt={images[selected].alt}
-                width={images[selected].width}
-                height={images[selected].height}
-              />
-              <DialogDescription>{images[selected].caption}</DialogDescription>
-            </>
-          )}
-          <div className="gallery-controls">
-            <button onClick={() => step(-1)}>← Previous</button>
-            <button onClick={() => step(1)}>Next →</button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
-function Credentials() {
-  if (!certificates.length) return null;
-  const cards = (items: typeof certificates) =>
-    items.map((item) => (
-      <article className="credential-card" key={item.name}>
-        <span className="micro">
-          {item.issuer} · {item.date}
-        </span>
-        <h3>{item.name}</h3>
-        {item.url && (
-          <a href={item.url} target="_blank" rel="noreferrer">
-            Verify credential ↗
-          </a>
-        )}
-      </article>
-    ));
-  return (
-    <section className="section credentials" id="credentials">
-      <div className="section-heading">
-        <span className="micro">04 / CONTINUED LEARNING</span>
-        <h2>Learning, applied.</h2>
-      </div>
-      <div className="credential-grid">{cards(certificates.slice(0, 4))}</div>
-      {certificates.length > 4 && (
-        <details>
-          <summary>More credentials</summary>
-          {cards(certificates.slice(4))}
-        </details>
-      )}
-    </section>
-  );
-}
-function ProjectImage({
-  image,
-  eager = false,
-  compact = false,
-}: {
-  image: ProjectImageData;
-  eager?: boolean;
-  compact?: boolean;
-}) {
-  return (
-    <figure className={compact ? 'project-image compact' : 'project-image'}>
-      <img
-        src={image.src}
-        alt={image.alt}
-        width={image.width}
-        height={image.height}
-        loading={eager ? 'eager' : 'lazy'}
-        fetchPriority={eager ? 'high' : 'auto'}
-        decoding="async"
-      />
-      <figcaption>{image.caption}</figcaption>
-    </figure>
-  );
-}
-function Header() {
+
+function Chrome({ t, wide = true }: { t: T; wide?: boolean }) {
   return (
     <>
       <a className="skip" href="#main">
-        Skip to content
+        {t(ui.skip)}
       </a>
-      <header className="site-header">
-        <a className="wordmark" href="/">
-          JL<span>JIAMING LI</span>
-        </a>
-        <nav aria-label="Main navigation">
-          <a href="/#about">About</a>
-          <a href="/#experience">Experience</a>
-          <a href="/#work">Work</a>
-          <a href="/#contact">
-            Contact <ArrowUpRight size={14} />
-          </a>
-        </nav>
-        <a className="resume-link" href="/jiaming-li-resume.pdf" download>
-          Résumé <ArrowDown size={14} />
-        </a>
-      </header>
+      {wide && <div className="progress" data-progress="" />}
     </>
   );
 }
-function Footer() {
+
+function SiteFooterLinks({ t, email = false }: { t: T; email?: boolean }) {
   return (
-    <footer id="contact">
-      <div className="micro">HAVE A PROBLEM WORTH EXPLORING?</div>
-      <h2>
-        Let’s make
-        <br />
-        <span>something clear.</span>
-      </h2>
-      <a className="contact-email" href={`mailto:${profile.email}`}>
-        {profile.email}
-        <ArrowUpRight />
-      </a>
-      <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} Jiaming Li</span>
-        <div>
-          <a href="/jiaming-li-resume.pdf" download>
-            Résumé ↓
-          </a>
-          <a href={profile.linkedin}>LinkedIn ↗</a>
-          <a href={profile.github}>GitHub ↗</a>
-          <a href={archive ? profile.story : profile.archive}>
-            {archive ? 'Explore the story' : 'Explore the archive'} ↗
-          </a>
-        </div>
-        <a href="#top">Back to top ↑</a>
-      </div>
-    </footer>
-  );
-}
-function About() {
-  return (
-    <section className="about-section section profile-first" id="about">
-      <div className="profile-landscape">
-        <NatureBackground />
-        <div className="profile-heading">
-          <span className="micro accent">01 / MEET JIAMING</span>
-          <h1>
-            Jiaming Li<span className="accent">.</span>
-          </h1>
-          <p className="profile-role">Data Analyst / Business Data Analyst</p>
-        </div>
-        <div className="about-grid">
-          <div className="portrait-wrap">
-            <img
-              src="/portrait.jpg"
-              alt="Jiaming Li"
-              width="540"
-              height="680"
-              loading="eager"
-              fetchPriority="high"
-            />
-            <span className="portrait-label">JIAMING LI</span>
-          </div>
-          <div className="about-copy">
-            <div className="profile-actions">
-              <a className="primary-button" href="#work">
-                Explore my work <ArrowDown size={18} />
-              </a>
-              <a className="text-link" href={`mailto:${profile.email}`}>
-                Contact me <ArrowUpRight size={18} />
-              </a>
-              <a className="text-link" href="/jiaming-li-resume.pdf" download>
-                Résumé ↓
-              </a>
-            </div>
-            <p className="large-copy">
-              I like understanding why things work the way they do. Then finding
-              a way to make them work better.
-            </p>
-          </div>
-        </div>
-        <a className="scroll-discover" href="#background">Scroll to discover <ArrowDown size={18} /></a>
-      </div>
-      <div className="profile-details" id="background">
-        <div className="profile-biography">
-          <span className="micro">BACKGROUND & PERSPECTIVE</span>
-          <p>My background brings together applied mathematics, interactive media and European e-commerce. I connect analytical thinking with useful, tangible tools.</p>
-          <p>Having studied in Ireland, I value collaborative, international environments. I’m based in China and open to relocation, with Ireland as my preferred destination. Employer sponsorship would be required.</p>
-        </div>
-        <div className="education">
-          <span className="micro">EDUCATION</span>
-          <strong>MSc Computer Science (Interactive Media)</strong>
-          <span>University College Cork · 2024–2026</span>
-          <strong>BSc Applied Mathematics</strong>
-          <span>Taiyuan University of Science and Technology · 2020–2024</span>
-        </div>
-        <div className="skills">
-          {[
-            'Python',
-            'SQL',
-            'Excel',
-            'Power BI',
-            'Tableau',
-            'JavaScript',
-            'Data visualisation',
-            'Business analysis',
-          ].map((x) => (
-            <span key={x}>{x}</span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-function Experience() {
-  return (
-    <section className="experience section" id="experience">
-      <div className="section-heading">
-        <span className="micro">02 / EXPERIENCE</span>
-        <h2>
-          Grounded in
-          <br />
-          <em>real questions.</em>
-        </h2>
-      </div>
-      {experience.map((x) => (
-        <article className="experience-row" key={x.company}>
-          <span className="micro">{x.date}</span>
-          <div>
-            <h3>{x.role}</h3>
-            <span>{x.company}</span>
-          </div>
-          <div className="experience-detail">
-            <p>{x.text}</p>
-            <ul>
-              {x.highlights.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-            {x.project && (
-              <a className="text-link" href={`/work/${x.project}/`}>
-                Explore the related project ↗
-              </a>
-            )}
-          </div>
-        </article>
-      ))}
-    </section>
-  );
-}
-function ProjectCard({ p }: { p: (typeof projects)[number] }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  return (
-    <a
-      ref={ref}
-      className={`project-card card-${p.id}`}
-      href={`/work/${p.id}/`}
-      onPointerMove={(e) => {
-        if (
-          e.pointerType !== 'mouse' ||
-          matchMedia('(prefers-reduced-motion: reduce)').matches
-        )
-          return;
-        const r = e.currentTarget.getBoundingClientRect();
-        e.currentTarget.style.setProperty(
-          '--tilt',
-          `${((e.clientX - r.left) / r.width - 0.5) * 3}deg`,
-        );
-      }}
-      onPointerLeave={() => ref.current?.style.setProperty('--tilt', '0deg')}
-    >
-      <div className="card-top">
-        <span className="micro">
-          {p.number} / {p.tag}
-        </span>
-        <ArrowUpRight />
-      </div>
-      <ProjectImage image={p.featuredImage} compact />
-      <div className="card-copy">
-        <span className="micro">{p.context}</span>
-        <h3>{p.title}</h3>
-        <p>{p.summary}</p>
-        <div className="card-bottom">
-          <span>{p.status}</span>
-          <span className="circle-arrow">
-            <ArrowUpRight size={18} />
-          </span>
-        </div>
-      </div>
-    </a>
-  );
-}
-function Work() {
-  const [filter, setFilter] = useState('All');
-  const grid = useRef<HTMLDivElement>(null);
-  const positions = useRef(new Map<string, DOMRect>());
-  useEffect(() => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    grid.current
-      ?.querySelectorAll<HTMLElement>('[data-project]')
-      .forEach((el) => {
-        const prev = positions.current.get(el.dataset.project!);
-        if (prev) {
-          const now = el.getBoundingClientRect();
-          el.animate(
-            [
-              {
-                transform: `translate(${prev.left - now.left}px,${prev.top - now.top}px)`,
-              },
-              { transform: 'translate(0,0)' },
-            ],
-            { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' },
-          );
-        }
-      });
-  }, [filter]);
-  return (
-    <section className="work section" id="work">
-      <div className="section-heading">
-        <span className="micro">03 / SELECTED WORK</span>
-        <h2>
-          Different problems.
-          <br />
-          <em>One curious mind.</em>
-        </h2>
-        <p>
-          From research questions to working systems.
-          <br />
-          Four projects at the intersection of data and product.
-        </p>
-      </div>
-      {!archive && (
-        <div className="flagship">
-          <div className="flagship-copy">
-            <span className="micro accent">FEATURED / MCDA TOOL</span>
-            <h3>
-              Good decisions start
-              <br />
-              with better questions.
-            </h3>
-            <div className="story-step">
-              <span>01 — THE QUESTION</span>
-              <p>
-                Which tyre recovery option makes sense when every choice
-                involves a trade-off?
-              </p>
-            </div>
-            <div className="story-step">
-              <span>02 — THE METHOD</span>
-              <p>
-                Make the criteria explicit. Adjust their importance. See which
-                alternatives move to the top.
-              </p>
-            </div>
-            <div className="story-step">
-              <span>03 — THE TOOL</span>
-              <p>
-                Built at MaREI in Ireland, initially comparing five alternatives
-                within a research team of more than seven.
-              </p>
-            </div>
-            <a className="text-link" href="/work/mcda/">
-              Explore the case study <ArrowUpRight size={18} />
-            </a>
-          </div>
-          <div className="sticky-lab">
-            <DecisionLab />
-          </div>
-        </div>
-      )}
-      {archive && (
-        <div className="filters" aria-label="Filter projects">
-          {['All', 'Data', 'AI', 'Product'].map((f) => (
-            <button
-              key={f}
-              aria-pressed={filter === f}
-              onClick={() => {
-                positions.current.clear();
-                grid.current
-                  ?.querySelectorAll<HTMLElement>('[data-project]')
-                  .forEach((el) =>
-                    positions.current.set(
-                      el.dataset.project!,
-                      el.getBoundingClientRect(),
-                    ),
-                  );
-                setFilter(f);
-              }}
-            >
-              {f}
-              <span>
-                {f === 'All'
-                  ? 4
-                  : projects.filter((p) => p.category.includes(f)).length}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
-      <div ref={grid} className="project-grid">
-        {projects
-          .filter((p) => filter === 'All' || p.category.includes(filter))
-          .map((p) => (
-            <div data-project={p.id} key={p.id}>
-              <ProjectCard p={p} />
-            </div>
-          ))}
-      </div>
-    </section>
-  );
-}
-function Sidebar() {
-  return (
-    <aside className="archive-sidebar">
-      <a className="wordmark" href="/">
-        JL<span>JIAMING LI</span>
-      </a>
-      <p>
-        Data Analyst
-        <br />& practical tool builder.
-      </p>
-      <nav aria-label="Archive navigation">
-        <a href="/#about">01 — About me</a>
-        <a href="/#experience">02 — Experience</a>
-        <a href="/#work">03 — Selected work</a>
-        <a href="/#contact">04 — Get in touch</a>
-      </nav>
-      <div className="sidebar-bottom">
-        <span className="live-dot">Open to opportunities</span>
-        <a href="/jiaming-li-resume.pdf" download>
-          Download résumé ↗
-        </a>
+    <div className="footer-bottom">
+      <span>© {year} Jiaming Li</span>
+      <div>
+        {email ? (
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        ) : (
+          <a href="/resume/">{t(ui.resume)}</a>
+        )}
+        <a href={profile.linkedin}>LinkedIn ↗</a>
         <a href={profile.github}>GitHub ↗</a>
       </div>
-    </aside>
+    </div>
   );
 }
-export default function Portfolio({ projectId }: { projectId?: string }) {
-  const p = projects.find((x) => x.id === projectId);
-  useEffect(() => {
-    document.documentElement.dataset.edition = archive ? 'archive' : 'story';
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('in-view');
-            observer.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.08 },
-    );
-    document
-      .querySelectorAll('.section-heading,.experience-row,.story-step,.profile-details > div,.project-grid > div')
-      .forEach((el) => {
-        el.classList.add('reveal');
-        observer.observe(el);
-      });
-    const sections = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        'main > section[id], main > footer[id]',
-      ),
-    );
-    const updateNavigation = () => {
-      const landscape = document.querySelector('.profile-landscape');
-      document.querySelector('.edition')?.classList.toggle('hero-passed', !!landscape && landscape.getBoundingClientRect().bottom <= 0);
-      const active =
-        [...sections]
-          .reverse()
-          .find(
-            (section) =>
-              section.getBoundingClientRect().top <= innerHeight * 0.4,
-          ) ?? sections[0];
-      document.querySelectorAll('nav a[href^="/#"]').forEach((link) => {
-        if (link.getAttribute('href') === `/#${active?.id}`)
-          link.setAttribute('aria-current', 'location');
-        else link.removeAttribute('aria-current');
-      });
-    };
-    updateNavigation();
-    window.addEventListener('scroll', updateNavigation, { passive: true });
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', updateNavigation);
-    };
-  }, []);
+
+function ProjectImage({
+  image,
+  alt,
+  crop = false,
+  eager = false,
+}: {
+  image: Project['image'];
+  alt: string;
+  crop?: boolean;
+  eager?: boolean;
+}) {
   return (
-    <div id="top" className={`edition ${archive ? 'archive' : 'story'} ${p ? 'case-page' : 'home-page'}`}>
-      {archive ? (
-        <>
-          <a className="skip" href="#main">
-            Skip to content
+    <img
+      className={crop ? 'crop' : undefined}
+      src={image.src}
+      alt={alt}
+      width={image.width}
+      height={image.height}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchPriority={eager ? 'high' : 'auto'}
+      decoding="async"
+    />
+  );
+}
+
+function Home() {
+  const { lang, t } = useLang();
+  useSiteMotion(lang);
+  const [before, accent, after] = ui.heroTitle[lang];
+  const titles = Object.fromEntries(projects.map((p) => [p.id, t(p.title)]));
+  return (
+    <>
+      <Chrome t={t} />
+      <div className="wrap">
+        <header className="site-header">
+          <a className="wordmark" href="#top">
+            {lang === 'zh' ? '李嘉铭 Jiaming Li' : 'Jiaming Li'}
           </a>
-          <Sidebar />
-        </>
-      ) : (
-        <Header />
-      )}
-      <main id="main">
-        {p ? (
-          <>
-            <section className="case-hero section">
-              <a className="text-link" href="/#work">
-                <ArrowLeft size={18} /> All projects
-              </a>
-              <div className="micro accent">
-                {p.number} / {p.tag}
+          <nav aria-label="Main navigation">
+            <a href="#experience">{t(ui.nav.experience)}</a>
+            <a href="#work">{t(ui.nav.work)}</a>
+            <a href="#about">{t(ui.nav.about)}</a>
+            <a href="#contact">{t(ui.nav.contact)}</a>
+          </nav>
+          <div className="header-actions">
+            <LangToggle />
+            <a className="pill pill-ink" href="/resume/">
+              {t(ui.resume)} ↓
+            </a>
+          </div>
+        </header>
+        <main id="main">
+          <section id="top" className="hero">
+            <HeroChart />
+            <div>
+              <div className="status" data-reveal="0">
+                <span className="dot" />
+                {t(ui.status)}
               </div>
-              <h1>
-                {p.title}
-                <span className="accent">.</span>
+              <h1 data-reveal="90" data-speed="-0.06">
+                <span className="hero-title">
+                  {before.split('\n').map((line, i) => (
+                    <Fragment key={line}>
+                      {i > 0 && <br />}
+                      {line}
+                    </Fragment>
+                  ))}
+                  <em>{accent}</em>
+                  {after}
+                </span>
               </h1>
-              <p className="case-subtitle">{p.subtitle}</p>
-              <div className="case-meta">
-                <span>{p.context}</span>
-                <span>{p.status}</span>
-                <a href={`${profile.github}/${p.repo}`}>
-                  View source <Github size={16} />
+              <p className="hero-intro" data-reveal="200">
+                {t(ui.heroIntro)}
+              </p>
+              <div className="hero-actions" data-reveal="300">
+                <a className="pill pill-lg pill-accent" data-magnet="" href="#work">
+                  {t(ui.seeWork)}
+                </a>
+                <a
+                  className="pill pill-lg pill-outline"
+                  data-magnet=""
+                  href={`mailto:${profile.email}`}
+                >
+                  {profile.email}
                 </a>
               </div>
-            </section>
-            <section className="case-body section">
-              <div className="case-narrative case-intro">
-                <h2>The question</h2>
-                <p className="large-copy">{p.problem}</p>
-                <h3>My contribution</h3>
-                <p>{p.contribution}</p>
-                <h3>The approach</h3>
-                <p>{p.approach}</p>
-                <div className="fact-list">
-                  {p.facts.map((f) => (
-                    <span key={f}>
-                      <Check size={16} />
-                      {f}
+            </div>
+            <figure className="portrait" data-reveal="160">
+              <div data-follow="-22">
+                <img
+                  data-speed="0.05"
+                  src="/portrait.jpg"
+                  alt={t(profile.name)}
+                  width="540"
+                  height="680"
+                  loading="eager"
+                  fetchPriority="high"
+                />
+              </div>
+            </figure>
+          </section>
+
+          <section className="fact-strip" aria-label="Summary">
+            {ui.facts.map((f, i) => (
+              <div key={f.label.en} data-reveal={String([0, 90, 90, 180][i])}>
+                <span className="label">{t(f.label)}</span>
+                <span>{t(f.value)}</span>
+              </div>
+            ))}
+          </section>
+
+          <section id="experience" className="split section">
+            <h2 className="h2" data-reveal="0">
+              {t(ui.experienceTitle)}
+            </h2>
+            <div>
+              {experience.map((x) => (
+                <article className="exp-row" key={x.role.en} data-reveal="0">
+                  <span className="exp-date">{t(x.date)}</span>
+                  <div>
+                    <h3>{t(x.role)}</h3>
+                    <div className="org">{t(x.org)}</div>
+                    <ul>
+                      {x.points[lang].map((pt) => (
+                        <li key={pt}>{pt}</li>
+                      ))}
+                    </ul>
+                    {x.project && (
+                      <a className="related" href={caseHref(x.project)}>
+                        {t(ui.relatedProject)}
+                        {titles[x.project]} →
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section id="work" className="section ruled">
+            <div className="work-head">
+              <h2 className="h2" data-reveal="0">
+                {t(ui.workTitle)}
+              </h2>
+              <p>{t(ui.workIntro)}</p>
+            </div>
+            <div className="work-grid">
+              {projects.map((p, i) => (
+                <a
+                  className="work-card"
+                  key={p.id}
+                  href={caseHref(p.id)}
+                  data-reveal={String((i % 2) * 120)}
+                >
+                  <div className="mat" data-tilt="">
+                    <div className="mat-inner">
+                      <ProjectImage image={p.image} alt={t(p.image.caption)} crop />
+                    </div>
+                  </div>
+                  <div className="meta">
+                    <span>
+                      {p.n} · {t(p.tag)}
                     </span>
+                    <span>{t(p.status)}</span>
+                  </div>
+                  <h3>{t(p.title)} ↗</h3>
+                  <p>{t(p.summary)}</p>
+                  <span className="stack">{p.stack}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <section id="about" className="split section ruled">
+            <h2 className="h2" data-reveal="0">
+              {t(ui.aboutTitle)}
+            </h2>
+            <div className="about">
+              <p className="about-lead">{t(ui.about)}</p>
+              <div className="about-cols">
+                <div>
+                  <span className="label">{t(ui.educationLabel)}</span>
+                  {education.map((e) => (
+                    <div key={e.deg.en}>
+                      <div className="strong">{t(e.deg)}</div>
+                      <div className="sub">
+                        {t(e.school)} · {t(e.note)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <span className="label">{t(ui.skillsLabel)}</span>
+                  {skills[lang].map(([k, v]) => (
+                    <div key={k}>
+                      <div className="strong">{k}</div>
+                      <div className="sub">{v}</div>
+                    </div>
                   ))}
                 </div>
               </div>
-              <section
-                className="interface-walkthrough"
-                aria-labelledby="interface-heading"
-              >
-                <div className="gallery-heading">
-                  <span className="micro accent">WORKING INTERFACES</span>
-                  <h2 id="interface-heading">Interface walkthrough</h2>
-                  <p>
-                    Screens captured from the running project. Each note
-                    explains what the view shows and what I contributed.
-                  </p>
-                </div>
-                <Gallery images={[p.featuredImage, ...p.gallery]} />
-                {p.id === 'mcda' && (
-                  <div className="case-demo">
-                    <h3>Explore a synthetic scenario</h3>
-                    <DecisionLab />
-                  </div>
-                )}
-              </section>
-              <div className="case-narrative case-result">
-                <h3>What exists today</h3>
-                <p>{p.outcome}</p>
-                <details>
-                  <summary>
-                    Technical notes <Plus size={18} />
-                  </summary>
-                  <p>{p.stack.join(' · ')}</p>
-                  <a
-                    className="text-link"
-                    href={`${profile.github}/${p.repo}/blob/main/${p.source}`}
-                  >
-                    Read the project documentation ↗
-                  </a>
-                </details>
-                <details>
-                  <summary>
-                    What I’m exploring next <Plus size={18} />
-                  </summary>
-                  <p>{p.next}</p>
-                </details>
-              </div>
-            </section>
-            <section className="next-project section">
-              <span className="micro">KEEP EXPLORING</span>
-              <a href={`/work/${projects[(projects.indexOf(p) + 1) % 4].id}/`}>
-                {projects[(projects.indexOf(p) + 1) % 4].title}
-                <ArrowUpRight />
-              </a>
-            </section>
-          </>
-        ) : (
-          <>
-            <About />
-            <Experience />
-            <Work />
-            <Credentials />
-          </>
-        )}
-        <Footer />
-      </main>
-    </div>
+            </div>
+          </section>
+        </main>
+
+        <footer id="contact" className="contact ruled">
+          <h2 data-reveal="0">{t(ui.contactTitle)}</h2>
+          <a className="contact-email" href={`mailto:${profile.email}`}>
+            {profile.email} ↗
+          </a>
+          <SiteFooterLinks t={t} />
+        </footer>
+      </div>
+    </>
   );
+}
+
+function Case({ p }: { p: Project }) {
+  const { lang, t } = useLang();
+  useSiteMotion(lang);
+  const next = projects[(projects.indexOf(p) + 1) % projects.length];
+  return (
+    <>
+      <Chrome t={t} />
+      <div className="wrap">
+        <header className="site-header">
+          <a className="wordmark" href="/">
+            {lang === 'zh' ? '李嘉铭 Jiaming Li' : 'Jiaming Li'}
+          </a>
+          <nav aria-label="Projects">
+            {projects.map((x) => (
+              <a
+                key={x.id}
+                href={caseHref(x.id)}
+                aria-current={x.id === p.id ? 'page' : undefined}
+              >
+                {t(x.title)}
+              </a>
+            ))}
+          </nav>
+          <LangToggle />
+        </header>
+        <main id="main">
+          <section className="case-hero">
+            <div className="spot" data-spot="rgba(47,138,100,0.12)" />
+            <a className="back" href={archive ? '/#projects' : '/#work'}>
+              {t(ui.allProjects)}
+            </a>
+            <div className="case-tag" data-reveal="0">
+              {p.n} · {t(p.tag)}
+            </div>
+            <h1 data-reveal="80">
+              {t(p.title)}
+              <span className="accent">.</span>
+            </h1>
+            <p className="case-subtitle" data-reveal="160">
+              {t(p.subtitle)}
+            </p>
+            <div className="case-pills" data-reveal="240">
+              <span className="pill pill-outline-soft">{t(p.ctx)}</span>
+              <span className="pill pill-outline-soft">{t(p.status)}</span>
+              <a
+                className="pill pill-ink"
+                data-magnet=""
+                href={`${profile.github}/${p.repo}`}
+              >
+                {t(ui.viewSource)}
+              </a>
+            </div>
+          </section>
+
+          <figure className="case-feature" data-reveal="120">
+            <div className="mat mat-lg" data-tilt="">
+              <div className="mat-inner">
+                <ProjectImage image={p.image} alt={t(p.image.caption)} eager />
+              </div>
+            </div>
+          </figure>
+
+          <section className="case-narrative">
+            <div data-reveal="0">
+              <div className="label">{t(ui.question)}</div>
+              <p className="question">{t(p.problem)}</p>
+            </div>
+            <div className="case-detail">
+              <div data-reveal="80">
+                <h2>{t(ui.contribution)}</h2>
+                <p>{t(p.contribution)}</p>
+              </div>
+              <div data-reveal="160">
+                <h2>{t(ui.approach)}</h2>
+                <p>{t(p.approach)}</p>
+              </div>
+              <ul className="facts" data-reveal="240">
+                {p.facts[lang].map((f) => (
+                  <li key={f}>
+                    <span aria-hidden="true">✓</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section className="case-gallery ruled">
+            <h2 className="h2" data-reveal="0">
+              {t(ui.walkthrough)}
+            </h2>
+            <div className="gallery-grid">
+              {p.gallery.map((g, i) => (
+                <figure key={g.src} data-reveal={String((i % 2) * 120)}>
+                  <div className="mat" data-tilt="">
+                    <div className="mat-inner">
+                      <ProjectImage image={g} alt={t(g.caption)} />
+                    </div>
+                  </div>
+                  <figcaption>{t(g.caption)}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+
+          <section className="case-outcome ruled">
+            <div data-reveal="0">
+              <div className="label">{t(ui.today)}</div>
+              <p>{t(p.outcome)}</p>
+            </div>
+            <div data-reveal="100">
+              <div className="label">{t(ui.stack)}</div>
+              <p>{p.stack}</p>
+            </div>
+          </section>
+
+          <a className="next-project" href={caseHref(next.id)} data-reveal="0">
+            <div>
+              <div className="next-label">{t(ui.nextProject)}</div>
+              <div className="next-title">{t(next.title)}</div>
+            </div>
+            <span aria-hidden="true">→</span>
+          </a>
+        </main>
+        <footer className="case-footer">
+          <SiteFooterLinks t={t} email />
+        </footer>
+      </div>
+    </>
+  );
+}
+
+function Resume() {
+  const { lang, t } = useLang();
+  useSiteMotion(lang);
+  const r = ui.resumePage;
+  return (
+    <>
+      <Chrome t={t} />
+      <div className="wrap wrap-narrow">
+        <header className="site-header">
+          <a className="wordmark" href="/">
+            {t(r.back)}
+          </a>
+          <div className="header-actions">
+            <LangToggle />
+            <a
+              className="pill pill-accent"
+              data-magnet=""
+              href={profile.resumePdf}
+              download
+            >
+              {t(r.download)}
+            </a>
+          </div>
+        </header>
+        <main id="main" className="resume">
+          <section className="resume-head">
+            <h1 data-reveal="0">
+              {lang === 'zh' ? '李嘉铭 Jiaming Li' : 'Jiaming Li'}
+            </h1>
+            <p className="headline" data-reveal="100">
+              {t(r.headline)}
+            </p>
+            <p className="summary" data-reveal="180">
+              {t(r.summary)}
+            </p>
+            <div className="contact-row" data-reveal="240">
+              <a href={`mailto:${profile.email}`}>{profile.email}</a>
+              <a href={profile.linkedin}>LinkedIn ↗</a>
+              <a href={profile.github}>GitHub ↗</a>
+              <span>{t(r.location)}</span>
+            </div>
+          </section>
+
+          <section className="resume-row">
+            <h2 data-reveal="0">{t(r.experience)}</h2>
+            <div className="stack-28">
+              {experience.map((x) => (
+                <div key={x.role.en} data-reveal="0">
+                  <div className="row-head">
+                    <h3>{t(x.role)}</h3>
+                    <span>{t(x.date)}</span>
+                  </div>
+                  <div className="sub">{t(x.org)}</div>
+                  <ul>
+                    {x.points[lang].map((pt) => (
+                      <li key={pt}>{pt}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="resume-row">
+            <h2 data-reveal="0">{t(r.projects)}</h2>
+            <div className="stack-18">
+              {projects.map((p) => (
+                <a
+                  className="resume-project"
+                  key={p.id}
+                  href={caseHref(p.id)}
+                  data-reveal="0"
+                >
+                  <div className="strong">{t(p.title)} ↗</div>
+                  <div className="sub">{t(p.summary)}</div>
+                  <div className="stack">{p.stack}</div>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          <section className="resume-row">
+            <h2 data-reveal="0">{t(r.education)}</h2>
+            <div className="stack-20">
+              {education.map((e) => (
+                <div key={e.deg.en} data-reveal="0">
+                  <div className="row-head">
+                    <h3>{t(e.deg)}</h3>
+                    <span>{t(e.date)}</span>
+                  </div>
+                  <div className="sub">
+                    {t(e.school)} · {t(e.note)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="resume-row last">
+            <h2 data-reveal="0">{t(r.skills)}</h2>
+            <div className="stack-12">
+              {skills[lang].map(([k, v]) => (
+                <div className="kv" key={k} data-reveal="0">
+                  <strong>{k}</strong>
+                  <span>{v}</span>
+                </div>
+              ))}
+              <div className="kv" data-reveal="0">
+                <strong>{t(r.languages)}</strong>
+                <span>{t(r.languagesValue)}</span>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </>
+  );
+}
+
+const filters: ('All' | Category)[] = ['All', 'Data', 'AI', 'Product'];
+function Archive() {
+  const { lang, t } = useLang();
+  const [filter, setFilter] = useState<(typeof filters)[number]>('All');
+  useSiteMotion(`${lang}-${filter}`);
+  const a = ui.archive;
+  const list = projects.filter((p) => filter === 'All' || p.cat.includes(filter));
+  return (
+    <>
+      <Chrome t={t} wide={false} />
+      <div className="archive">
+        <aside className="archive-sidebar">
+          <div>
+            <a className="archive-name" href="/">
+              {t(profile.name)}
+            </a>
+            <p>{t(a.tagline)}</p>
+          </div>
+          <nav aria-label="Archive navigation">
+            {a.nav.map((n) => (
+              <a key={n.href} href={n.href}>
+                {t(n.label)}
+              </a>
+            ))}
+          </nav>
+          <div className="sidebar-bottom">
+            <span className="open">
+              <span className="dot" />
+              {t(a.open)}
+            </span>
+            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            <a href={profile.github}>GitHub ↗</a>
+            <LangToggle />
+          </div>
+        </aside>
+        <main id="main" className="archive-main">
+          <section id="projects">
+            <div className="archive-head">
+              <h1 data-reveal="0">{t(a.title)}</h1>
+              <fieldset className="filters">
+                <legend className="sr-only">Filter projects</legend>
+                {filters.map((f) => (
+                  <button
+                    key={f}
+                    aria-pressed={filter === f}
+                    onClick={() => setFilter(f)}
+                  >
+                    {t(a.filters[f])}
+                    <span>
+                      {f === 'All'
+                        ? projects.length
+                        : projects.filter((p) => p.cat.includes(f)).length}
+                    </span>
+                  </button>
+                ))}
+              </fieldset>
+            </div>
+            <div className="archive-grid">
+              {list.map((p, i) => (
+                <a
+                  className="archive-card"
+                  key={p.id}
+                  href={caseHref(p.id)}
+                  data-reveal={String((i % 3) * 90)}
+                >
+                  <div className="archive-thumb" data-tilt="">
+                    <ProjectImage image={p.image} alt={t(p.image.caption)} crop />
+                  </div>
+                  <div className="meta">
+                    <span>
+                      {p.n} · {t(p.tag)}
+                    </span>
+                    <span>{t(p.status)}</span>
+                  </div>
+                  <h2>{t(p.title)}</h2>
+                  <p>{t(p.summary)}</p>
+                  <span className="stack">{p.stack}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+          <section id="experience" className="archive-exp">
+            <h2 data-reveal="0">{t(ui.experienceTitle)}</h2>
+            {experience.map((x) => (
+              <div className="archive-exp-row" key={x.role.en} data-reveal="0">
+                <span>{t(x.date)}</span>
+                <div>
+                  <div className="strong">{t(x.role)}</div>
+                  <div className="sub">{t(x.org)}</div>
+                </div>
+              </div>
+            ))}
+          </section>
+        </main>
+      </div>
+    </>
+  );
+}
+
+export function NotFoundView() {
+  const { t } = useLang();
+  return (
+    <main className="not-found">
+      <p className="label">{t(ui.notFound.label)}</p>
+      <h1>{t(ui.notFound.title)}</h1>
+      <a href="/">{t(ui.notFound.back)}</a>
+    </main>
+  );
+}
+
+export default function Portfolio({
+  projectId,
+  view,
+}: {
+  projectId?: string;
+  view?: 'resume';
+}) {
+  const p = projects.find((x) => x.id === projectId);
+  if (p) return <Case p={p} />;
+  if (view === 'resume') return <Resume />;
+  return archive ? <Archive /> : <Home />;
 }
