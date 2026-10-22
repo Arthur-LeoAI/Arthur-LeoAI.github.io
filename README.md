@@ -1,6 +1,6 @@
 # Jiaming Li — portfolio
 
-Two static presentations share `lib/content.ts`: the story edition ("Profile Sheet" home) on Sites and the archive edition (sidebar + project archive) on GitHub Pages. Both include the case studies (`/work/[slug]/`) and the web résumé (`/resume/`).
+Two static presentations share `lib/content.ts`: the story edition ("Profile Sheet" home), published on GitHub Pages and Sites, and the archive edition (sidebar + project archive), which is built locally only. Both include the case studies (`/work/[slug]/`) and the web résumé (`/resume/`).
 
 ## Develop and build
 
