@@ -270,9 +270,13 @@ em {
   isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(220px, 0.8fr);
-  gap: clamp(28px, 5vw, 72px);
-  align-items: end;
+  column-gap: clamp(28px, 5vw, 72px);
+  align-items: start;
   padding: clamp(48px, 8vw, 104px) 0 clamp(40px, 6vw, 72px);
+}
+/* Status spans both columns so the headline and portrait share one top edge. */
+.hero > .status {
+  grid-column: 1 / -1;
 }
 .hero-chart {
   position: absolute;
@@ -331,6 +335,9 @@ html[lang='zh-CN'] .hero em {
 }
 .portrait {
   margin: 0;
+  /* Optical alignment with the cap height of the serif headline. */
+  padding-top: 0.12em;
+  font-size: clamp(48px, 7.2vw, 104px);
 }
 .portrait > div {
   border-radius: 4px;

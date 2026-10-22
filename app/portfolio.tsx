@@ -119,12 +119,12 @@ function Home() {
         <main id="main">
           <section id="top" className="hero">
             <HeroChart />
+            <div className="status" data-reveal="0">
+              <span className="dot" />
+              {t(ui.status)}
+            </div>
             <div>
-              <div className="status" data-reveal="0">
-                <span className="dot" />
-                {t(ui.status)}
-              </div>
-              <h1 data-reveal="90" data-speed="-0.06">
+              <h1 data-reveal="90">
                 <span className="hero-title">
                   {before.split('\n').map((line, i) => (
                     <Fragment key={line}>
@@ -140,12 +140,11 @@ function Home() {
                 {t(ui.heroIntro)}
               </p>
               <div className="hero-actions" data-reveal="300">
-                <a className="pill pill-lg pill-accent" data-magnet="" href="#work">
+                <a className="pill pill-lg pill-accent" href="#work">
                   {t(ui.seeWork)}
                 </a>
                 <a
                   className="pill pill-lg pill-outline"
-                  data-magnet=""
                   href={`mailto:${profile.email}`}
                 >
                   {profile.email}
@@ -153,7 +152,7 @@ function Home() {
               </div>
             </div>
             <figure className="portrait" data-reveal="160">
-              <div data-follow="-22">
+              <div>
                 <img
                   data-speed="0.05"
                   src="/portrait.jpg"
@@ -328,7 +327,6 @@ function Case({ p }: { p: Project }) {
               <span className="pill pill-outline-soft">{t(p.status)}</span>
               <a
                 className="pill pill-ink"
-                data-magnet=""
                 href={`${profile.github}/${p.repo}`}
               >
                 {t(ui.viewSource)}
@@ -378,7 +376,7 @@ function Case({ p }: { p: Project }) {
                 <figure key={g.src} data-reveal={String((i % 2) * 120)}>
                   <div className="mat" data-tilt="">
                     <div className="mat-inner">
-                      <ProjectImage image={g} alt={t(g.caption)} />
+                      <ProjectImage image={g} alt={t(g.caption)} crop />
                     </div>
                   </div>
                   <figcaption>{t(g.caption)}</figcaption>
@@ -430,7 +428,6 @@ function Resume() {
             <LangToggle />
             <a
               className="pill pill-accent"
-              data-magnet=""
               href={profile.resumePdf}
               download
             >
