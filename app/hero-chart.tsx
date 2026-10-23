@@ -57,20 +57,24 @@ export default function HeroChart() {
       canvas.width = W * dpr;
       canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      step = W < 700 ? 9 : 10;
-      // Chart band sits in the hero's bottom padding, below the headline and button.
+      // Tall band with big swings; the centre mask keeps the headline readable.
       bot = H - 30;
-      top = bot - Math.min(H * 0.24, 170);
+      top = bot - H * 0.62;
+      // Grow the dot spacing until the dot count stays within budget.
+      step = W < 700 ? 9 : 10;
+      while ((W / step) * ((bot - top) / step) * 0.55 > 3400) step++;
       let seed = 7;
       const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
       const cols = Math.floor(W / step);
       const maxRows = Math.max(4, Math.floor((bot - top) / step));
       values = [];
-      let v = 0.55;
+      let noise = 0;
       for (let c = 0; c < cols; c++) {
-        v += (rnd() - 0.5) * 0.12 + (0.55 - v) * 0.04;
-        v = Math.min(0.98, Math.max(0.12, v));
-        values.push(v);
+        const k = c / cols;
+        noise += (rnd() - 0.5) * 0.09 - noise * 0.08;
+        // Two slow waves give large peaks and troughs; the walk adds texture.
+        const wave = 0.3 * Math.sin(k * Math.PI * 2.6 + 0.4) + 0.14 * Math.sin(k * Math.PI * 7.1 + 1.3);
+        values.push(Math.min(0.97, Math.max(0.06, 0.5 + wave + noise)));
       }
       dots = [];
       tops = [];

@@ -15,7 +15,7 @@ import {
 } from '@/lib/content';
 import HeroChart from './hero-chart';
 import MarketLens from './market-lens';
-import AiWorkflow from './ai-workflow';
+import AiLab from './ai-lab';
 import { useLang } from './language';
 import { useSiteMotion } from './use-site-motion';
 
@@ -214,7 +214,7 @@ function Home() {
                 ))}
               </dl>
             </div>
-            <AiWorkflow />
+            <AiLab />
           </section>
 
           <section id="work" className="section ruled">

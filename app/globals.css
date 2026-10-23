@@ -275,8 +275,8 @@ em {
   justify-content: center;
   text-align: center;
   min-height: min(86vh, 900px);
-  /* Bottom padding leaves room for the dot chart band drawn by HeroChart. */
-  padding: clamp(40px, 6vw, 80px) 0 clamp(150px, 26vh, 230px);
+  /* The dot chart fills the lower ~60%; the centre mask keeps the copy readable. */
+  padding: clamp(40px, 6vw, 80px) 0 clamp(80px, 12vh, 140px);
 }
 .hero-copy {
   max-width: 1100px;
@@ -721,6 +721,133 @@ html[lang='zh-CN'] .hero em {
   margin-left: auto;
   font-size: 11px;
   white-space: nowrap;
+}
+.lab-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.lab-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 8px 12px;
+  background: transparent;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+}
+.lab-tabs button[aria-selected='true'] {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
+  font-weight: 600;
+}
+.attn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px;
+}
+.attn-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+.attn-token {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 7px 10px 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.35s var(--ease);
+}
+.attn-token span {
+  font-size: 15px;
+  font-weight: 500;
+}
+.attn-token small {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 10px;
+  color: var(--ink-2);
+}
+.attn-token[data-query] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+.attn-token[data-query] small {
+  color: var(--control);
+}
+.attn-readout {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.attn-readout strong {
+  color: var(--ink);
+}
+.attn-readout span {
+  color: var(--accent);
+  font-weight: 500;
+}
+.attn-matrix {
+  display: grid;
+  grid-template-columns: 76px repeat(8, minmax(0, 1fr));
+  gap: 3px;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 10px;
+  color: var(--subtle);
+}
+.attn-col {
+  text-align: center;
+  overflow: hidden;
+}
+.attn-row {
+  display: contents;
+}
+.attn-rowlabel {
+  align-self: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+}
+.attn-row[data-active] .attn-rowlabel {
+  color: var(--ink);
+  font-weight: 600;
+}
+.attn-cell {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  outline: 1px solid transparent;
+  transition: outline-color 0.2s;
+}
+.attn-row[data-active] .attn-cell {
+  outline-color: var(--ink);
+}
+.attn-formula {
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: var(--surface);
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: var(--ink);
+  text-align: center;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.lab-note {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--subtle);
 }
 .flow-progress {
   height: 2px;

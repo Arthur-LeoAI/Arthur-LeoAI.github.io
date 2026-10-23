@@ -458,13 +458,13 @@ export const skills: Record<Lang, [string, string][]> = {
     ['Data & BI', 'SQL · Python · Excel · Power BI · Tableau'],
     ['E-commerce', 'Seller Central · Helium 10 · Keepa · Amalytix'],
     ['Engineering', 'JavaScript/TypeScript · React · InfluxDB · Git'],
-    ['AI & automation', 'LLM APIs · AI coding agents · Prompt design · Workflow automation'],
+    ['AI & ML', 'LLM APIs · Transformers & embeddings · scikit-learn · Neural networks · Workflow automation'],
   ],
   zh: [
     ['数据与 BI', 'SQL · Python · Excel · Power BI · Tableau'],
     ['电商运营', 'Seller Central · Helium 10 · Keepa · Amalytix'],
     ['工程开发', 'JavaScript/TypeScript · React · InfluxDB · Git'],
-    ['AI 与自动化', 'LLM API · AI 编程助手 · 提示词设计 · 自动化工作流'],
+    ['AI 与机器学习', 'LLM API · Transformer 与向量嵌入 · scikit-learn · 神经网络 · 自动化工作流'],
   ],
 };
 
@@ -488,8 +488,8 @@ export const ui = {
     zh: ['把', '杂乱的业务数据', '\n变成清晰的决策。'],
   } as TextList,
   heroSub: {
-    en: 'A data analyst who builds with AI: tools, websites and automated workflows.',
-    zh: '用 AI 构建工具、网站与自动化工作流的数据分析师。',
+    en: 'A data analyst who understands how AI works, and builds with it: tools, websites and automated workflows.',
+    zh: '懂 AI 原理，也用 AI 构建工具、网站与自动化工作流的数据分析师。',
   },
   heroHint: {
     en: 'Move your cursor to sort the noise',
@@ -569,78 +569,102 @@ export const ui = {
       zh: '数字仅作演示，并非公司真实数据。',
     },
   },
-  // "Built with AI" section. The demo run is simulated.
+  // "Built with AI" section. Demo numbers and attention weights are illustrative.
   ai: {
-    title: { en: 'Built with AI', zh: '用 AI 构建' },
+    title: { en: 'AI, from first principles', zh: '懂原理，也能落地的 AI' },
     lead: {
-      en: 'I treat AI as an everyday working tool: to build tools and websites faster, to automate the repetitive parts of analysis, and to leave more time for the judgement calls.',
-      zh: '我把 AI 当作日常工作工具：更快地搭建工具和网站，把分析中重复的部分自动化，把时间留给真正需要判断的地方。',
+      en: 'I don’t just chat with AI. I studied machine learning and neural networks in applied mathematics, I understand how transformer models work, and I build with them through APIs, turning that understanding into tools that create real value.',
+      zh: '我不只是和 AI 聊天。我在应用数学专业系统学习过机器学习与神经网络，理解 Transformer 模型的工作原理，并通过 API 把模型接入真实的开发，把对原理的理解转化为能创造价值的工具。',
     },
     points: [
       {
-        k: { en: 'Build', zh: '构建' },
+        k: { en: 'Foundations', zh: '理论基础' },
         v: {
-          en: 'Prototype tools and websites with AI coding agents. This portfolio was designed and built that way.',
-          zh: '用 AI 编程助手快速做出工具和网站原型。这个作品集网站就是这样设计和搭建的。',
+          en: 'Machine learning, neural networks and algorithm design from my applied-mathematics degree; Random Forest models in my quantitative-analysis project.',
+          zh: '应用数学本科打下机器学习、神经网络与算法设计基础；在量化分析项目中实际训练过随机森林模型。',
         },
       },
       {
-        k: { en: 'Automate', zh: '自动化' },
+        k: { en: 'Transformers', zh: 'Transformer' },
         v: {
-          en: 'Chain cleaning, checks and reporting into repeatable AI-assisted workflows.',
-          zh: '把数据清洗、校验和报表串成可重复运行的 AI 辅助工作流。',
+          en: 'Tokens, embeddings, self-attention and context windows. Knowing how models read input shapes how I design prompts and context.',
+          zh: '理解分词、向量嵌入、自注意力与上下文窗口。清楚模型如何“读”输入，才能设计好提示词与上下文。',
         },
       },
       {
-        k: { en: 'Apply', zh: '应用' },
+        k: { en: 'API development', zh: 'API 开发' },
         v: {
-          en: 'Use LLMs in everyday analysis, from research and summaries to first drafts.',
-          zh: '在日常分析中使用大模型：调研、总结、起草初稿。',
+          en: 'LLM APIs built into real software: MoTai passes a structured story bible as context to configurable model providers.',
+          zh: '把大模型 API 集成进真实软件：MoTai 将结构化的故事设定作为上下文，传给可配置的模型服务商。',
         },
       },
       {
-        k: { en: 'Verify', zh: '把关' },
+        k: { en: 'Engineering', zh: '工程落地' },
         v: {
-          en: 'AI drafts, I check: every output passes a rule check or a human review.',
-          zh: 'AI 起草，我来把关：每个结果都要经过规则校验或人工审阅。',
+          en: 'AI coding agents and automated pipelines, with schema validation, rule checks and human review before anything ships. This portfolio was built that way.',
+          zh: '使用 AI 编程助手与自动化流水线，结果上线前都经过结构校验、规则检查与人工审阅。这个网站就是这样搭建的。',
         },
       },
     ],
-    demo: {
-      kicker: { en: 'Demo · simulated run', zh: '演示 · 模拟运行' },
-      file: 'weekly-report.workflow',
-      run: { en: 'Run workflow ▶', zh: '运行工作流 ▶' },
-      running: { en: 'Running…', zh: '运行中…' },
-      rerun: { en: 'Run again ↻', zh: '再运行一次 ↻' },
-      steps: [
-        {
-          label: { en: 'Pull marketplace export', zh: '拉取站点数据导出' },
-          out: { en: '1,920 rows · 8 markets', zh: '1,920 行 · 8 个站点' },
-        },
-        {
-          label: { en: 'AI cleans and tags listings', zh: 'AI 清洗并标注商品' },
-          out: { en: '42 duplicates merged · 117 titles tagged', zh: '合并 42 条重复 · 标注 117 个标题' },
-        },
-        {
-          label: { en: 'Rule checks', zh: '规则校验' },
-          out: { en: '3 outliers flagged', zh: '标记 3 个异常值' },
-        },
-        {
-          label: { en: 'Human review', zh: '人工审阅' },
-          out: { en: '2 flags kept · 1 dismissed', zh: '保留 2 个 · 排除 1 个' },
-        },
-        {
-          label: { en: 'Draft weekly summary', zh: '起草周报摘要' },
-          out: { en: 'Ready to send', zh: '可以发送' },
-        },
-      ],
-      result: {
-        en: 'Market B: high traffic, low conversion. Check the listing and price first.',
-        zh: '站点 B：流量高、转化低。建议先检查商品页与定价。',
+    lab: {
+      tabs: {
+        attention: { en: 'Self-attention', zh: '自注意力' },
+        pipeline: { en: 'API pipeline', zh: 'API 流水线' },
       },
-      note: {
-        en: 'Simulated run with synthetic numbers, not real company data.',
-        zh: '模拟运行，数字为虚构，并非公司真实数据。',
+      kicker: { en: 'Interactive · illustrative', zh: '可交互 · 示意' },
+      attention: {
+        file: 'attention.head-1',
+        hint: {
+          en: 'Hover a token to see where it looks. Each row of the matrix sums to 1 after softmax.',
+          zh: '把鼠标移到某个词上，看它在“关注”哪些词。经过 softmax 后，矩阵每一行之和为 1。',
+        },
+        attends: { en: 'attends most to', zh: '最关注' },
+        query: { en: 'Query', zh: '查询词' },
+        keys: { en: 'Keys', zh: '键' },
+        note: {
+          en: 'Hand-set weights to illustrate the mechanism; not output from a trained model.',
+          zh: '权重为手工设定，仅用于说明机制，并非训练模型的实际输出。',
+        },
+      },
+      pipeline: {
+        file: 'weekly-report.pipeline',
+        run: { en: 'Run pipeline ▶', zh: '运行流水线 ▶' },
+        running: { en: 'Running…', zh: '运行中…' },
+        rerun: { en: 'Run again ↻', zh: '再运行一次 ↻' },
+        steps: [
+          {
+            label: { en: 'Load marketplace export', zh: '加载站点数据导出' },
+            out: { en: 'pandas · 1,920 rows × 14 cols', zh: 'pandas · 1,920 行 × 14 列' },
+          },
+          {
+            label: { en: 'Embed product titles', zh: '商品标题向量化' },
+            out: { en: 'cosine > 0.92 · 42 near-duplicates clustered', zh: '余弦相似度 > 0.92 · 聚出 42 组近似重复' },
+          },
+          {
+            label: { en: 'LLM API call · structured output', zh: '调用大模型 API · 结构化输出' },
+            out: { en: '117 listings tagged · JSON schema valid', zh: '标注 117 个商品 · JSON Schema 校验通过' },
+          },
+          {
+            label: { en: 'Statistical checks', zh: '统计校验' },
+            out: { en: '3 outliers flagged (|z| > 3)', zh: '标记 3 个异常值（|z| > 3）' },
+          },
+          {
+            label: { en: 'Human review', zh: '人工审阅' },
+            out: { en: '2 kept · 1 dismissed', zh: '保留 2 个 · 排除 1 个' },
+          },
+          {
+            label: { en: 'Draft weekly summary', zh: '起草周报摘要' },
+            out: { en: 'Ready to send', zh: '可以发送' },
+          },
+        ],
+        result: {
+          en: 'Market B: high traffic, low conversion. Check the listing and price first.',
+          zh: '站点 B：流量高、转化低。建议先检查商品页与定价。',
+        },
+        note: {
+          en: 'Simulated run with synthetic numbers, not real company data.',
+          zh: '模拟运行，数字为虚构，并非公司真实数据。',
+        },
       },
     },
   },
