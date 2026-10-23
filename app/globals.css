@@ -125,6 +125,11 @@ fieldset.filters {
   font-size: clamp(36px, 4vw, 52px);
   line-height: 1;
   margin: 0;
+  text-wrap: balance;
+}
+html[lang='zh-CN'] .h2 {
+  line-height: 1.2;
+  word-break: keep-all;
 }
 .section {
   padding: var(--section) 0;
@@ -958,6 +963,142 @@ li[data-state='run'] .flow-icon {
   opacity: 0.7;
 }
 
+/* AI section extras */
+.ai-foundations {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--subtle);
+}
+li[data-warn][data-state='done'] .flow-icon {
+  border-color: var(--accent);
+  background: var(--bg);
+  color: var(--accent);
+}
+
+/* Deployments: card constraint line, supporting evidence, also-built */
+.card-constraint {
+  margin: 0;
+  padding: 12px 0 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.card-constraint dt {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 4px;
+}
+.card-constraint dd {
+  margin: 0;
+  color: var(--ink-2);
+}
+.supporting {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.supporting-card {
+  display: grid;
+  grid-template-columns: minmax(160px, 260px) minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 32px);
+  align-items: center;
+  color: var(--ink);
+}
+.supporting-card:hover {
+  color: var(--accent);
+}
+.supporting-thumb {
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 10px;
+}
+.supporting-thumb img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+.supporting-card h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 8px 0 6px;
+}
+.supporting-card p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.also-built {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.also-built .label {
+  margin-right: 14px;
+}
+
+/* Case study: fixed five-step structure */
+.case-steps {
+  list-style: none;
+  margin: 0;
+  padding: clamp(40px, 6vw, 80px) 0;
+}
+.case-step {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.6fr) minmax(0, 2fr);
+  gap: clamp(20px, 4vw, 56px);
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+}
+.case-step:first-child {
+  border-top-color: var(--line-strong);
+}
+.step-label {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+.step-n {
+  font-size: 13px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.step-label h2 {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin: 0;
+}
+.step-body p {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-2);
+  max-width: 760px;
+}
+.step-problem .step-body p {
+  font-family: var(--serif);
+  font-size: clamp(26px, 2.8vw, 36px);
+  line-height: 1.2;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.step-body .facts {
+  margin-top: 18px;
+  max-width: 520px;
+}
+
 /* Selected work */
 .work-head {
   display: flex;
@@ -1605,7 +1746,9 @@ img.crop {
   .split,
   #experience.split,
   #ai.split,
-  .resume-row {
+  .resume-row,
+  .case-step,
+  .supporting-card {
     grid-template-columns: minmax(0, 1fr);
   }
   .lens-col {
@@ -1659,5 +1802,82 @@ img.crop {
   .lens-bar,
   .lens-mean {
     transition: none;
+  }
+}
+
+/* Print: used to export the résumé PDFs from /resume/ (?lang=en|zh). */
+@page {
+  size: A4;
+  margin: 14mm 14mm 12mm;
+}
+@media print {
+  html,
+  body {
+    background: #fff;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .progress,
+  .skip,
+  .header-actions,
+  .site-header {
+    display: none !important;
+  }
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+  .resume-head {
+    padding: 0 0 16px;
+  }
+  .resume-head h1 {
+    font-size: 40px;
+  }
+  .resume-head .summary,
+  .resume-row ul,
+  .kv,
+  .resume-project .sub {
+    font-size: 12.5px;
+  }
+  .resume-row {
+    padding: 14px 0;
+    gap: 20px;
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+  /* Keep individual entries whole; sections may flow across pages. */
+  .resume-row > div > *,
+  .resume-row h2 {
+    break-inside: avoid;
+  }
+  .contact-row a[href^='http']::after {
+    content: ' ' attr(href);
+    color: var(--subtle);
+  }
+  .resume-row.last {
+    padding-bottom: 0;
+  }
+  .resume-row h3 {
+    font-size: 14px;
+  }
+  .sub,
+  .row-head span,
+  .contact-row {
+    font-size: 12px;
+  }
+  .stack-28 {
+    gap: 14px;
+  }
+  .stack-18,
+  .stack-20 {
+    gap: 10px;
+  }
+  .resume-row ul {
+    margin-top: 6px;
+    gap: 2px;
+  }
+  a {
+    color: var(--accent);
   }
 }

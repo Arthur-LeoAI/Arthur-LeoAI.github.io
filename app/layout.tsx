@@ -2,12 +2,12 @@ import type { Metadata } from 'next';
 import './globals.css';
 export const metadata: Metadata = {
   icons: { icon: '/favicon.svg' },
-  title: 'Jiaming Li — Data Analyst',
+  title: 'Jiaming Li — Applied AI & Solutions',
   description:
-    'Jiaming Li is a data analyst who turns messy business data into decisions. Open to data analyst roles worldwide · visa sponsorship needed.',
+    'Jiaming Li builds and deploys data and AI tools into real business workflows: production monitoring, decision support and LLM integrations. Based in China · Open to Dublin and the EU · Visa sponsorship required.',
 };
-// Applies the saved language and hides reveal targets before first paint.
-const boot = `try{var l=localStorage.getItem('jl-site-lang');if(l==='zh')document.documentElement.lang='zh-CN'}catch(e){}if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motion='on'`;
+// Applies the saved (or ?lang=) language and hides reveal targets before first paint.
+const boot = `try{var l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('jl-site-lang');if(l==='zh')document.documentElement.lang='zh-CN'}catch(e){}if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motion='on'`;
 export default function RootLayout({
   children,
 }: {

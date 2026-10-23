@@ -1,7 +1,7 @@
 import Portfolio from '@/app/portfolio';
-import { projects } from '@/lib/content';
+import { published } from '@/lib/content';
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.id }));
+  return published.map((p) => ({ slug: p.id }));
 }
 export async function generateMetadata({
   params,
@@ -9,7 +9,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const p = projects.find((x) => x.id === slug);
+  const p = published.find((x) => x.id === slug);
   return {
     title: `${p?.title.en || 'Project'} — Jiaming Li`,
     description: p?.summary.en,

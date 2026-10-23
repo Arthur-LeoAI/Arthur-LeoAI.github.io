@@ -143,9 +143,9 @@ function Pipeline() {
         {d.steps.map((s, i) => {
           const state = i < step ? 'done' : i === step ? 'run' : 'wait';
           return (
-            <li key={s.label.en} data-state={state}>
+            <li key={s.label.en} data-state={state} data-warn={s.warn || undefined}>
               <span className="flow-icon" aria-hidden="true">
-                {state === 'done' ? '✓' : state === 'run' ? '' : String(i + 1)}
+                {state === 'done' ? (s.warn ? '↻' : '✓') : state === 'run' ? '' : String(i + 1)}
               </span>
               <span className="flow-label">{t(s.label)}</span>
               <span className="flow-out">{state === 'done' ? t(s.out) : ''}</span>
@@ -156,7 +156,7 @@ function Pipeline() {
       <div className="flow-result" data-show={done || undefined} aria-live="polite">
         {done && (
           <>
-            <span className="flow-ai">LLM</span>
+            <span className="flow-ai">OK</span>
             <p>{t(d.result)}</p>
           </>
         )}
@@ -178,7 +178,7 @@ function Pipeline() {
 export default function AiLab() {
   const { t } = useLang();
   const lab = ui.ai.lab;
-  const [tab, setTab] = useState<Tab>('attention');
+  const [tab, setTab] = useState<Tab>('pipeline');
   return (
     <div className="flow" data-reveal="80">
       <div className="flow-top">
@@ -191,7 +191,7 @@ export default function AiLab() {
         <span className="label">{t(lab.kicker)}</span>
       </div>
       <div className="lab-tabs" role="tablist">
-        {(['attention', 'pipeline'] as Tab[]).map((k) => (
+        {(['pipeline', 'attention'] as Tab[]).map((k) => (
           <button
             key={k}
             role="tab"

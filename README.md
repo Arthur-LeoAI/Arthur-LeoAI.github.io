@@ -24,7 +24,13 @@ Builds must run sequentially because vinext shares its output directory. The wra
 
 Put approved public assets in `public/`. **Never commit the phone number**, original CVs, research data, tokens or API keys. The public résumé PDF is exported with the phone hidden; the version with the phone stays private.
 
-Location copy everywhere: "Open to data analyst roles worldwide · visa sponsorship needed". Do not name a preferred country.
+Positioning: deploying data and AI tools into real business workflows, for Forward Deployed, Applied AI, Solutions Engineering and Sales/Business Operations roles. The home hero has three options in `ui.heroOptions`; `heroChoice` picks the live one.
+
+Location copy everywhere: "Based in China · Open to Dublin and the EU · Visa sponsorship required".
+
+Projects use a fixed case structure (business problem → constraints → what I built → result → next) and a `tier`: `deployment`, `supporting` or `also`. Drafts (`draft: true`) are never rendered or exported. The flagship "Multilingual Listing Compliance Checker" is reserved as a draft; to publish it, fill every field with confirmed facts (no invented numbers), add screenshots built on synthetic data, add `work/listing-compliance` to `scripts/build.mjs`, and remove `draft: true`.
+
+Résumé PDFs are printed from `/resume/` with headless Chrome: `chrome --headless=new --no-pdf-header-footer --virtual-time-budget=12000 --print-to-pdf=public/jiaming-li-resume.pdf "http://localhost:4173/resume/?lang=en"` (and `?lang=zh` → `jiaming-li-resume-zh.pdf`) against a local production preview.
 
 Pushing `main` runs GitHub Pages validation, build and deployment. For Sites, build the story edition, push the exact commit to its source remote using a temporary credential, package with the Sites helper, save a version and deploy it. Never save credentials in Git config or files. Sites and Pages use the same source commit and content, but have separate visual builds.
 

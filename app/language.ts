@@ -10,7 +10,9 @@ let current: Lang | null = null;
 function read(): Lang {
   if (current) return current;
   try {
-    current = localStorage.getItem(key) === 'zh' ? 'zh' : 'en';
+    // ?lang=zh|en in the URL wins (used for shareable links and PDF export).
+    const param = new URLSearchParams(location.search).get('lang');
+    current = (param ?? localStorage.getItem(key)) === 'zh' ? 'zh' : 'en';
   } catch {
     current = 'en';
   }

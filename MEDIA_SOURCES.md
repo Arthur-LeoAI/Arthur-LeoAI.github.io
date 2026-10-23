@@ -7,4 +7,7 @@ Existing captures in public/projects are taken from the running projects; captur
 The home hero background (`app/hero-chart.tsx`) draws a seeded random walk. Its values are decorative synthetic data and are never labelled as real metrics.
 
 ## Résumé PDF
-`public/jiaming-li-resume.pdf` is exported from the design handoff's `Resume.dc.html` (A4, EN + ZH pages) with the phone number removed.
+`public/jiaming-li-resume.pdf` (EN) and `public/jiaming-li-resume-zh.pdf` (ZH) are printed from the site's own `/resume/` page (A4, print styles in `app/globals.css`). The page never contains a phone number.
+
+## Demos
+The market lens, AI pipeline and attention visualiser use synthetic, hand-set values and are labelled as such on the page. They contain no company or customer data.

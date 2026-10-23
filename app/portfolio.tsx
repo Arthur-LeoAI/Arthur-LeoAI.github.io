@@ -4,11 +4,14 @@ import { Fragment, useState } from 'react';
 /* oxlint-disable next/no-html-link-for-pages, next/no-img-element */
 import {
   profile,
-  projects,
+  published,
+  byTier,
+  projectNumber,
   experience,
   education,
   skills,
   ui,
+  heroChoice,
   type Category,
   type Project,
   type Text,
@@ -103,8 +106,9 @@ const withBreaks = (text: string) =>
 function Home() {
   const { lang, t } = useLang();
   useSiteMotion(lang);
-  const [before, accent, after] = ui.heroTitle[lang];
-  const titles = Object.fromEntries(projects.map((p) => [p.id, t(p.title)]));
+  const hero = ui.heroOptions[heroChoice];
+  const [before, accent, after] = hero.title[lang];
+  const titles = Object.fromEntries(published.map((p) => [p.id, t(p.title)]));
   return (
     <>
       <Chrome t={t} />
@@ -143,7 +147,7 @@ function Home() {
                 </span>
               </h1>
               <p className="hero-sub" data-reveal="170">
-                {t(ui.heroSub)}
+                {t(hero.sub)}
               </p>
               <div className="hero-actions" data-reveal="240">
                 <a className="pill pill-lg pill-accent" href="#work">
@@ -213,6 +217,9 @@ function Home() {
                   </div>
                 ))}
               </dl>
+              <p className="ai-foundations" data-reveal="360">
+                {t(ui.ai.foundations)}
+              </p>
             </div>
             <AiLab />
           </section>
@@ -225,7 +232,7 @@ function Home() {
               <p>{t(ui.workIntro)}</p>
             </div>
             <div className="work-grid">
-              {projects.map((p, i) => (
+              {byTier('deployment').map((p, i) => (
                 <a
                   className="work-card"
                   key={p.id}
@@ -239,16 +246,59 @@ function Home() {
                   </div>
                   <div className="meta">
                     <span>
-                      {p.n} · {t(p.tag)}
+                      {projectNumber(p)} · {t(p.tag)}
                     </span>
                     <span>{t(p.status)}</span>
                   </div>
                   <h3>{t(p.title)} ↗</h3>
                   <p>{t(p.summary)}</p>
+                  <dl className="card-constraint">
+                    <dt>{t(ui.caseSteps.constraints)}</dt>
+                    <dd>{t(p.constraints)}</dd>
+                  </dl>
                   <span className="stack">{p.stack}</span>
                 </a>
               ))}
             </div>
+
+            <div className="supporting">
+              <span className="label">{t(ui.supportingTitle)}</span>
+              {byTier('supporting').map((p) => (
+                <a
+                  className="supporting-card"
+                  key={p.id}
+                  href={caseHref(p.id)}
+                  data-reveal="0"
+                >
+                  <div className="supporting-thumb" data-tilt="">
+                    <ProjectImage image={p.image} alt={t(p.image.caption)} crop />
+                  </div>
+                  <div>
+                    <div className="meta">
+                      <span>
+                        {projectNumber(p)} · {t(ui.supportingTag)}
+                      </span>
+                      <span>{t(p.status)}</span>
+                    </div>
+                    <h3>{t(p.title)} ↗</h3>
+                    <p>{t(p.summary)}</p>
+                    <span className="stack">{p.stack}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            <p className="also-built">
+              <span className="label">{t(ui.alsoBuilt)}</span>
+              {byTier('also').map((p, i) => (
+                <Fragment key={p.id}>
+                  {i > 0 && ' · '}
+                  <a href={caseHref(p.id)}>{t(p.title)}</a>
+                  {' — '}
+                  {t(p.summary)}
+                </Fragment>
+              ))}
+            </p>
           </section>
 
           <section id="about" className="split section ruled">
@@ -328,7 +378,10 @@ function Home() {
 function Case({ p }: { p: Project }) {
   const { lang, t } = useLang();
   useSiteMotion(lang);
-  const next = projects[(projects.indexOf(p) + 1) % projects.length];
+  const next = published[(published.indexOf(p) + 1) % published.length];
+  const steps = (['problem', 'constraints', 'built', 'result', 'next'] as const).map(
+    (k) => ({ k, label: ui.caseSteps[k], body: p[k] }),
+  );
   return (
     <>
       <Chrome t={t} />
@@ -338,7 +391,7 @@ function Case({ p }: { p: Project }) {
             {lang === 'zh' ? '李嘉铭 Jiaming Li' : 'Jiaming Li'}
           </a>
           <nav aria-label="Projects">
-            {projects.map((x) => (
+            {published.map((x) => (
               <a
                 key={x.id}
                 href={caseHref(x.id)}
@@ -357,7 +410,7 @@ function Case({ p }: { p: Project }) {
               {t(ui.allProjects)}
             </a>
             <div className="case-tag" data-reveal="0">
-              {p.n} · {t(p.tag)}
+              {projectNumber(p)} · {p.tier === 'supporting' ? t(ui.supportingTag) : t(p.tag)}
             </div>
             <h1 data-reveal="80">
               {t(p.title)}
@@ -386,30 +439,29 @@ function Case({ p }: { p: Project }) {
             </div>
           </figure>
 
-          <section className="case-narrative">
-            <div data-reveal="0">
-              <div className="label">{t(ui.question)}</div>
-              <p className="question">{t(p.problem)}</p>
-            </div>
-            <div className="case-detail">
-              <div data-reveal="80">
-                <h2>{t(ui.contribution)}</h2>
-                <p>{t(p.contribution)}</p>
-              </div>
-              <div data-reveal="160">
-                <h2>{t(ui.approach)}</h2>
-                <p>{t(p.approach)}</p>
-              </div>
-              <ul className="facts" data-reveal="240">
-                {p.facts[lang].map((f) => (
-                  <li key={f}>
-                    <span aria-hidden="true">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
+          <ol className="case-steps">
+            {steps.map((s, i) => (
+              <li key={s.k} className={`case-step step-${s.k}`} data-reveal="0">
+                <div className="step-label">
+                  <span className="step-n">{String(i + 1).padStart(2, '0')}</span>
+                  <h2>{t(s.label)}</h2>
+                </div>
+                <div className="step-body">
+                  <p>{t(s.body)}</p>
+                  {s.k === 'built' && p.facts[lang].length > 0 && (
+                    <ul className="facts">
+                      {p.facts[lang].map((f) => (
+                        <li key={f}>
+                          <span aria-hidden="true">✓</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
 
           <section className="case-gallery ruled">
             <h2 className="h2" data-reveal="0">
@@ -431,10 +483,6 @@ function Case({ p }: { p: Project }) {
 
           <section className="case-outcome ruled">
             <div data-reveal="0">
-              <div className="label">{t(ui.today)}</div>
-              <p>{t(p.outcome)}</p>
-            </div>
-            <div data-reveal="100">
               <div className="label">{t(ui.stack)}</div>
               <p>{p.stack}</p>
             </div>
@@ -472,7 +520,7 @@ function Resume() {
             <LangToggle />
             <a
               className="pill pill-accent"
-              href={profile.resumePdf}
+              href={lang === 'zh' ? profile.resumePdfZh : profile.resumePdf}
               download
             >
               {t(r.download)}
@@ -521,7 +569,7 @@ function Resume() {
           <section className="resume-row">
             <h2 data-reveal="0">{t(r.projects)}</h2>
             <div className="stack-18">
-              {projects.map((p) => (
+              {published.map((p) => (
                 <a
                   className="resume-project"
                   key={p.id}
@@ -537,6 +585,22 @@ function Resume() {
           </section>
 
           <section className="resume-row">
+            <h2 data-reveal="0">{t(r.skills)}</h2>
+            <div className="stack-12">
+              {skills[lang].map(([k, v]) => (
+                <div className="kv" key={k} data-reveal="0">
+                  <strong>{k}</strong>
+                  <span>{v}</span>
+                </div>
+              ))}
+              <div className="kv" data-reveal="0">
+                <strong>{t(r.languages)}</strong>
+                <span>{t(r.languagesValue)}</span>
+              </div>
+            </div>
+          </section>
+
+          <section className="resume-row last">
             <h2 data-reveal="0">{t(r.education)}</h2>
             <div className="stack-20">
               {education.map((e) => (
@@ -552,22 +616,6 @@ function Resume() {
               ))}
             </div>
           </section>
-
-          <section className="resume-row last">
-            <h2 data-reveal="0">{t(r.skills)}</h2>
-            <div className="stack-12">
-              {skills[lang].map(([k, v]) => (
-                <div className="kv" key={k} data-reveal="0">
-                  <strong>{k}</strong>
-                  <span>{v}</span>
-                </div>
-              ))}
-              <div className="kv" data-reveal="0">
-                <strong>{t(r.languages)}</strong>
-                <span>{t(r.languagesValue)}</span>
-              </div>
-            </div>
-          </section>
         </main>
       </div>
     </>
@@ -580,7 +628,7 @@ function Archive() {
   const [filter, setFilter] = useState<(typeof filters)[number]>('All');
   useSiteMotion(`${lang}-${filter}`);
   const a = ui.archive;
-  const list = projects.filter((p) => filter === 'All' || p.cat.includes(filter));
+  const list = published.filter((p) => filter === 'All' || p.cat.includes(filter));
   return (
     <>
       <Chrome t={t} wide={false} />
@@ -624,8 +672,8 @@ function Archive() {
                     {t(a.filters[f])}
                     <span>
                       {f === 'All'
-                        ? projects.length
-                        : projects.filter((p) => p.cat.includes(f)).length}
+                        ? published.length
+                        : published.filter((p) => p.cat.includes(f)).length}
                     </span>
                   </button>
                 ))}
@@ -644,7 +692,7 @@ function Archive() {
                   </div>
                   <div className="meta">
                     <span>
-                      {p.n} · {t(p.tag)}
+                      {projectNumber(p)} · {t(p.tag)}
                     </span>
                     <span>{t(p.status)}</span>
                   </div>
@@ -691,7 +739,7 @@ export default function Portfolio({
   projectId?: string;
   view?: 'resume';
 }) {
-  const p = projects.find((x) => x.id === projectId);
+  const p = published.find((x) => x.id === projectId);
   if (p) return <Case p={p} />;
   if (view === 'resume') return <Resume />;
   return archive ? <Archive /> : <Home />;
