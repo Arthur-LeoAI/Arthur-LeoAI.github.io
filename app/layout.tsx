@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 export const metadata: Metadata = {
   icons: { icon: '/favicon.svg' },
-  title: 'Jiaming Li — Applied AI & Solutions',
+  title: 'Jiaming Li — Applied AI · Data · Business Operations',
   description:
-    'Jiaming Li builds and deploys data and AI tools into real business workflows: production monitoring, decision support and LLM integrations. Based in China · Open to Dublin and the EU · Visa sponsorship required.',
+    'Jiaming Li puts AI to work in real business operations, combining data analysis, e-commerce and engineering. Based in China · Open to Europe, North America & Oceania · Visa sponsorship required.',
 };
 // Applies the saved (or ?lang=) language and hides reveal targets before first paint.
 const boot = `try{var l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('jl-site-lang');if(l==='zh')document.documentElement.lang='zh-CN'}catch(e){}if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.dataset.motion='on'`;

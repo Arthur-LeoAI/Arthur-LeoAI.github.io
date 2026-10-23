@@ -24,9 +24,9 @@ Builds must run sequentially because vinext shares its output directory. The wra
 
 Put approved public assets in `public/`. **Never commit the phone number**, original CVs, research data, tokens or API keys. The public résumé PDF is exported with the phone hidden; the version with the phone stays private.
 
-Positioning: deploying data and AI tools into real business workflows, for Forward Deployed, Applied AI, Solutions Engineering and Sales/Business Operations roles. The home hero has three options in `ui.heroOptions`; `heroChoice` picks the live one.
+Positioning: putting AI to work where the business actually runs, combining data analysis, e-commerce operations and engineering. Target roles: applied AI, solutions engineering, and sales/business operations.
 
-Location copy everywhere: "Based in China · Open to Dublin and the EU · Visa sponsorship required".
+Location copy: use `location` from `lib/content.ts` everywhere ("Based in China · Open to Europe, North America & Oceania · Visa sponsorship required"; ZH "现居中国 · 意向欧洲、北美及大洋洲 · 需要工作签证担保"). The only variant is the hero label, which ends "Visa sponsorship needed". Do not name a single preferred country or city.
 
 Projects use a fixed case structure (business problem → constraints → what I built → result → next) and a `tier`: `deployment`, `supporting` or `also`. Drafts (`draft: true`) are never rendered or exported. The flagship "Multilingual Listing Compliance Checker" is reserved as a draft; to publish it, fill every field with confirmed facts (no invented numbers), add screenshots built on synthetic data, add `work/listing-compliance` to `scripts/build.mjs`, and remove `draft: true`.
 

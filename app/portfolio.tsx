@@ -11,7 +11,7 @@ import {
   education,
   skills,
   ui,
-  heroChoice,
+  location,
   type Category,
   type Project,
   type Text,
@@ -56,7 +56,9 @@ function Chrome({ t, wide = true }: { t: T; wide?: boolean }) {
 function SiteFooterLinks({ t, email = false }: { t: T; email?: boolean }) {
   return (
     <div className="footer-bottom">
-      <span>© {year} Jiaming Li</span>
+      <span>
+        © {year} Jiaming Li · {t(location)}
+      </span>
       <div>
         {email ? (
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
@@ -106,8 +108,7 @@ const withBreaks = (text: string) =>
 function Home() {
   const { lang, t } = useLang();
   useSiteMotion(lang);
-  const hero = ui.heroOptions[heroChoice];
-  const [before, accent, after] = hero.title[lang];
+  const [before, accent, after] = ui.heroTitle[lang];
   const titles = Object.fromEntries(published.map((p) => [p.id, t(p.title)]));
   return (
     <>
@@ -147,7 +148,7 @@ function Home() {
                 </span>
               </h1>
               <p className="hero-sub" data-reveal="170">
-                {t(hero.sub)}
+                {t(ui.heroSub)}
               </p>
               <div className="hero-actions" data-reveal="240">
                 <a className="pill pill-lg pill-accent" href="#work">
@@ -329,6 +330,10 @@ function Home() {
                 </p>
                 <p className="about-lead" data-reveal="160">
                   {t(ui.about)}
+                </p>
+                <p className="about-location" data-reveal="200">
+                  <span className="dot" />
+                  {t(location)}
                 </p>
                 <a
                   className="pill pill-lg pill-outline about-email"
@@ -542,7 +547,7 @@ function Resume() {
               <a href={`mailto:${profile.email}`}>{profile.email}</a>
               <a href={profile.linkedin}>LinkedIn ↗</a>
               <a href={profile.github}>GitHub ↗</a>
-              <span>{t(r.location)}</span>
+              <span>{t(location)}</span>
             </div>
           </section>
 
@@ -652,6 +657,7 @@ function Archive() {
               <span className="dot" />
               {t(a.open)}
             </span>
+            <span className="sidebar-location">{t(location)}</span>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
             <a href={profile.github}>GitHub ↗</a>
             <LangToggle />

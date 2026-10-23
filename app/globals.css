@@ -345,7 +345,7 @@ em {
 .hero h1 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(56px, 9vw, 136px);
+  font-size: clamp(46px, 7.2vw, 112px);
   line-height: 0.96;
   letter-spacing: -0.025em;
   margin: 0;
@@ -371,6 +371,9 @@ html[lang='zh-CN'] .hero em {
 }
 .hero .status {
   display: block;
+  max-width: 760px;
+  text-wrap: balance;
+  line-height: 1.6;
   margin-bottom: clamp(24px, 3vw, 36px);
 }
 .hero .status .dot {
@@ -1880,4 +1883,18 @@ img.crop {
   a {
     color: var(--accent);
   }
+}
+
+/* Shared location line (About, archive sidebar) */
+.about-location {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.sidebar-location {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
 }

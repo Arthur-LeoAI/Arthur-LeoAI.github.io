@@ -544,8 +544,11 @@ export const skills: Record<Lang, [string, string][]> = {
   ],
 };
 
-/** Which of ui.heroOptions is live on the home page ('A' | 'B' | 'C'). */
-export const heroChoice: 'A' | 'B' | 'C' = 'A';
+/** Location line used everywhere except the hero label (About, résumé, meta, archive). */
+export const location: Text = {
+  en: 'Based in China · Open to Europe, North America & Oceania · Visa sponsorship required',
+  zh: '现居中国 · 意向欧洲、北美及大洋洲 · 需要工作签证担保',
+};
 
 // Interface copy shared by every page.
 export const ui = {
@@ -557,65 +560,37 @@ export const ui = {
     contact: { en: 'Contact', zh: '联系' },
   },
   resume: { en: 'Résumé', zh: '简历' },
+  // Hero label above the headline.
   status: {
-    en: 'Based in China · Open to Dublin and the EU · Visa sponsorship required',
-    zh: '现居中国 · 可前往都柏林及欧盟 · 需工作签证担保',
+    en: 'Applied AI · Data · Business Operations · Open to Europe, North America & Oceania · Visa sponsorship needed',
+    zh: '应用 AI · 数据 · 业务运营 · 意向欧洲、北美及大洋洲 · 需要工作签证担保',
   },
-  roles: {
-    en: 'Forward Deployed Engineer · Applied AI Engineer · Solutions Engineer · Sales & Business Operations',
-    zh: '前线部署工程师 · 应用 AI 工程师 · 解决方案工程师 · 销售与业务运营',
-  },
-  // Three hero options; `heroChoice` picks the live one.
   // Title parts are [before, accent, after]; "\n" becomes a line break.
-  heroOptions: {
-    A: {
-      title: {
-        en: ['I deploy ', 'data and AI tools', '\ninto real business workflows.'],
-        zh: ['把', '数据与 AI 工具', '\n部署进真实的业务流程。'],
-      } as TextList,
-      sub: {
-        en: 'I scope the problem with the people who own it, build the tool, and make it run reliably, from marketplace operations to production monitoring.',
-        zh: '和业务负责人一起界定问题，动手构建工具，并让它稳定运行：从电商运营到生产监控。',
-      },
-    },
-    B: {
-      title: {
-        en: ['AI that ships ', 'into the workflow', ',\nnot the slide deck.'],
-        zh: ['让 AI ', '真正进入工作流', '，\n而不是停留在演示稿里。'],
-      } as TextList,
-      sub: {
-        en: 'I build and deploy data and AI tools where the work happens, with schema checks, evaluation and human review built in.',
-        zh: '在工作真正发生的地方构建并部署数据与 AI 工具，内置结构校验、评估与人工审核。',
-      },
-    },
-    C: {
-      title: {
-        en: ['From business problem\nto ', 'deployed tool', '.'],
-        zh: ['从业务问题，\n到', '上线运行的工具', '。'],
-      } as TextList,
-      sub: {
-        en: 'Applied AI and data engineering for operations teams: real-time monitoring, decision support and LLM integrations, built to run every day.',
-        zh: '面向业务团队的应用 AI 与数据工程：实时监控、决策支持与大模型集成，为每天稳定运行而构建。',
-      },
-    },
+  heroTitle: {
+    en: ['Putting AI to work\n', 'where the business actually runs', '.'],
+    zh: ['让 AI 走进\n', '业务真正运转的地方', '。'],
+  } as TextList,
+  heroSub: {
+    en: 'I combine data analysis, e-commerce operations and engineering to turn messy operational data into tools teams use every day.',
+    zh: '我把数据分析、电商运营和工程能力结合起来，把杂乱的业务数据变成团队每天都在用的工具。',
   },
   heroHint: {
-    en: 'Move your cursor to structure the data',
-    zh: '移动鼠标，把原始数据结构化',
+    en: 'Move your cursor to bring order to the data',
+    zh: '移动鼠标，让杂乱的数据归位',
   },
   heroHintTouch: {
-    en: 'Scroll to structure the data',
-    zh: '向下滑动，把原始数据结构化',
+    en: 'Scroll to bring order to the data',
+    zh: '向下滑动，让杂乱的数据归位',
   },
   aboutHello: {
-    en: 'Hi, I’m Jiaming Li. I build and deploy data and AI tools for business teams.',
-    zh: '你好，我是李嘉铭。我为业务团队构建并部署数据与 AI 工具。',
+    en: 'Hi, I’m Jiaming Li. I build data and AI tools that teams rely on every day.',
+    zh: '你好，我是李嘉铭。我做的是团队每天都离不开的数据与 AI 工具。',
   },
   heroIntro: {
-    en: 'I currently run Amazon marketplace operations across eight European markets in restricted categories. Before that, I co-developed a real-time monitoring platform at Sun Yat-sen University and built a decision tool for a research team at MaREI in Ireland.',
-    zh: '目前负责亚马逊欧洲 8 个站点的运营与数据分析。此前在爱尔兰 MaREI 研究中心和中山大学搭建过决策工具与数据管道。',
+    en: 'Right now I run Amazon operations across eight European marketplaces, in restricted categories where advertising isn’t allowed. Before that, I co-developed a real-time monitoring platform at Sun Yat-sen University and built a decision tool for a research team at MaREI in Ireland.',
+    zh: '目前我负责亚马逊欧洲 8 个站点的运营，所在品类受限、不能投放广告。此前，我在中山大学参与开发了实时监控平台，并在爱尔兰 MaREI 研究中心为科研团队搭建了决策工具。',
   },
-  seeWork: { en: 'See deployments ↓', zh: '查看部署案例 ↓' },
+  seeWork: { en: 'See the work ↓', zh: '看看我做的工具 ↓' },
   facts: [
     {
       label: { en: 'Now', zh: '现任' },
@@ -631,8 +606,8 @@ export const ui = {
     {
       label: { en: 'Focus', zh: '方向' },
       value: {
-        en: 'Applied AI · Solutions · Ops',
-        zh: '应用 AI · 解决方案 · 业务运营',
+        en: 'Applied AI · Data · Business Ops',
+        zh: '应用 AI · 数据 · 业务运营',
       },
     },
     {
@@ -800,14 +775,14 @@ export const ui = {
   alsoBuilt: { en: 'Also built', zh: '其他项目' },
   aboutTitle: { en: 'About', zh: '关于我' },
   about: {
-    en: 'My background brings together applied mathematics, computer science and European e-commerce operations. Having studied in Ireland, I work well in collaborative, international teams. I’m looking for Forward Deployed, Applied AI, Solutions Engineering or Sales & Business Operations roles. Based in China · Open to Dublin and the EU · Visa sponsorship required.',
-    zh: '我的背景横跨应用数学、计算机科学与欧洲电商运营。在爱尔兰求学的经历让我习惯国际化、协作式的团队。我正在寻找前线部署工程师、应用 AI 工程师、解决方案工程师或销售与业务运营相关岗位。现居中国 · 可前往都柏林及欧盟 · 需工作签证担保。',
+    en: 'My background spans applied mathematics, computer science and European e-commerce. Studying in Ireland taught me to work well in international teams. I’m looking for roles where AI, data and business operations meet: applied AI, solutions engineering, or sales and business operations.',
+    zh: '我的背景横跨应用数学、计算机科学与欧洲电商。在爱尔兰的求学经历让我习惯在国际化团队中协作。我希望找到 AI、数据与业务运营交汇的岗位：应用 AI、解决方案工程，或销售与业务运营。',
   },
   educationLabel: { en: 'Education', zh: '教育背景' },
   skillsLabel: { en: 'Skills', zh: '技能' },
   contactTitle: {
-    en: 'Have a workflow worth deploying into?',
-    zh: '有值得落地的业务流程？',
+    en: 'Got a workflow AI could help run?',
+    zh: '有想让 AI 帮上忙的业务流程吗？',
   },
   allProjects: { en: '← All deployments', zh: '← 全部案例' },
   viewSource: { en: 'View source on GitHub ↗', zh: '在 GitHub 查看源码 ↗' },
@@ -826,16 +801,12 @@ export const ui = {
     back: { en: '← Jiaming Li', zh: '← 李嘉铭' },
     download: { en: 'Download PDF ↓', zh: '下载 PDF ↓' },
     headline: {
-      en: 'Applied AI · Solutions Engineering · Business Operations',
-      zh: '应用 AI · 解决方案工程 · 业务运营',
+      en: 'Applied AI · Data · Business Operations',
+      zh: '应用 AI · 数据 · 业务运营',
     },
     summary: {
-      en: 'I build and deploy data and AI tools into real business workflows. I currently run Amazon operations across eight European marketplaces in restricted categories, and have co-developed a production telemetry platform and built a decision tool for a research team. Applied-mathematics and computer-science background.',
-      zh: '我把数据与 AI 工具构建并部署进真实的业务流程。现负责亚马逊欧洲 8 个站点在受限品类下的运营，曾参与开发生产级遥测监控平台，并为科研团队搭建决策工具。应用数学本科、计算机科学硕士。',
-    },
-    location: {
-      en: 'Based in China · Open to Dublin and the EU · Visa sponsorship required',
-      zh: '现居中国 · 可前往都柏林及欧盟 · 需工作签证担保',
+      en: 'I combine data analysis, e-commerce operations and engineering to build tools teams use every day. I currently run Amazon operations across eight European marketplaces in restricted categories; before that, I co-developed a production telemetry platform and built a decision tool for a research team. Background in applied mathematics and computer science.',
+      zh: '我把数据分析、电商运营和工程能力结合起来，做团队每天都在用的工具。现负责亚马逊欧洲 8 个站点在受限品类下的运营；此前参与开发了生产级遥测监控平台，并为科研团队搭建了决策工具。应用数学本科、计算机科学硕士。',
     },
     experience: { en: 'Experience', zh: '工作经历' },
     projects: { en: 'Deployments', zh: '部署案例' },
@@ -849,8 +820,8 @@ export const ui = {
   },
   archive: {
     tagline: {
-      en: 'I deploy data and AI tools into real business workflows.',
-      zh: '把数据与 AI 工具部署进真实的业务流程。',
+      en: 'Putting AI to work where the business actually runs.',
+      zh: '让 AI 走进业务真正运转的地方。',
     },
     nav: [
       { href: '#projects', label: { en: '01 — Projects', zh: '01 — 项目' } },
