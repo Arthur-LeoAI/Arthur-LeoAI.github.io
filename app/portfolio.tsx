@@ -14,6 +14,7 @@ import {
   type Text,
 } from '@/lib/content';
 import HeroChart from './hero-chart';
+import MarketLens from './market-lens';
 import { useLang } from './language';
 import { useSiteMotion } from './use-site-motion';
 
@@ -123,7 +124,7 @@ function Home() {
               <span className="dot" />
               {t(ui.status)}
             </div>
-            <div>
+            <div className="hero-copy">
               <h1 data-reveal="90">
                 <span className="hero-title">
                   {before.split('\n').map((line, i) => (
@@ -151,19 +152,6 @@ function Home() {
                 </a>
               </div>
             </div>
-            <figure className="portrait" data-reveal="160">
-              <div>
-                <img
-                  data-speed="0.05"
-                  src="/portrait.jpg"
-                  alt={t(profile.name)}
-                  width="540"
-                  height="680"
-                  loading="eager"
-                  fetchPriority="high"
-                />
-              </div>
-            </figure>
           </section>
 
           <section className="fact-strip" aria-label="Summary">
@@ -176,10 +164,13 @@ function Home() {
           </section>
 
           <section id="experience" className="split section">
-            <h2 className="h2" data-reveal="0">
-              {t(ui.experienceTitle)}
-            </h2>
+            <aside className="lens-col">
+              <MarketLens />
+            </aside>
             <div>
+              <h2 className="h2 exp-title" data-reveal="0">
+                {t(ui.experienceTitle)}
+              </h2>
               {experience.map((x) => (
                 <article className="exp-row" key={x.role.en} data-reveal="0">
                   <span className="exp-date">{t(x.date)}</span>
@@ -238,9 +229,23 @@ function Home() {
           </section>
 
           <section id="about" className="split section ruled">
-            <h2 className="h2" data-reveal="0">
-              {t(ui.aboutTitle)}
-            </h2>
+            <div className="about-side">
+              <h2 className="h2" data-reveal="0">
+                {t(ui.aboutTitle)}
+              </h2>
+              <figure className="portrait" data-reveal="120">
+                <div>
+                  <img
+                    src="/portrait.jpg"
+                    alt={t(profile.name)}
+                    width="540"
+                    height="680"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </figure>
+            </div>
             <div className="about">
               <p className="about-lead">{t(ui.about)}</p>
               <div className="about-cols">

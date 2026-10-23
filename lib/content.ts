@@ -514,6 +514,42 @@ export const ui = {
     },
   ],
   experienceTitle: { en: 'Experience', zh: '工作经历' },
+  // Interactive "market lens" beside Experience. Its numbers are synthetic.
+  lens: {
+    kicker: { en: 'Try it · synthetic data', zh: '动手试试 · 模拟数据' },
+    title: { en: 'Which market needs attention?', zh: '哪个站点最需要关注？' },
+    hint: {
+      en: 'Switch the metric, then hover a market.',
+      zh: '切换指标，再把鼠标移到某个站点上。',
+    },
+    market: { en: 'Market', zh: '站点' },
+    metrics: {
+      sales: { en: 'Sales', zh: '销售额' },
+      traffic: { en: 'Traffic', zh: '流量' },
+      conversion: { en: 'Conversion', zh: '转化率' },
+    },
+    flag: {
+      en: 'High traffic, low conversion: check the listing and price first.',
+      zh: '流量高、转化低：先检查商品页与定价。',
+    },
+    healthy: {
+      en: 'Conversion at or above average: protect stock and visibility.',
+      zh: '转化率不低于平均：重点保证库存与曝光。',
+    },
+    lowTraffic: {
+      en: 'Converts well but lacks traffic: test ads and keywords.',
+      zh: '转化不错但流量不足：试试广告与关键词。',
+    },
+    weak: {
+      en: 'Low traffic and low conversion: review the assortment before spending on ads.',
+      zh: '流量和转化都偏低：先梳理选品，再考虑投放广告。',
+    },
+    mean: { en: 'Average', zh: '平均' },
+    note: {
+      en: 'Illustrative numbers only, not company data.',
+      zh: '数字仅作演示，并非公司真实数据。',
+    },
+  },
   relatedProject: { en: 'Related project: ', zh: '相关项目：' },
   workTitle: { en: 'Selected work', zh: '精选项目' },
   workIntro: {
