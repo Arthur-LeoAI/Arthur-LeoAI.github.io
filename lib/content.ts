@@ -458,11 +458,13 @@ export const skills: Record<Lang, [string, string][]> = {
     ['Data & BI', 'SQL · Python · Excel · Power BI · Tableau'],
     ['E-commerce', 'Seller Central · Helium 10 · Keepa · Amalytix'],
     ['Engineering', 'JavaScript/TypeScript · React · InfluxDB · Git'],
+    ['AI & automation', 'LLM APIs · AI coding agents · Prompt design · Workflow automation'],
   ],
   zh: [
     ['数据与 BI', 'SQL · Python · Excel · Power BI · Tableau'],
     ['电商运营', 'Seller Central · Helium 10 · Keepa · Amalytix'],
     ['工程开发', 'JavaScript/TypeScript · React · InfluxDB · Git'],
+    ['AI 与自动化', 'LLM API · AI 编程助手 · 提示词设计 · 自动化工作流'],
   ],
 };
 
@@ -470,6 +472,7 @@ export const skills: Record<Lang, [string, string][]> = {
 export const ui = {
   nav: {
     experience: { en: 'Experience', zh: '经历' },
+    ai: { en: 'AI', zh: 'AI' },
     work: { en: 'Work', zh: '项目' },
     about: { en: 'About', zh: '关于' },
     contact: { en: 'Contact', zh: '联系' },
@@ -484,6 +487,18 @@ export const ui = {
     en: ['From ', 'messy business data', '\nto clear decisions.'],
     zh: ['把', '杂乱的业务数据', '\n变成清晰的决策。'],
   } as TextList,
+  heroSub: {
+    en: 'A data analyst who builds with AI: tools, websites and automated workflows.',
+    zh: '用 AI 构建工具、网站与自动化工作流的数据分析师。',
+  },
+  heroHint: {
+    en: 'Move your cursor to sort the noise',
+    zh: '移动鼠标，让杂乱的数据归位',
+  },
+  heroHintTouch: {
+    en: 'Scroll to sort the noise',
+    zh: '向下滑动，让杂乱的数据归位',
+  },
   aboutHello: {
     en: 'Hi, I’m Jiaming Li, a data analyst.',
     zh: '你好，我是李嘉铭，一名数据分析师。',
@@ -512,8 +527,8 @@ export const ui = {
     {
       label: { en: 'Tools', zh: '工具' },
       value: {
-        en: 'SQL · Python · Excel · Power BI',
-        zh: 'SQL · Python · Excel · Power BI',
+        en: 'SQL · Python · Power BI · AI',
+        zh: 'SQL · Python · Power BI · AI',
       },
     },
   ],
@@ -554,6 +569,81 @@ export const ui = {
       zh: '数字仅作演示，并非公司真实数据。',
     },
   },
+  // "Built with AI" section. The demo run is simulated.
+  ai: {
+    title: { en: 'Built with AI', zh: '用 AI 构建' },
+    lead: {
+      en: 'I treat AI as an everyday working tool: to build tools and websites faster, to automate the repetitive parts of analysis, and to leave more time for the judgement calls.',
+      zh: '我把 AI 当作日常工作工具：更快地搭建工具和网站，把分析中重复的部分自动化，把时间留给真正需要判断的地方。',
+    },
+    points: [
+      {
+        k: { en: 'Build', zh: '构建' },
+        v: {
+          en: 'Prototype tools and websites with AI coding agents. This portfolio was designed and built that way.',
+          zh: '用 AI 编程助手快速做出工具和网站原型。这个作品集网站就是这样设计和搭建的。',
+        },
+      },
+      {
+        k: { en: 'Automate', zh: '自动化' },
+        v: {
+          en: 'Chain cleaning, checks and reporting into repeatable AI-assisted workflows.',
+          zh: '把数据清洗、校验和报表串成可重复运行的 AI 辅助工作流。',
+        },
+      },
+      {
+        k: { en: 'Apply', zh: '应用' },
+        v: {
+          en: 'Use LLMs in everyday analysis, from research and summaries to first drafts.',
+          zh: '在日常分析中使用大模型：调研、总结、起草初稿。',
+        },
+      },
+      {
+        k: { en: 'Verify', zh: '把关' },
+        v: {
+          en: 'AI drafts, I check: every output passes a rule check or a human review.',
+          zh: 'AI 起草，我来把关：每个结果都要经过规则校验或人工审阅。',
+        },
+      },
+    ],
+    demo: {
+      kicker: { en: 'Demo · simulated run', zh: '演示 · 模拟运行' },
+      file: 'weekly-report.workflow',
+      run: { en: 'Run workflow ▶', zh: '运行工作流 ▶' },
+      running: { en: 'Running…', zh: '运行中…' },
+      rerun: { en: 'Run again ↻', zh: '再运行一次 ↻' },
+      steps: [
+        {
+          label: { en: 'Pull marketplace export', zh: '拉取站点数据导出' },
+          out: { en: '1,920 rows · 8 markets', zh: '1,920 行 · 8 个站点' },
+        },
+        {
+          label: { en: 'AI cleans and tags listings', zh: 'AI 清洗并标注商品' },
+          out: { en: '42 duplicates merged · 117 titles tagged', zh: '合并 42 条重复 · 标注 117 个标题' },
+        },
+        {
+          label: { en: 'Rule checks', zh: '规则校验' },
+          out: { en: '3 outliers flagged', zh: '标记 3 个异常值' },
+        },
+        {
+          label: { en: 'Human review', zh: '人工审阅' },
+          out: { en: '2 flags kept · 1 dismissed', zh: '保留 2 个 · 排除 1 个' },
+        },
+        {
+          label: { en: 'Draft weekly summary', zh: '起草周报摘要' },
+          out: { en: 'Ready to send', zh: '可以发送' },
+        },
+      ],
+      result: {
+        en: 'Market B: high traffic, low conversion. Check the listing and price first.',
+        zh: '站点 B：流量高、转化低。建议先检查商品页与定价。',
+      },
+      note: {
+        en: 'Simulated run with synthetic numbers, not real company data.',
+        zh: '模拟运行，数字为虚构，并非公司真实数据。',
+      },
+    },
+  },
   relatedProject: { en: 'Related project: ', zh: '相关项目：' },
   workTitle: { en: 'Selected work', zh: '精选项目' },
   workIntro: {
@@ -562,8 +652,8 @@ export const ui = {
   },
   aboutTitle: { en: 'About', zh: '关于我' },
   about: {
-    en: 'My background brings together applied mathematics, interactive media and European e-commerce. Having studied in Ireland, I value collaborative, international teams. I’m based in China and open to relocating anywhere in the world where employer visa sponsorship is available.',
-    zh: '我的背景横跨应用数学、交互媒体与欧洲电商。在爱尔兰求学的经历让我习惯国际化、协作式的团队。目前在中国，愿意前往全球任何能提供工作签证担保的国家或地区工作。',
+    en: 'My background brings together applied mathematics, interactive media and European e-commerce. Having studied in Ireland, I value collaborative, international teams. I use AI every day to build tools and automate the repetitive parts of analysis. I’m based in China and open to relocating anywhere in the world where employer visa sponsorship is available.',
+    zh: '我的背景横跨应用数学、交互媒体与欧洲电商。在爱尔兰求学的经历让我习惯国际化、协作式的团队。我每天都在用 AI 搭建工具、把分析中重复的部分自动化。目前在中国，愿意前往全球任何能提供工作签证担保的国家或地区工作。',
   },
   educationLabel: { en: 'Education', zh: '教育背景' },
   skillsLabel: { en: 'Skills', zh: '技能' },

@@ -15,6 +15,7 @@ import {
 } from '@/lib/content';
 import HeroChart from './hero-chart';
 import MarketLens from './market-lens';
+import AiWorkflow from './ai-workflow';
 import { useLang } from './language';
 import { useSiteMotion } from './use-site-motion';
 
@@ -114,6 +115,7 @@ function Home() {
           </a>
           <nav aria-label="Main navigation">
             <a href="#experience">{t(ui.nav.experience)}</a>
+            <a href="#ai">{t(ui.nav.ai)}</a>
             <a href="#work">{t(ui.nav.work)}</a>
             <a href="#about">{t(ui.nav.about)}</a>
             <a href="#contact">{t(ui.nav.contact)}</a>
@@ -140,12 +142,19 @@ function Home() {
                   {withBreaks(after)}
                 </span>
               </h1>
+              <p className="hero-sub" data-reveal="170">
+                {t(ui.heroSub)}
+              </p>
               <div className="hero-actions" data-reveal="240">
                 <a className="pill pill-lg pill-accent" href="#work">
                   {t(ui.seeWork)}
                 </a>
               </div>
             </div>
+            <p className="hero-hint" aria-hidden="true">
+              <span className="hint-pointer">{t(ui.heroHint)}</span>
+              <span className="hint-touch">{t(ui.heroHintTouch)}</span>
+            </p>
           </section>
 
           <section className="fact-strip" aria-label="Summary">
@@ -186,6 +195,26 @@ function Home() {
                 </article>
               ))}
             </div>
+          </section>
+
+          <section id="ai" className="split section ruled ai-section">
+            <div className="ai-copy">
+              <h2 className="h2" data-reveal="0">
+                {t(ui.ai.title)}
+              </h2>
+              <p className="ai-lead" data-reveal="80">
+                {t(ui.ai.lead)}
+              </p>
+              <dl className="ai-points">
+                {ui.ai.points.map((pt, i) => (
+                  <div key={pt.k.en} data-reveal={String(120 + i * 60)}>
+                    <dt>{t(pt.k)}</dt>
+                    <dd>{t(pt.v)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <AiWorkflow />
           </section>
 
           <section id="work" className="section ruled">
