@@ -74,7 +74,8 @@ export default function HeroChart() {
         m.y += (m.ty - m.y) * 0.16;
       }
       ctx.clearRect(0, 0, W, H);
-      const top = H * 0.38;
+      // Lower band only, so the centred headline and button stay clear.
+      const top = H * 0.66;
       const bot = H - 24;
       const step = 7;
       const off = (t * 10) % step;

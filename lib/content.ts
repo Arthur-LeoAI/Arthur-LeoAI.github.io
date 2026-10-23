@@ -481,9 +481,13 @@ export const ui = {
   },
   // [before, accent, after]; a newline in `before` becomes a line break.
   heroTitle: {
-    en: ['Jiaming Li is a data analyst who turns ', 'messy business data', ' into decisions.'],
-    zh: ['李嘉铭，数据分析师。\n把', '杂乱的业务数据', '变成可执行的决策。'],
+    en: ['From ', 'messy business data', '\nto clear decisions.'],
+    zh: ['把', '杂乱的业务数据', '\n变成清晰的决策。'],
   } as TextList,
+  aboutHello: {
+    en: 'Hi, I’m Jiaming Li, a data analyst.',
+    zh: '你好，我是李嘉铭，一名数据分析师。',
+  },
   heroIntro: {
     en: 'I currently analyse Amazon marketplace performance across eight European markets. Before that, I built decision tools and data pipelines at MaREI in Ireland and Sun Yat-sen University.',
     zh: '目前负责亚马逊欧洲 8 个站点的运营与数据分析。此前在爱尔兰 MaREI 研究中心和中山大学搭建过决策工具与数据管道。',

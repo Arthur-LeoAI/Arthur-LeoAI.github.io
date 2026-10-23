@@ -91,6 +91,14 @@ function ProjectImage({
   );
 }
 
+const withBreaks = (text: string) =>
+  text.split('\n').map((line, i) => (
+    <Fragment key={`${i}-${line}`}>
+      {i > 0 && <br />}
+      {line}
+    </Fragment>
+  ));
+
 function Home() {
   const { lang, t } = useLang();
   useSiteMotion(lang);
@@ -127,28 +135,14 @@ function Home() {
             <div className="hero-copy">
               <h1 data-reveal="90">
                 <span className="hero-title">
-                  {before.split('\n').map((line, i) => (
-                    <Fragment key={line}>
-                      {i > 0 && <br />}
-                      {line}
-                    </Fragment>
-                  ))}
+                  {withBreaks(before)}
                   <em>{accent}</em>
-                  {after}
+                  {withBreaks(after)}
                 </span>
               </h1>
-              <p className="hero-intro" data-reveal="200">
-                {t(ui.heroIntro)}
-              </p>
-              <div className="hero-actions" data-reveal="300">
+              <div className="hero-actions" data-reveal="240">
                 <a className="pill pill-lg pill-accent" href="#work">
                   {t(ui.seeWork)}
-                </a>
-                <a
-                  className="pill pill-lg pill-outline"
-                  href={`mailto:${profile.email}`}
-                >
-                  {profile.email}
                 </a>
               </div>
             </div>
@@ -247,7 +241,23 @@ function Home() {
               </figure>
             </div>
             <div className="about">
-              <p className="about-lead">{t(ui.about)}</p>
+              <div className="about-intro">
+                <h3 className="about-hello" data-reveal="0">
+                  {t(ui.aboutHello)}
+                </h3>
+                <p className="about-lead" data-reveal="80">
+                  {t(ui.heroIntro)}
+                </p>
+                <p className="about-lead" data-reveal="160">
+                  {t(ui.about)}
+                </p>
+                <a
+                  className="pill pill-lg pill-outline about-email"
+                  href={`mailto:${profile.email}`}
+                >
+                  {profile.email}
+                </a>
+              </div>
               <div className="about-cols">
                 <div>
                   <span className="label">{t(ui.educationLabel)}</span>

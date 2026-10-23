@@ -268,15 +268,20 @@ em {
 .hero {
   position: relative;
   isolation: isolate;
-  /* Text-only opening: copy sits over the chart, the portrait waits in About. */
+  /* Minimal centred opening: one headline and one action over the chart. */
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  min-height: min(78vh, 820px);
-  padding: clamp(48px, 8vw, 104px) 0 clamp(40px, 6vw, 72px);
+  text-align: center;
+  min-height: min(82vh, 860px);
+  padding: clamp(48px, 8vw, 104px) 0 clamp(56px, 8vw, 104px);
 }
 .hero-copy {
-  max-width: 980px;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .hero-chart {
   position: absolute;
@@ -288,8 +293,9 @@ em {
   transform: translateX(-50%);
   z-index: -1;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.35), #000 55%);
-  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.35), #000 55%);
+  /* Quiet behind the centred headline, full strength towards the bottom. */
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 35%, #000 80%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 35%, #000 80%);
 }
 .status {
   display: flex;
@@ -302,16 +308,16 @@ em {
 .hero h1 {
   font-family: var(--serif);
   font-weight: 400;
-  font-size: clamp(48px, 7.2vw, 104px);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
+  font-size: clamp(56px, 9vw, 136px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
   margin: 0;
-  text-wrap: balance;
 }
 html[lang='zh-CN'] .hero-title {
   display: block;
-  font-size: 0.78em;
-  line-height: 1.2;
+  font-size: 0.72em;
+  line-height: 1.25;
+  letter-spacing: 0;
 }
 .hero em {
   font-style: italic;
@@ -319,19 +325,15 @@ html[lang='zh-CN'] .hero-title {
 html[lang='zh-CN'] .hero em {
   font-style: normal;
 }
-.hero-intro {
-  font-size: clamp(17px, 1.6vw, 20px);
-  line-height: 1.6;
-  color: var(--muted);
-  max-width: 640px;
-  margin-top: 28px;
-  text-wrap: pretty;
-}
 .hero-actions {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 32px;
+  justify-content: center;
+  margin-top: clamp(32px, 4vw, 48px);
+}
+.hero .status {
+  margin-bottom: clamp(24px, 3vw, 36px);
 }
 .about-side {
   display: flex;
@@ -688,11 +690,33 @@ img.crop {
   flex-direction: column;
   gap: 36px;
 }
+.about-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.about-hello {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(32px, 3.4vw, 46px);
+  line-height: 1.05;
+  margin: 0 0 4px;
+  text-wrap: balance;
+  word-break: keep-all;
+}
 .about-lead {
   font-size: clamp(19px, 1.8vw, 23px);
   line-height: 1.55;
   max-width: 760px;
   text-wrap: pretty;
+}
+.about-intro .about-lead + .about-lead {
+  font-size: clamp(17px, 1.5vw, 19px);
+  color: var(--muted);
+}
+.about-email {
+  margin-top: 6px;
 }
 .about-cols {
   display: grid;
