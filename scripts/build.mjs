@@ -24,6 +24,7 @@ for (const page of [
   'work/motai',
   'work/connoisseur',
   'resume',
+  'lab',
 ]) {
   const target = `dist/client/${page}`;
   mkdirSync(target, { recursive: true });
