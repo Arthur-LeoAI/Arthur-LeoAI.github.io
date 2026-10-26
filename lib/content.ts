@@ -550,13 +550,13 @@ export const experience: {
     },
     points: {
       en: [
-        'Manage Amazon marketplace operations across Europe and the US; added US marketplace responsibility in October 2026.',
+        'Run Amazon operations for 8 European marketplaces (incl. UK, DE, FR, IT, ES) and 3 in North America (US, CA, MX), each with 2,000+ ASINs, in a business with eight-figure annual revenue (USD).',
         'Maintain localised listings, investigate compliance issues in restricted categories, create ads and write listings to grow sales, and analyse data to find and fix the store’s real problems.',
         'Analyse sales, traffic, fees, product and competitor data to prioritise listing and operational improvements.',
         'Use Seller Central, Helium 10, Keepa and Amalytix for keyword, competitor and product research.',
       ],
       zh: [
-        '负责欧洲及美国 Amazon 站点运营；于 2026 年 10 月接手美国站。',
+        '负责 Amazon 欧洲 8 个站点（含英、德、法、意、西）及北美 3 个站点（美、加、墨）的运营，每个站点管理 2,000+ ASIN；所在业务年营收达数千万美元级别。',
         '维护本地化商品信息，排查受限品类中的合规问题，创建广告编写listing提高销量，分析数据发现店铺的实际问题并优化解决。',
         '分析销售、流量、费用、产品及竞品数据，确定商品页及运营改进的优先级。',
         '使用 Seller Central、Helium 10、Keepa 和 Amalytix 开展关键词、竞品与产品研究。',
@@ -715,8 +715,8 @@ export const ui = {
     zh: '轻点激活输入层',
   },
   heroIntro: {
-    en: 'Computer Science MSc, University College Cork. I map how a process really runs, then design and build the tool, integration or AI-assisted step that improves it. My current role in European and US Amazon operations keeps me close to the day-to-day work those systems have to fit.',
-    zh: '爱尔兰科克大学计算机科学硕士。我先弄清一个流程实际如何运转，再设计并搭建改进它的工具、系统集成或 AI 辅助环节。目前在欧洲及美国 Amazon 运营一线工作，让我始终贴近这些系统要服务的日常业务。',
+    en: 'Computer Science MSc, University College Cork. I map how a process really runs, then design and build the tool, integration or AI-assisted step that improves it. My current role in European and North American Amazon operations keeps me close to the day-to-day work those systems have to fit.',
+    zh: '爱尔兰科克大学计算机科学硕士。我先弄清一个流程实际如何运转，再设计并搭建改进它的工具、系统集成或 AI 辅助环节。目前在欧洲及北美 Amazon 运营一线工作，让我始终贴近这些系统要服务的日常业务。',
   },
   seeWork: {
     en: 'Explore case studies ↓',
@@ -729,8 +729,8 @@ export const ui = {
         zh: '当前工作',
       },
       value: {
-        en: 'Operations, data & compliance · Amazon EU/US',
-        zh: '运营、数据与合规 · Amazon 欧美站',
+        en: 'Operations, data & compliance · Amazon EU & NA',
+        zh: '运营、数据与合规 · Amazon 欧洲及北美站',
       },
     },
     {
@@ -881,8 +881,8 @@ export const ui = {
       zh: '系统实施 · 业务系统 · 流程与数据',
     },
     summary: {
-      en: 'MSc Computer Science (Interactive Media), University College Cork. I map how processes really run, then design and build the tools, integrations and AI-assisted steps that improve them. Projects turn an Excel-based process into a decision tool, connect live data into a monitoring view and build an LLM workflow with human review. Current role in European and US Amazon operations, covering listings, compliance and performance data. Skills: Python, SQL, Excel, web development and LLM API integration. Seeking implementation, business systems, process and technical business analyst roles.',
-      zh: '爱尔兰科克大学计算机科学硕士（交互媒体）。我先弄清流程实际如何运转，再设计并搭建改进它的工具、系统集成与 AI 辅助环节。项目包括把 Excel 流程做成决策工具、把实时数据接入监控视图，以及带人工审核的大模型工作流。现任欧洲及美国 Amazon 运营，负责商品信息、合规与经营数据。技能：Python、SQL、Excel、网页开发与大模型 API 集成。寻求系统实施、业务系统、流程分析与技术型业务分析相关岗位。',
+      en: 'MSc Computer Science (Interactive Media), University College Cork. I map how processes really run, then design and build the tools, integrations and AI-assisted steps that improve them. Projects turn an Excel-based process into a decision tool, connect live data into a monitoring view and build an LLM workflow with human review. Current role in European and North American Amazon operations, covering listings, compliance and performance data. Skills: Python, SQL, Excel, web development and LLM API integration. Seeking implementation, business systems, process and technical business analyst roles.',
+      zh: '爱尔兰科克大学计算机科学硕士（交互媒体）。我先弄清流程实际如何运转，再设计并搭建改进它的工具、系统集成与 AI 辅助环节。项目包括把 Excel 流程做成决策工具、把实时数据接入监控视图，以及带人工审核的大模型工作流。现任欧洲及北美 Amazon 运营，负责商品信息、合规与经营数据。技能：Python、SQL、Excel、网页开发与大模型 API 集成。寻求系统实施、业务系统、流程分析与技术型业务分析相关岗位。',
     },
     experience: { en: 'Experience', zh: '工作经历' },
     projects: {
