@@ -540,7 +540,10 @@ export const experience: {
 }[] = [
   {
     date: { en: 'May 2026 — Present', zh: '2026.05 — 至今' },
-    role: { en: 'E-commerce Operator Specialist', zh: '电商运营专员' },
+    role: {
+      en: 'Cross-border E-commerce Operations',
+      zh: '跨境电商运营',
+    },
     org: {
       en: 'Triple A internetshops GmbH · Shenzhen',
       zh: 'Triple A internetshops GmbH · 深圳',
@@ -548,13 +551,13 @@ export const experience: {
     points: {
       en: [
         'Manage Amazon marketplace operations across Europe and the US; added US marketplace responsibility in October 2026.',
-        'Maintain localised listings and investigate compliance issues in restricted product categories.',
+        'Maintain localised listings, investigate compliance issues in restricted categories, create ads and write listings to grow sales, and analyse data to find and fix the store’s real problems.',
         'Analyse sales, traffic, fees, product and competitor data to prioritise listing and operational improvements.',
         'Use Seller Central, Helium 10, Keepa and Amalytix for keyword, competitor and product research.',
       ],
       zh: [
         '负责欧洲及美国 Amazon 站点运营；于 2026 年 10 月接手美国站。',
-        '维护本地化商品信息，排查受限品类中的合规问题。',
+        '维护本地化商品信息，排查受限品类中的合规问题，创建广告编写listing提高销量，分析数据发现店铺的实际问题并优化解决。',
         '分析销售、流量、费用、产品及竞品数据，确定商品页及运营改进的优先级。',
         '使用 Seller Central、Helium 10、Keepa 和 Amalytix 开展关键词、竞品与产品研究。',
       ],
