@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ui } from '@/lib/content';
 import { useLang } from './language';
 
-// Illustrative BPMN-style swimlane map of a listing compliance check.
+// Illustrative BPMN-style swimlane map of a weekly performance review.
 // Shapes follow BPMN conventions: thin circle = start, thick circle = end,
 // rounded rectangle = task, diamond = exclusive gateway.
 type View = 'asis' | 'tobe';

@@ -551,14 +551,12 @@ export const experience: {
     points: {
       en: [
         'Run Amazon operations for 8 European marketplaces (incl. UK, DE, FR, IT, ES) and 3 in North America (US, CA, MX), each with 2,000+ ASINs, in a business with eight-figure annual revenue (USD).',
-        'Maintain localised listings, investigate compliance issues in restricted categories, create ads and write listings to grow sales, and analyse data to find and fix the store’s real problems.',
-        'Analyse sales, traffic, fees, product and competitor data to prioritise listing and operational improvements.',
+        'Analyse sales, traffic, fees and competitor data to find the store’s real problems, then fix them through listing copy, localisation and advertising campaigns.',
         'Use Seller Central, Helium 10, Keepa and Amalytix for keyword, competitor and product research.',
       ],
       zh: [
         '负责 Amazon 欧洲 8 个站点（含英、德、法、意、西）及北美 3 个站点（美、加、墨）的运营，每个站点管理 2,000+ ASIN；所在业务年营收达数千万美元级别。',
-        '维护本地化商品信息，排查受限品类中的合规问题，创建广告编写listing提高销量，分析数据发现店铺的实际问题并优化解决。',
-        '分析销售、流量、费用、产品及竞品数据，确定商品页及运营改进的优先级。',
+        '分析销售、流量、费用及竞品数据，找出店铺的实际问题，并通过编写 listing、本地化商品信息和创建广告来优化解决、提升销量。',
         '使用 Seller Central、Helium 10、Keepa 和 Amalytix 开展关键词、竞品与产品研究。',
       ],
     },
@@ -729,8 +727,8 @@ export const ui = {
         zh: '当前工作',
       },
       value: {
-        en: 'Operations, data & compliance · Amazon EU & NA',
-        zh: '运营、数据与合规 · Amazon 欧洲及北美站',
+        en: 'Data analysis & marketing · Amazon EU & NA',
+        zh: '数据分析与市场营销 · Amazon 欧洲及北美站',
       },
     },
     {
@@ -881,8 +879,8 @@ export const ui = {
       zh: '系统实施 · 业务系统 · 流程与数据',
     },
     summary: {
-      en: 'MSc Computer Science (Interactive Media), University College Cork. I map how processes really run, then design and build the tools, integrations and AI-assisted steps that improve them. Projects turn an Excel-based process into a decision tool, connect live data into a monitoring view and build an LLM workflow with human review. Current role in European and North American Amazon operations, covering listings, compliance and performance data. Skills: Python, SQL, Excel, web development and LLM API integration. Seeking implementation, business systems, process and technical business analyst roles.',
-      zh: '爱尔兰科克大学计算机科学硕士（交互媒体）。我先弄清流程实际如何运转，再设计并搭建改进它的工具、系统集成与 AI 辅助环节。项目包括把 Excel 流程做成决策工具、把实时数据接入监控视图，以及带人工审核的大模型工作流。现任欧洲及北美 Amazon 运营，负责商品信息、合规与经营数据。技能：Python、SQL、Excel、网页开发与大模型 API 集成。寻求系统实施、业务系统、流程分析与技术型业务分析相关岗位。',
+      en: 'MSc Computer Science (Interactive Media), University College Cork. I map how processes really run, then design and build the tools, integrations and AI-assisted steps that improve them. Projects turn an Excel-based process into a decision tool, connect live data into a monitoring view and build an LLM workflow with human review. Current role in European and North American Amazon operations, focused on data analysis and marketing. Skills: Python, SQL, Excel, web development and LLM API integration. Seeking implementation, business systems, process and technical business analyst roles.',
+      zh: '爱尔兰科克大学计算机科学硕士（交互媒体）。我先弄清流程实际如何运转，再设计并搭建改进它的工具、系统集成与 AI 辅助环节。项目包括把 Excel 流程做成决策工具、把实时数据接入监控视图，以及带人工审核的大模型工作流。现任欧洲及北美 Amazon 运营，主要负责数据分析与市场营销。技能：Python、SQL、Excel、网页开发与大模型 API 集成。寻求系统实施、业务系统、流程分析与技术型业务分析相关岗位。',
     },
     experience: { en: 'Experience', zh: '工作经历' },
     projects: {
@@ -1073,12 +1071,12 @@ export const ui = {
       },
     ],
   },
-  // Illustrative BPMN-style map of a listing check; not a client deliverable.
+  // Illustrative BPMN-style map of a weekly performance review; not a client deliverable.
   processMap: {
     kicker: { en: 'Illustrative process map', zh: '示意流程图' },
     title: {
-      en: 'Listing compliance check: current vs future state',
-      zh: '商品信息合规检查：现状与目标流程',
+      en: 'Weekly performance review: current vs future state',
+      zh: '每周经营复盘：现状与目标流程',
     },
     tabs: {
       asis: { en: 'Current state', zh: '现状流程' },
@@ -1087,37 +1085,37 @@ export const ui = {
     lanes: {
       operator: { en: 'Operator', zh: '运营' },
       system: { en: 'System', zh: '系统' },
-      reviewer: { en: 'Reviewer', zh: '审核人' },
+      reviewer: { en: 'Analyst', zh: '分析' },
     },
     asis: {
-      start: { en: 'New or changed listing', zh: '新增或修改商品' },
-      export: { en: 'Export listings', zh: '导出商品信息' },
-      read: { en: 'Read each listing against the rules', zh: '逐条对照规则阅读' },
-      issue: { en: 'Issue?', zh: '有问题？' },
-      fix: { en: 'Fix and resubmit', zh: '修改并重新提交' },
+      start: { en: 'Week ends', zh: '周期结束' },
+      export: { en: 'Export reports', zh: '导出各站报表' },
+      read: { en: 'Merge and check sheets by hand', zh: '手工合并并逐表检查' },
+      issue: { en: 'Problem found?', zh: '发现问题？' },
+      fix: { en: 'Adjust listing or ads', zh: '调整商品页或广告' },
       done: { en: 'Done', zh: '完成' },
     },
     tobe: {
-      start: { en: 'New or changed listing', zh: '新增或修改商品' },
-      extract: { en: 'Extract and check (LLM + rules)', zh: '提取并校验（大模型 + 规则）' },
-      valid: { en: 'Schema valid & passes?', zh: '结构合规且通过？' },
-      publish: { en: 'Publish and log', zh: '发布并记录' },
-      review: { en: 'Review flagged item', zh: '审核被标记条目' },
-      fix: { en: 'Fix and resubmit', zh: '修改并重新提交' },
+      start: { en: 'Week ends', zh: '周期结束' },
+      extract: { en: 'Pull data, flag anomalies', zh: '拉取数据并标记异常' },
+      valid: { en: 'Within normal range?', zh: '指标正常？' },
+      publish: { en: 'Publish dashboard', zh: '发布复盘看板' },
+      review: { en: 'Review flagged metric', zh: '复核异常指标' },
+      fix: { en: 'Adjust listing or ads', zh: '调整商品页或广告' },
       done: { en: 'Done', zh: '完成' },
     },
     yes: { en: 'yes', zh: '是' },
     no: { en: 'no', zh: '否' },
-    approve: { en: 'approve', zh: '通过' },
-    reject: { en: 'reject', zh: '驳回' },
+    approve: { en: 'dismiss', zh: '忽略' },
+    reject: { en: 'act', zh: '处理' },
     changes: {
       asis: {
-        en: 'Every listing is read by a person, every time; checks depend on who does them and leave no record.',
-        zh: '每条商品每次都要人工阅读；检查结果因人而异，也没有记录。',
+        en: 'Every week someone merges reports by hand; problems surface late and depend on who is looking.',
+        zh: '每周靠人工合并报表；问题发现得晚，也取决于谁在看。',
       },
       tobe: {
-        en: 'The system checks every listing the same way and logs it; people only review what is flagged, and decide.',
-        zh: '系统用同一标准检查每条商品并留下记录；人只审核被标记的条目，并做最终判断。',
+        en: 'Data is pulled and checked the same way every week; people only look at flagged metrics and decide what to change.',
+        zh: '数据每周按同一标准自动拉取和检查；人只看被标记的指标，并决定怎么调整。',
       },
     },
     note: {
