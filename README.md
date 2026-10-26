@@ -20,7 +20,7 @@ Builds must run sequentially because vinext shares its output directory. The wra
 - Presentation: `app/portfolio.tsx` (Home, Case, Résumé, Archive).
 - Styles and design tokens: `app/globals.css`. Light theme, hairline rules, no shadows.
 - Language: `app/language.ts`, persisted in `localStorage['jl-site-lang']` and reflected in `<html lang>`.
-- Motion: `app/use-site-motion.ts` (`data-reveal`, `data-speed`, `data-follow`, `data-tilt`, `data-magnet`, `data-spot`, `data-progress`) and `app/hero-workflow.tsx`. Motion is disabled under `prefers-reduced-motion`; state controls still work.
+- Motion: `app/use-site-motion.ts` (`data-reveal`, `data-speed`, `data-follow`, `data-tilt`, `data-magnet`, `data-spot`, `data-progress`) and `app/hero-flow.tsx` (a simulated multilingual listing-review pipeline). Under `prefers-reduced-motion` the hero draws one still frame.
 
 Put approved public assets in `public/`. **Never commit the phone number**, original CVs, research data, tokens or API keys. The public résumé PDF is exported with the phone hidden; the version with the phone stays private.
 
@@ -44,4 +44,4 @@ Public documentation reviewed on 2026-10-23: [MCDA README.txt](https://github.co
 
 Experience titles, dates and degrees are retained from the existing portfolio. The owner confirmed on 2026-10-23 that US Amazon operations were added to the current Triple A role in October 2026. No new employer or past US role is inferred. Specific campaign ownership, ad spend, deployment impact, research-team counts and class-rank claims are not substantiated by this review and are not added to the recruitment copy. Historical production-platform claims are separated from the publicly evidenced telemetry demo.
 
-No unmeasured commercial or performance improvements are claimed. All interface captures use synthetic, simulated or fictional data. MoTai captures show an earlier interface and are labelled accordingly; current AI credentials are runtime-managed. The hero animation illustrates scattered tasks becoming an AI-assisted workflow and does not report measured time savings. EN/ZH web and PDF résumés must be regenerated together when résumé content changes. Validate with type checking, lint, the Transformer checks, both static builds and browser smoke checks.
+No unmeasured commercial or performance improvements are claimed. All interface captures use synthetic, simulated or fictional data. MoTai captures show an earlier interface and are labelled accordingly; current AI credentials are runtime-managed. The hero animation is a simulated listing-review pipeline; its counter is labelled "simulated" and reports no real volumes or time savings. EN/ZH web and PDF résumés must be regenerated together when résumé content changes. Validate with type checking, lint, the Transformer checks, both static builds and browser smoke checks.

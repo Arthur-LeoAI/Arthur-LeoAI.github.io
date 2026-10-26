@@ -16,7 +16,7 @@ import {
   type Project,
   type Text,
 } from '@/lib/content';
-import HeroWorkflow from './hero-workflow';
+import HeroFlow from './hero-flow';
 import MarketLens from './market-lens';
 import ProjectPreview from './project-preview';
 import { useLang } from './language';
@@ -134,7 +134,7 @@ function Home() {
         </header>
         <main id="main" tabIndex={-1}>
           <section id="top" className="hero">
-            <HeroWorkflow />
+            <HeroFlow />
             <div className="status" data-reveal="0">
               <span className="dot" />
               {t(ui.status)}
@@ -171,6 +171,10 @@ function Home() {
                 </a>
               </div>
             </div>
+            <p className="hero-hint" aria-hidden="true">
+              <span className="hint-pointer">{t(ui.heroHint)}</span>
+              <span className="hint-touch">{t(ui.heroHintTouch)}</span>
+            </p>
           </section>
 
           <dl className="fact-strip" aria-label={t(ui.summaryLabel)}>

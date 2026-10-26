@@ -703,12 +703,29 @@ export const ui = {
     zh: '结合业务经验、软件开发与大模型集成，构建解决实际问题的 AI 辅助工具。',
   },
   heroHint: {
-    en: 'Move your cursor to bring order to the data',
-    zh: '移动鼠标，让杂乱的数据归位',
+    en: 'Hover a language to trace it · click to run a batch',
+    zh: '悬停语言标签查看流向 · 点击运行一批',
   },
   heroHintTouch: {
-    en: 'Scroll to bring order to the data',
-    zh: '向下滑动，让杂乱的数据归位',
+    en: 'Tap to run a batch',
+    zh: '轻点运行一批',
+  },
+  // Hero background: a simulated multilingual listing-review pipeline (no real data).
+  heroFlow: {
+    hub: { en: 'LLM + rules', zh: '大模型 + 规则' },
+    outcomes: {
+      approved: { en: 'Approved', zh: '通过' },
+      review: { en: 'Human review', zh: '人工审核' },
+      fixed: { en: 'Auto-fixed', zh: '自动修正' },
+    },
+    trace: {
+      en: 'listings → extract · check · route',
+      zh: '商品文案 → 提取 · 校验 · 分流',
+    },
+    counter: {
+      en: 'simulated · {n} processed · {r} sent to review',
+      zh: '模拟 · 已处理 {n} · 转人工 {r}',
+    },
   },
   aboutHello: {
     en: 'Business context. Clear analysis. Working tools.',
