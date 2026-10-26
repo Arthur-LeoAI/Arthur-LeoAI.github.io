@@ -712,8 +712,8 @@ export const ui = {
     zh: '轻点激活输入层',
   },
   heroIntro: {
-    en: 'Computer Science MSc, University College Cork. I work in European and US Amazon operations, which taught me to start with how the work actually runs, then decide what tool, data or AI it needs.',
-    zh: '爱尔兰科克大学计算机科学硕士。目前从事欧洲及美国 Amazon 运营，这让我习惯先弄清工作实际如何运转，再决定需要什么工具、数据或 AI。',
+    en: 'Computer Science MSc, University College Cork. I map how a process really runs, then design and build the tool, integration or AI-assisted step that improves it. My current role in European and US Amazon operations keeps me close to the day-to-day work those systems have to fit.',
+    zh: '爱尔兰科克大学计算机科学硕士。我先弄清一个流程实际如何运转，再设计并搭建改进它的工具、系统集成或 AI 辅助环节。目前在欧洲及美国 Amazon 运营一线工作，让我始终贴近这些系统要服务的日常业务。',
   },
   seeWork: {
     en: 'Explore case studies ↓',
