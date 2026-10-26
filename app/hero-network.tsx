@@ -78,12 +78,18 @@ export default function HeroNetwork() {
       pulses = [];
     };
 
-    // Send a signal from a node along its strongest outgoing connections.
-    const fire = (n: number, s: number) => {
+    // Send a signal from a node along one (or a few) of its stronger connections.
+    // Signals are kept sparse: one path at a time, a small on-screen cap, weak ones fade out.
+    const maxPulses = 12;
+    const fire = (n: number, s: number, branches = 1) => {
       nodes[n].act = Math.max(nodes[n].act, s);
+      if (s < 0.15) return;
       const ranked = [...out[n]].sort((i, j) => Math.abs(edges[j].w) - Math.abs(edges[i].w));
-      for (const e of ranked.slice(0, 3))
-        if (pulses.length < 140) pulses.push({ edge: e, t: 0, s: s * Math.abs(edges[e].w) });
+      const pool = ranked.slice(0, branches + 1);
+      for (let k = 0; k < branches && pool.length; k++) {
+        const e = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+        if (pulses.length < maxPulses) pulses.push({ edge: e, t: 0, s: s * Math.abs(edges[e].w) });
+      }
     };
 
     const draw = (dt: number) => {
@@ -109,28 +115,28 @@ export default function HeroNetwork() {
       // Signals
       const next: Pulse[] = [];
       for (const p of pulses) {
-        p.t += dt * 0.85;
+        p.t += dt * 0.5;
         const e = edges[p.edge];
         const a = nodes[e.a];
         const b = nodes[e.b];
         if (p.t >= 1) {
-          if (out[e.b].length) fire(e.b, Math.min(1, p.s * 1.25));
+          if (out[e.b].length) fire(e.b, Math.min(1, p.s * 1.15));
           else b.act = Math.max(b.act, p.s);
           continue;
         }
         const x = a.x + (b.x - a.x) * p.t;
         const y = a.y + (b.y - a.y) * p.t;
-        const tx = a.x + (b.x - a.x) * Math.max(0, p.t - 0.08);
-        const ty = a.y + (b.y - a.y) * Math.max(0, p.t - 0.08);
-        ctx.strokeStyle = `rgba(${accent},${(0.35 * p.s + 0.15).toFixed(2)})`;
-        ctx.lineWidth = 2;
+        const tx = a.x + (b.x - a.x) * Math.max(0, p.t - 0.06);
+        const ty = a.y + (b.y - a.y) * Math.max(0, p.t - 0.06);
+        ctx.strokeStyle = `rgba(${accent},${(0.25 * p.s + 0.1).toFixed(2)})`;
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(tx, ty);
         ctx.lineTo(x, y);
         ctx.stroke();
         ctx.fillStyle = `rgba(${accent},${(0.5 + 0.5 * p.s).toFixed(2)})`;
         ctx.beginPath();
-        ctx.arc(x, y, 2.8, 0, Math.PI * 2);
+        ctx.arc(x, y, 2.2, 0, Math.PI * 2);
         ctx.fill();
         next.push(p);
       }
@@ -141,9 +147,9 @@ export default function HeroNetwork() {
         if (!reduce) n.act *= Math.exp(-dt * 1.6);
         const r = n.layer === 0 || !out[i].length ? 6 : 5;
         if (n.act > 0.02) {
-          ctx.fillStyle = `rgba(${accent},${(0.14 * n.act).toFixed(3)})`;
+          ctx.fillStyle = `rgba(${accent},${(0.1 * n.act).toFixed(3)})`;
           ctx.beginPath();
-          ctx.arc(n.x, n.y, r + 10 * n.act, 0, Math.PI * 2);
+          ctx.arc(n.x, n.y, r + 7 * n.act, 0, Math.PI * 2);
           ctx.fill();
         }
         ctx.fillStyle = card;
@@ -166,16 +172,16 @@ export default function HeroNetwork() {
       last = now;
       if (!visible) return;
       idle += dt;
-      if (idle > 0.7) {
+      if (idle > 2.4) {
         idle = 0;
         const input = layers[0][Math.floor(Math.random() * layers[0].length)];
         fire(input, 0.9);
       }
       if (hot >= 0) {
         hoverClock += dt;
-        if (hoverClock > 0.55) {
+        if (hoverClock > 1.1) {
           hoverClock = 0;
-          fire(hot, 1);
+          fire(hot, 1, 2);
         }
       }
       draw(dt);
@@ -201,7 +207,7 @@ export default function HeroNetwork() {
       const n = m.on ? nearest() : -1;
       if (n !== hot) {
         hot = n;
-        hoverClock = 0.55;
+        hoverClock = 1.1;
       }
       canvas.parentElement?.toggleAttribute('data-hot', hot >= 0);
     };
