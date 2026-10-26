@@ -2683,3 +2683,257 @@ footer[id] {
   line-height: 1.5;
   color: var(--muted);
 }
+
+/* Implementation / business-systems repositioning */
+.hero-links {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-top: 18px;
+  font-size: 14px;
+}
+.exp-row .tool-tags,
+.tool-tags {
+  list-style: none;
+  flex-direction: row;
+  font-size: 12.5px;
+  line-height: 1.4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.exp-row .tool-tags li,
+.tool-tags li {
+  padding: 3px 10px;
+  border: 1px solid var(--control);
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.card-links {
+  display: flex;
+  gap: 18px;
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+.lab-teaser {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.6fr) minmax(0, 2fr) auto;
+  gap: 20px;
+  align-items: center;
+  margin-top: 40px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.lab-teaser:hover {
+  border-color: var(--accent);
+  color: var(--ink-2);
+}
+.lab-teaser strong {
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.lab-page {
+  padding: clamp(40px, 6vw, 80px) 0;
+}
+.lab-page .ai-copy {
+  max-width: 820px;
+  margin-bottom: 28px;
+}
+
+/* How I work */
+.approach-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line-strong);
+}
+.approach-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 22px 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+.approach-steps li:not(:nth-child(3n + 1)) {
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+}
+.approach-steps h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+.approach-steps p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.approach-steps .related {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 14px;
+}
+
+/* Process map (illustrative BPMN-style swimlanes) */
+.process-map {
+  margin-top: clamp(40px, 5vw, 64px);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  padding: 22px;
+  scroll-margin-top: 24px;
+}
+.pm-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.pm-head h3 {
+  margin: 6px 0 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.15;
+}
+.pm-tabs {
+  display: flex;
+  border: 1px solid var(--control);
+  border-radius: 999px;
+  padding: 3px;
+}
+.pm-tabs button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.pm-tabs button[aria-selected='true'] {
+  background: var(--ink);
+  color: var(--bg);
+}
+.pm-scroll {
+  overflow-x: auto;
+}
+.pm-scroll svg {
+  display: block;
+  width: 100%;
+  min-width: 620px;
+  height: auto;
+  font-family: var(--sans);
+}
+.pm-lane rect {
+  fill: var(--bg);
+  stroke: var(--line);
+}
+.pm-lane line {
+  stroke: var(--line);
+}
+.pm-lane text {
+  fill: var(--subtle);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.pm-task rect {
+  fill: var(--card);
+  stroke: var(--accent);
+  stroke-width: 1.4;
+}
+.pm-task text {
+  fill: var(--ink);
+  font-size: 12.5px;
+}
+.pm-gateway path {
+  fill: var(--card);
+  stroke: var(--accent);
+  stroke-width: 1.4;
+}
+.pm-gateway text,
+.pm-end text {
+  fill: var(--ink-2);
+  font-size: 12px;
+}
+.pm-start {
+  fill: var(--card);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+.pm-end circle {
+  fill: var(--card);
+  stroke: var(--ink);
+  stroke-width: 3.5;
+}
+.pm-flow path {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 1.3;
+}
+.pm-flow text {
+  fill: var(--accent);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.pm-arrowhead {
+  fill: var(--ink-2);
+}
+.pm-diagram {
+  animation: pm-in 0.45s var(--ease);
+}
+@keyframes pm-in {
+  from {
+    opacity: 0;
+  }
+}
+.pm-change {
+  margin-top: 14px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+@media (max-width: 900px) {
+  .approach-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .approach-steps li:not(:nth-child(3n + 1)) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .approach-steps li:nth-child(even) {
+    padding-left: 22px;
+    border-left: 1px solid var(--line);
+  }
+}
+@media (max-width: 560px) {
+  .approach-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .approach-steps li:nth-child(even) {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .lab-teaser {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .process-map {
+    padding: 16px;
+  }
+}

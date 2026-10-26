@@ -2,7 +2,7 @@ import Portfolio from '@/app/portfolio';
 export const metadata = {
   title: 'Résumé — Jiaming Li',
   description:
-    'Applied AI, software development and business workflows. LLM integration projects, European and US Amazon experience, education and skills.',
+    'Implementation, business systems and process analysis. European and US Amazon operations, process-to-tool and data-integration projects, education and skills.',
 };
 export default function ResumePage() {
   return <Portfolio view="resume" />;

@@ -19,6 +19,7 @@ import {
 import HeroFlow from './hero-flow';
 import MarketLens from './market-lens';
 import ProjectPreview from './project-preview';
+import ProcessMap from './process-map';
 import { useLang } from './language';
 import { useSiteMotion } from './use-site-motion';
 
@@ -121,8 +122,9 @@ function Home() {
           </a>
           <nav aria-label={t(ui.navigation)}>
             <a href="#experience">{t(ui.nav.experience)}</a>
-            <a href="#skills">{t(ui.nav.skills)}</a>
             <a href="#work">{t(ui.nav.work)}</a>
+            <a href="#approach">{t(ui.nav.approach)}</a>
+            <a href="#skills">{t(ui.nav.skills)}</a>
             <a href="#contact">{t(ui.nav.contact)}</a>
           </nav>
           <div className="header-actions">
@@ -170,6 +172,10 @@ function Home() {
                   {t(ui.readResume)}
                 </a>
               </div>
+              <p className="hero-links" data-reveal="280">
+                <a href={profile.linkedin}>{t(ui.heroLinks.linkedin)}</a>
+                <a href={profile.github}>{t(ui.heroLinks.github)}</a>
+              </p>
             </div>
             <p className="hero-hint" aria-hidden="true">
               <span className="hint-pointer">{t(ui.heroHint)}</span>
@@ -245,6 +251,11 @@ function Home() {
                         <li key={pt}>{pt}</li>
                       ))}
                     </ul>
+                    <ul className="tool-tags" aria-label={t(ui.skillsLabel)}>
+                      {x.tools.map((tool) => (
+                        <li key={tool}>{tool}</li>
+                      ))}
+                    </ul>
                     {x.project && (
                       <a className="related" href={caseHref(x.project)}>
                         {t(ui.relatedProject)}
@@ -254,34 +265,6 @@ function Home() {
                   </div>
                 </article>
               ))}
-            </div>
-          </section>
-
-          <section id="skills" className="section ruled">
-            <div className="split">
-              <h2 className="h2" data-reveal="0">
-                {t(ui.skillsLabel)}
-              </h2>
-              <div>
-                <p className="section-intro">{t(ui.skillsIntro)}</p>
-                <dl className="skills-list">
-                  {skills[lang].map(([k, v]) => (
-                    <div key={k} data-reveal="0">
-                      <dt>{k}</dt>
-                      <dd>{v}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </div>
-            <div id="ai" className="skill-demos">
-              <div className="ai-copy">
-                <h3 className="demo-title">{t(ui.ai.title)}</h3>
-                <p className="ai-lead">{t(ui.ai.lead)}</p>
-              </div>
-              <Suspense fallback={<p>{t(ui.ai.lead)}</p>}>
-                <AiLab />
-              </Suspense>
             </div>
           </section>
 
@@ -315,6 +298,12 @@ function Home() {
                     <dd>{t(p.constraints)}</dd>
                   </dl>
                   <span className="stack">{p.stack}</span>
+                  <p className="card-links">
+                    <a href={caseHref(p.id)}>{t(ui.caseLinks.caseStudy)}</a>
+                    <a href={`${profile.github}/${p.repo}`}>
+                      {t(ui.caseLinks.code)}
+                    </a>
+                  </p>
                 </article>
               ))}
             </div>
@@ -336,10 +325,64 @@ function Home() {
                     </h3>
                     <p>{t(p.summary)}</p>
                     <span className="stack">{p.stack}</span>
+                    <p className="card-links">
+                      <a href={caseHref(p.id)}>{t(ui.caseLinks.caseStudy)}</a>
+                      <a href={`${profile.github}/${p.repo}`}>
+                        {t(ui.caseLinks.code)}
+                      </a>
+                    </p>
                   </div>
                 </article>
               ))}
             </div>
+          </section>
+
+          <section id="approach" className="section ruled">
+            <div className="work-head">
+              <h2 className="h2" data-reveal="0">
+                {t(ui.approach.title)}
+              </h2>
+              <p>{t(ui.approach.intro)}</p>
+            </div>
+            <ol className="approach-steps">
+              {ui.approach.steps.map((step, i) => (
+                <li key={step.title.en} data-reveal={String((i % 3) * 80)}>
+                  <span className="step-n">{String(i + 1).padStart(2, '0')}</span>
+                  <h3>{t(step.title)}</h3>
+                  <p>{t(step.body)}</p>
+                  {step.href && (
+                    <a className="related" href={step.href}>
+                      {t(step.link)} →
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ol>
+            <ProcessMap />
+          </section>
+
+          <section id="skills" className="section ruled">
+            <div className="split">
+              <h2 className="h2" data-reveal="0">
+                {t(ui.skillsLabel)}
+              </h2>
+              <div>
+                <p className="section-intro">{t(ui.skillsIntro)}</p>
+                <dl className="skills-list">
+                  {skills[lang].map(([k, v]) => (
+                    <div key={k} data-reveal="0">
+                      <dt>{k}</dt>
+                      <dd>{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+            <a className="lab-teaser" href="/lab/" data-reveal="0">
+              <span className="label">{t(ui.lab.teaserTitle)}</span>
+              <span>{t(ui.lab.teaserBody)}</span>
+              <strong>{t(ui.lab.teaserLink)}</strong>
+            </a>
           </section>
 
           <section id="education" className="split section ruled">
@@ -517,6 +560,36 @@ function Case({ p }: { p: Project }) {
             </div>
             <span aria-hidden="true">→</span>
           </a>
+        </main>
+        <footer className="case-footer">
+          <SiteFooterLinks t={t} email />
+        </footer>
+      </div>
+    </>
+  );
+}
+
+function Lab() {
+  const { lang, t } = useLang();
+  useSiteMotion(lang);
+  return (
+    <>
+      <Chrome t={t} />
+      <div className="wrap">
+        <header className="site-header">
+          <a className="wordmark" href="/">
+            {t(ui.lab.back)}
+          </a>
+          <LangToggle />
+        </header>
+        <main id="main" tabIndex={-1} className="lab-page">
+          <div className="ai-copy">
+            <h1 className="h2">{t(ui.ai.title)}</h1>
+            <p className="ai-lead">{t(ui.ai.lead)}</p>
+          </div>
+          <Suspense fallback={<p>{t(ui.ai.lead)}</p>}>
+            <AiLab />
+          </Suspense>
         </main>
         <footer className="case-footer">
           <SiteFooterLinks t={t} email />
@@ -794,10 +867,11 @@ export default function Portfolio({
   view,
 }: {
   projectId?: string;
-  view?: 'resume';
+  view?: 'resume' | 'lab';
 }) {
   const p = published.find((x) => x.id === projectId);
   if (p) return <Case p={p} />;
   if (view === 'resume') return <Resume />;
+  if (view === 'lab') return <Lab />;
   return archive ? <Archive /> : <Home />;
 }
