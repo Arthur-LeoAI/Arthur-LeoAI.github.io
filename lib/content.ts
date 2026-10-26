@@ -726,8 +726,8 @@ export const ui = {
         zh: '当前工作',
       },
       value: {
-        en: 'Amazon operations · Europe & US',
-        zh: 'Amazon 运营 · 欧洲及美国',
+        en: 'Operations, data & compliance · Amazon EU/US',
+        zh: '运营、数据与合规 · Amazon 欧美站',
       },
     },
     {
@@ -768,7 +768,7 @@ export const ui = {
   // Interactive "market lens" beside Experience. Its numbers are synthetic.
   lens: {
     kicker: { en: 'Try it · synthetic data', zh: '动手试试 · 模拟数据' },
-    title: { en: 'Which market needs attention?', zh: '哪个站点最需要关注？' },
+    title: { en: 'Data first: where should we act?', zh: '用数据判断：先改进哪里？' },
     hint: {
       en: 'Switch the metric, then hover a market.',
       zh: '切换指标，再把鼠标移到某个站点上。',
@@ -878,8 +878,8 @@ export const ui = {
       zh: '系统实施 · 业务系统 · 流程与数据',
     },
     summary: {
-      en: 'MSc Computer Science (Interactive Media), University College Cork. European and US Amazon operations experience, combined with Python, SQL, Excel, web development and LLM API integration. Projects turn an Excel-based process into a decision tool, connect live data into a monitoring view and build an LLM workflow with human review. Seeking implementation, business systems, process and technical business analyst roles.',
-      zh: '爱尔兰科克大学计算机科学硕士（交互媒体）。具备欧洲及美国 Amazon 运营经验，掌握 Python、SQL、Excel、网页开发与大模型 API 集成。项目包括把 Excel 流程做成决策工具、把实时数据接入监控视图，以及带人工审核的大模型工作流。寻求系统实施、业务系统、流程分析与技术型业务分析相关岗位。',
+      en: 'MSc Computer Science (Interactive Media), University College Cork. I map how processes really run, then design and build the tools, integrations and AI-assisted steps that improve them. Projects turn an Excel-based process into a decision tool, connect live data into a monitoring view and build an LLM workflow with human review. Current role in European and US Amazon operations, covering listings, compliance and performance data. Skills: Python, SQL, Excel, web development and LLM API integration. Seeking implementation, business systems, process and technical business analyst roles.',
+      zh: '爱尔兰科克大学计算机科学硕士（交互媒体）。我先弄清流程实际如何运转，再设计并搭建改进它的工具、系统集成与 AI 辅助环节。项目包括把 Excel 流程做成决策工具、把实时数据接入监控视图，以及带人工审核的大模型工作流。现任欧洲及美国 Amazon 运营，负责商品信息、合规与经营数据。技能：Python、SQL、Excel、网页开发与大模型 API 集成。寻求系统实施、业务系统、流程分析与技术型业务分析相关岗位。',
     },
     experience: { en: 'Experience', zh: '工作经历' },
     projects: {
@@ -896,8 +896,8 @@ export const ui = {
   },
   archive: {
     tagline: {
-      en: 'Map the process. Build the tool. Roll it out.',
-      zh: '梳理流程，搭建工具，推动落地。',
+      en: 'I turn business processes into systems that work.',
+      zh: '把业务流程，变成真正好用的系统。',
     },
     nav: [
       { href: '#projects', label: { en: '01 — Projects', zh: '01 — 项目' } },
@@ -925,12 +925,12 @@ export const ui = {
   strengths: [
     {
       title: {
-        en: 'Understand the operation',
-        zh: '理解业务运营',
+        en: 'Map the real process',
+        zh: '梳理真实流程',
       },
       body: {
-        en: 'Hands-on marketplace work in Europe and the US.',
-        zh: '欧洲与美国电商一线经验。',
+        en: 'Find where the work actually breaks before choosing a fix.',
+        zh: '先找到工作真正卡住的地方，再选解决方案。',
       },
     },
     {
@@ -963,8 +963,8 @@ export const ui = {
     zh: '实施分析师 · 业务系统 / 流程分析师 · 技术型业务分析师 · AI 落地推广',
   },
   contactIntro: {
-    en: 'Open to implementation, business systems and process roles.',
-    zh: '正在寻找系统实施、业务系统与流程分析岗位。',
+    en: 'Open to implementation, business systems, process and AI adoption roles.',
+    zh: '正在寻找系统实施、业务系统、流程分析与 AI 落地推广岗位。',
   },
   readResume: {
     en: 'View résumé →',
