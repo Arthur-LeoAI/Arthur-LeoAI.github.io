@@ -279,8 +279,8 @@ em {
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: min(86vh, 900px);
-  padding: 40px 0 170px;
+  min-height: min(80vh, 820px);
+  padding: 40px 0 96px;
 }
 .hero-copy {
   max-width: 1100px;
@@ -288,7 +288,7 @@ em {
   flex-direction: column;
   align-items: center;
 }
-.hero-flow {
+.hero-network {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -301,12 +301,12 @@ em {
   -webkit-mask-image: radial-gradient(ellipse 40% 36% at 50% 40%, rgba(0, 0, 0, 0.14), #000 100%);
   mask-image: radial-gradient(ellipse 40% 36% at 50% 40%, rgba(0, 0, 0, 0.14), #000 100%);
 }
-.hero-flow canvas {
+.hero-network canvas {
   display: block;
   width: 100%;
   height: 100%;
 }
-.hero:has(.hero-flow[data-hot]) {
+.hero:has(.hero-network[data-hot]) {
   cursor: pointer;
 }
 .skill-demos .ai-copy {
@@ -2480,7 +2480,7 @@ footer[id] {
   }
   .hero {
     min-height: 0;
-    padding: 44px 0 180px;
+    padding: 44px 0 88px;
   }
   .hero h1 {
     font-size: clamp(42px, 7.4vw, 56px);
@@ -2936,4 +2936,189 @@ footer[id] {
   .process-map {
     padding: 16px;
   }
+}
+
+/* Simplified home: varied, lighter sections */
+.degree-list {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.degree-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent);
+}
+.degree-list strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+.degree-list span {
+  font-size: 14px;
+  color: var(--subtle);
+}
+.strengths-grid {
+  margin-top: 48px;
+  gap: 16px;
+}
+.strengths-grid article {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--card);
+  padding: 22px;
+}
+.strengths-grid h3 {
+  margin: 10px 0 6px;
+  font-size: 19px;
+}
+.strengths-grid p {
+  font-size: 15px;
+}
+.strength-n {
+  font-family: var(--serif);
+  font-size: 34px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+/* How I work: horizontal stepper */
+.approach-steps {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-top: 0;
+  position: relative;
+  gap: 0;
+}
+.approach-steps::before {
+  content: '';
+  position: absolute;
+  top: 17px;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  background: var(--line-strong);
+}
+.approach-steps li,
+.approach-steps li:not(:nth-child(3n + 1)) {
+  position: relative;
+  padding: 0 14px 0 0;
+  border: 0;
+  gap: 6px;
+}
+.step-dot {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  font-family: var(--serif);
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+.approach-steps li:has(.step-link) .step-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+.approach-steps h3 {
+  font-size: 16px;
+}
+.approach-steps p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.step-link {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Skills: grouped chips */
+.skill-groups {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 32px;
+}
+.skill-groups dt {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--subtle);
+}
+.skill-groups dd {
+  margin: 0;
+}
+.skill-groups .tool-tags li {
+  background: var(--card);
+}
+
+/* Contact: dark closing band */
+.contact-dark {
+  position: relative;
+  isolation: isolate;
+  color: var(--bg);
+  margin-top: var(--section);
+  padding-top: clamp(64px, 8vw, 104px);
+}
+.contact-dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: var(--ink);
+  z-index: -1;
+}
+.contact-dark .contact-intro {
+  color: rgba(244, 241, 234, 0.72);
+}
+.contact-dark a,
+.contact-dark .contact-email {
+  color: #9fd3bb;
+  border-color: #9fd3bb;
+}
+.contact-dark .pill-accent {
+  background: var(--bg);
+  color: var(--ink);
+}
+.contact-dark .pill-accent:hover {
+  background: #9fd3bb;
+  color: var(--ink);
+}
+.contact-dark .pill-outline {
+  border-color: rgba(244, 241, 234, 0.5);
+  color: var(--bg);
+}
+.contact-dark .footer-bottom {
+  border-top-color: rgba(244, 241, 234, 0.18);
+  color: rgba(244, 241, 234, 0.6);
+}
+@media (max-width: 900px) {
+  .approach-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 28px;
+  }
+  .approach-steps::before {
+    display: none;
+  }
+}
+@media (max-width: 560px) {
+  .approach-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .skill-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.approach-steps li:nth-child(n) {
+  padding-left: 0;
+  border-left: 0;
 }

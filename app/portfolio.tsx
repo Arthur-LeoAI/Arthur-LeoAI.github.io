@@ -16,7 +16,7 @@ import {
   type Project,
   type Text,
 } from '@/lib/content';
-import HeroFlow from './hero-flow';
+import HeroNetwork from './hero-network';
 import MarketLens from './market-lens';
 import ProjectPreview from './project-preview';
 import ProcessMap from './process-map';
@@ -136,7 +136,7 @@ function Home() {
         </header>
         <main id="main" tabIndex={-1}>
           <section id="top" className="hero">
-            <HeroFlow />
+            <HeroNetwork />
             <div className="status" data-reveal="0">
               <span className="dot" />
               {t(ui.status)}
@@ -158,9 +158,6 @@ function Home() {
                   {withBreaks(after)}
                 </span>
               </h1>
-              <p className="hero-sub" data-reveal="170">
-                {t(ui.heroSub)}
-              </p>
               <p className="hero-targets" data-reveal="200">
                 <strong>{t(ui.targetLabel)}</strong> {t(ui.targetRoles)}
               </p>
@@ -209,24 +206,24 @@ function Home() {
               <div className="about-intro" data-reveal="80">
                 <h2 className="h2">{t(ui.aboutTitle)}</h2>
                 <p className="about-lead">{t(ui.heroIntro)}</p>
-                <p className="about-lead">{t(ui.about)}</p>
-                <a className="related" href={profile.linkedin}>
-                  LinkedIn ↗
-                </a>
+                <ul className="degree-list">
+                  {education.map((e) => (
+                    <li key={e.deg.en}>
+                      <strong>{t(e.deg)}</strong>
+                      <span>
+                        {t(e.school)} · {t(e.date)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-            <div className="strengths-head">
-              <h3>{t(ui.bringTitle)}</h3>
-              <p>{t(ui.aboutHello)}</p>
             </div>
             <div className="strengths-grid">
               {ui.strengths.map((item, i) => (
                 <article key={item.title.en} data-reveal={String(i * 80)}>
+                  <span className="strength-n">{String(i + 1).padStart(2, '0')}</span>
                   <h3>{t(item.title)}</h3>
                   <p>{t(item.body)}</p>
-                  <a className="related" href={item.href}>
-                    {t(item.link)}
-                  </a>
                 </article>
               ))}
             </div>
@@ -247,7 +244,7 @@ function Home() {
                     <h3>{t(x.role)}</h3>
                     <div className="org">{t(x.org)}</div>
                     <ul>
-                      {x.points[lang].map((pt) => (
+                      {x.points[lang].slice(0, 2).map((pt) => (
                         <li key={pt}>{pt}</li>
                       ))}
                     </ul>
@@ -293,10 +290,6 @@ function Home() {
                     <a href={caseHref(p.id)}>{t(p.title)} ↗</a>
                   </h3>
                   <p>{t(p.summary)}</p>
-                  <dl className="card-constraint">
-                    <dt>{t(ui.caseSteps.constraints)}</dt>
-                    <dd>{t(p.constraints)}</dd>
-                  </dl>
                   <span className="stack">{p.stack}</span>
                   <p className="card-links">
                     <a href={caseHref(p.id)}>{t(ui.caseLinks.caseStudy)}</a>
@@ -346,12 +339,12 @@ function Home() {
             </div>
             <ol className="approach-steps">
               {ui.approach.steps.map((step, i) => (
-                <li key={step.title.en} data-reveal={String((i % 3) * 80)}>
-                  <span className="step-n">{String(i + 1).padStart(2, '0')}</span>
+                <li key={step.title.en} data-reveal={String(i * 60)}>
+                  <span className="step-dot">{i + 1}</span>
                   <h3>{t(step.title)}</h3>
                   <p>{t(step.body)}</p>
                   {step.href && (
-                    <a className="related" href={step.href}>
+                    <a className="step-link" href={step.href}>
                       {t(step.link)} →
                     </a>
                   )}
@@ -366,17 +359,20 @@ function Home() {
               <h2 className="h2" data-reveal="0">
                 {t(ui.skillsLabel)}
               </h2>
-              <div>
-                <p className="section-intro">{t(ui.skillsIntro)}</p>
-                <dl className="skills-list">
-                  {skills[lang].map(([k, v]) => (
-                    <div key={k} data-reveal="0">
-                      <dt>{k}</dt>
-                      <dd>{v}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
+              <dl className="skill-groups">
+                {skills[lang].map(([k, v]) => (
+                  <div key={k} data-reveal="0">
+                    <dt>{k}</dt>
+                    <dd>
+                      <ul className="tool-tags">
+                        {v.split(' · ').map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
             <a className="lab-teaser" href="/lab/" data-reveal="0">
               <span className="label">{t(ui.lab.teaserTitle)}</span>
@@ -385,24 +381,9 @@ function Home() {
             </a>
           </section>
 
-          <section id="education" className="split section ruled">
-            <h2 className="h2" data-reveal="0">
-              {t(ui.educationLabel)}
-            </h2>
-            <div className="education-list">
-              {education.map((e) => (
-                <article key={e.deg.en} data-reveal="0">
-                  <span className="label">{t(e.date)}</span>
-                  <h3>{t(e.deg)}</h3>
-                  <p>{t(e.school)}</p>
-                  <p className="sub">{t(e.note)}</p>
-                </article>
-              ))}
-            </div>
-          </section>
         </main>
 
-        <footer id="contact" className="contact ruled">
+        <footer id="contact" className="contact contact-dark">
           <h2 data-reveal="0">{t(ui.contactTitle)}</h2>
           <p className="contact-intro">{t(ui.contactIntro)}</p>
           <div className="contact-actions">

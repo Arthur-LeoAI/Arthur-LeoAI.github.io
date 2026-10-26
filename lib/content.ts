@@ -548,14 +548,14 @@ export const experience: {
     points: {
       en: [
         'Manage Amazon marketplace operations across Europe and the US; added US marketplace responsibility in October 2026.',
-        'Analyse sales, traffic, fees, product and competitor data to prioritise listing and operational improvements.',
         'Maintain localised listings and investigate compliance issues in restricted product categories.',
+        'Analyse sales, traffic, fees, product and competitor data to prioritise listing and operational improvements.',
         'Use Seller Central, Helium 10, Keepa and Amalytix for keyword, competitor and product research.',
       ],
       zh: [
         '负责欧洲及美国 Amazon 站点运营；于 2026 年 10 月接手美国站。',
-        '分析销售、流量、费用、产品及竞品数据，确定商品页及运营改进的优先级。',
         '维护本地化商品信息，排查受限品类中的合规问题。',
+        '分析销售、流量、费用、产品及竞品数据，确定商品页及运营改进的优先级。',
         '使用 Seller Central、Helium 10、Keepa 和 Amalytix 开展关键词、竞品与产品研究。',
       ],
     },
@@ -700,45 +700,20 @@ export const ui = {
   },
   // Title parts are [before, accent, after]; "\n" becomes a line break.
   heroTitle: {
-    en: ['Map the process.\n', 'Build the tool.', ' Roll it out.'],
-    zh: ['梳理流程，\n', '搭建工具，', '推动落地。'],
-  },
-  heroSub: {
-    en: 'I’m Jiaming Li. I bring e-commerce operations, data analysis and software development together to map how work really runs, build the tools that improve it, and help teams adopt them, using AI where it genuinely helps.',
-    zh: '我是李嘉铭。我把电商运营、数据分析和软件开发结合起来：梳理工作实际如何运转，搭建改进它的工具，并帮助团队用起来；在真正有帮助的地方引入 AI。',
+    en: ['I turn business processes\ninto ', 'systems that work', '.'],
+    zh: ['把业务流程，\n变成', '真正好用的系统', '。'],
   },
   heroHint: {
-    en: 'Hover a language to trace it · click to run a batch',
-    zh: '悬停语言标签查看流向 · 点击运行一批',
+    en: 'Hover a node to send a signal · click to fire the inputs',
+    zh: '悬停节点发送信号 · 点击激活输入层',
   },
   heroHintTouch: {
-    en: 'Tap to run a batch',
-    zh: '轻点运行一批',
-  },
-  // Hero background: a simulated multilingual listing-review pipeline (no real data).
-  heroFlow: {
-    hub: { en: 'LLM + rules', zh: '大模型 + 规则' },
-    outcomes: {
-      approved: { en: 'Approved', zh: '通过' },
-      review: { en: 'Human review', zh: '人工审核' },
-      fixed: { en: 'Auto-fixed', zh: '自动修正' },
-    },
-    trace: {
-      en: 'listings → extract · check · route',
-      zh: '商品文案 → 提取 · 校验 · 分流',
-    },
-    counter: {
-      en: 'simulated · {n} processed · {r} sent to review',
-      zh: '模拟 · 已处理 {n} · 转人工 {r}',
-    },
-  },
-  aboutHello: {
-    en: 'Understand the operation. Improve the process. Ship the tool.',
-    zh: '理解业务，改进流程，交付工具。',
+    en: 'Tap to fire the inputs',
+    zh: '轻点激活输入层',
   },
   heroIntro: {
-    en: 'I’m a Computer Science MSc graduate from University College Cork, working in European and US Amazon operations. Day to day, that means listings, restricted-category compliance and performance data. It taught me to start with how the work actually runs before deciding what tool, data or AI it needs.',
-    zh: '我毕业于爱尔兰科克大学，获计算机科学硕士学位，目前从事欧洲及美国 Amazon 运营，日常工作涉及商品信息、受限品类合规与经营数据。这段经历让我习惯先弄清工作实际如何运转，再决定需要什么工具、数据或 AI。',
+    en: 'Computer Science MSc, University College Cork. I work in European and US Amazon operations, which taught me to start with how the work actually runs, then decide what tool, data or AI it needs.',
+    zh: '爱尔兰科克大学计算机科学硕士。目前从事欧洲及美国 Amazon 运营，这让我习惯先弄清工作实际如何运转，再决定需要什么工具、数据或 AI。',
   },
   seeWork: {
     en: 'Explore case studies ↓',
@@ -837,8 +812,8 @@ export const ui = {
   relatedProject: { en: 'Related case: ', zh: '相关案例：' },
   workTitle: { en: 'Case studies', zh: '项目案例' },
   workIntro: {
-    en: 'Each case follows the same path: the problem, the context and constraints, what I contributed, how it was built, the evidence, and its limits.',
-    zh: '每个案例按同一思路展开：问题、背景与约束、我的贡献、实现方式、证明材料，以及局限。',
+    en: 'Problem, constraints, my part, the build, the evidence and the limits.',
+    zh: '问题、约束、我的部分、实现、证明与局限。',
   },
   supportingTitle: {
     en: 'More projects',
@@ -847,10 +822,6 @@ export const ui = {
   supportingTag: { en: 'LLM API integration', zh: '大模型 API 集成' },
   alsoBuilt: { en: 'Also built', zh: '其他项目' },
   aboutTitle: { en: 'Hi, I’m Jiaming.', zh: '你好，我是李嘉铭。' },
-  about: {
-    en: 'My projects turn a spreadsheet process into a decision tool, connect live data into a monitoring view, and build an LLM workflow with human review. I’m looking for implementation, business systems, process and technical business analyst roles, and for teams adopting AI in their operations.',
-    zh: '我的项目包括：把电子表格流程做成决策工具，把实时数据接入监控视图，以及搭建带人工审核的大模型工作流。我希望从事系统实施、业务系统、流程分析与技术型业务分析工作，也欢迎正在业务中引入 AI 的团队。',
-  },
   educationLabel: { en: 'Education', zh: '教育背景' },
   skillsLabel: {
     en: 'Skills',
@@ -951,10 +922,6 @@ export const ui = {
     title: { en: 'A different direction.', zh: '换个方向看看。' },
     back: { en: 'Return to Jiaming’s portfolio →', zh: '返回李嘉铭的作品集 →' },
   },
-  bringTitle: {
-    en: 'What I bring',
-    zh: '我能带来什么',
-  },
   strengths: [
     {
       title: {
@@ -962,13 +929,8 @@ export const ui = {
         zh: '理解业务运营',
       },
       body: {
-        en: 'European and US marketplace experience: listings, compliance, performance analysis and day-to-day problem-solving.',
-        zh: '欧洲及美国电商经验：商品信息、合规、绩效分析与日常问题排查。',
-      },
-      href: '#experience',
-      link: {
-        en: 'View experience →',
-        zh: '查看经历 →',
+        en: 'Hands-on marketplace work in Europe and the US.',
+        zh: '欧洲与美国电商一线经验。',
       },
     },
     {
@@ -977,13 +939,8 @@ export const ui = {
         zh: '把流程做成工具',
       },
       body: {
-        en: 'Take a manual or spreadsheet process and make it explicit, adjustable and easier to use. The MCDA tool started as an Excel-based analysis.',
-        zh: '把手工或电子表格流程梳理清楚，做成可调整、更好用的工具。MCDA 工具最初就是一套 Excel 分析流程。',
-      },
-      href: '/work/mcda/',
-      link: {
-        en: 'See the MCDA case →',
-        zh: '查看 MCDA 案例 →',
+        en: 'From spreadsheet workflows to tools people use.',
+        zh: '把表格流程做成好用的工具。',
       },
     },
     {
@@ -992,13 +949,8 @@ export const ui = {
         zh: '把数据与 AI 接入工作流',
       },
       body: {
-        en: 'Wire data sources, storage and interfaces together, and add AI where a person still reviews the result. See the monitoring and MoTai cases.',
-        zh: '把数据源、存储与界面连接起来，并在保留人工审核的前提下引入 AI。可查看监控平台与 MoTai 案例。',
-      },
-      href: '#approach',
-      link: {
-        en: 'See how I work →',
-        zh: '查看我的工作方式 →',
+        en: 'Data flows and AI steps, with people in the loop.',
+        zh: '接通数据与 AI，保留人工把关。',
       },
     },
   ],
@@ -1010,13 +962,9 @@ export const ui = {
     en: 'Implementation Analyst · Business Systems / Process Analyst · Technical Business Analyst · AI Adoption',
     zh: '实施分析师 · 业务系统 / 流程分析师 · 技术型业务分析师 · AI 落地推广',
   },
-  skillsIntro: {
-    en: 'Tools I have used in marketplace work, research and software projects. The case studies and experience show where each one was applied.',
-    zh: '这些是我在电商工作、科研与软件项目中实际用过的工具，具体用法可在案例和经历中查看。',
-  },
   contactIntro: {
-    en: 'I’m open to implementation, business systems, process and technical business analyst roles, and to teams bringing AI into their operations. View my résumé or get in touch.',
-    zh: '我正在寻找系统实施、业务系统、流程分析与技术型业务分析岗位，也欢迎正在业务中引入 AI 的团队联系我。欢迎查看简历或直接联系。',
+    en: 'Open to implementation, business systems and process roles.',
+    zh: '正在寻找系统实施、业务系统与流程分析岗位。',
   },
   readResume: {
     en: 'View résumé →',
@@ -1062,24 +1010,24 @@ export const ui = {
   approach: {
     title: { en: 'How I work', zh: '我的工作方式' },
     intro: {
-      en: 'The same six steps whether the fix is a spreadsheet, an integration or an AI-assisted check. Where a step links to evidence, it points to work you can inspect.',
-      zh: '无论最终是一张表格、一次系统集成还是一个 AI 辅助审核，我都按这六步推进。凡是附有链接的步骤，都指向可以查看的实际作品。',
+      en: 'Six steps, whatever the fix turns out to be.',
+      zh: '无论最终方案是什么，都按这六步推进。',
     },
     steps: [
       {
         title: { en: 'Understand how it runs today', zh: '弄清现状' },
         body: {
-          en: 'Walk through the current process with the people who do it, and look at the data it produces.',
-          zh: '和实际做这件事的人一起走一遍现有流程，并查看它产生的数据。',
+          en: 'Walk the process with the people who run it.',
+          zh: '和一线的人一起走一遍流程。',
         },
         href: '#experience',
-        link: { en: 'Marketplace operations', zh: '电商运营经历' },
+        link: { en: 'Experience', zh: '经历' },
       },
       {
         title: { en: 'Agree what “better” means', zh: '明确什么叫“更好”' },
         body: {
-          en: 'Write the requirements down: who needs what, the acceptance criteria, and how success will be checked.',
-          zh: '把需求写清楚：谁需要什么、验收标准是什么、如何判断是否成功。',
+          en: 'Write requirements and acceptance criteria.',
+          zh: '写清需求与验收标准。',
         },
         href: '',
         link: { en: '', zh: '' },
@@ -1087,26 +1035,26 @@ export const ui = {
       {
         title: { en: 'Design the future state', zh: '设计目标流程' },
         body: {
-          en: 'Map the to-be process and data flow, and decide where rules, AI and human review each belong.',
-          zh: '画出目标流程与数据流，决定规则、AI 与人工审核各自放在哪一步。',
+          en: 'Map the to-be process and data flow.',
+          zh: '画出目标流程与数据流。',
         },
         href: '#process-map',
-        link: { en: 'Process map below', zh: '见下方流程图' },
+        link: { en: 'Process map', zh: '流程图' },
       },
       {
         title: { en: 'Build or configure', zh: '搭建或配置' },
         body: {
-          en: 'Build the smallest tool, integration or report that does the job, using the stack the team already has where possible.',
-          zh: '做出能解决问题的最小工具、集成或报表，尽量沿用团队已有的技术栈。',
+          en: 'Build the smallest tool that does the job.',
+          zh: '做出够用的最小工具。',
         },
         href: '/work/mcda/',
-        link: { en: 'MCDA: Excel process to web tool', zh: 'MCDA：Excel 流程到网页工具' },
+        link: { en: 'MCDA', zh: 'MCDA' },
       },
       {
         title: { en: 'Test and roll out', zh: '测试并上线' },
         body: {
-          en: 'Check it against the acceptance criteria with real users, then hand over with clear notes on how to use and maintain it.',
-          zh: '和真实用户一起按验收标准测试，再附上清楚的使用与维护说明完成交接。',
+          en: 'Test with users, then hand over.',
+          zh: '与用户测试，然后交接。',
         },
         href: '',
         link: { en: '', zh: '' },
@@ -1114,11 +1062,11 @@ export const ui = {
       {
         title: { en: 'Measure and improve', zh: '跟踪并改进' },
         body: {
-          en: 'Watch the numbers the change was meant to move, and keep a person in the loop wherever mistakes are costly.',
-          zh: '跟踪这次改动本该影响的指标；在出错代价高的环节，始终保留人工把关。',
+          en: 'Track the result; keep a person in the loop.',
+          zh: '跟踪效果，保留人工把关。',
         },
         href: '/work/motai/',
-        link: { en: 'MoTai: LLM workflow with human review', zh: 'MoTai：带人工审核的大模型工作流' },
+        link: { en: 'MoTai', zh: 'MoTai' },
       },
     ],
   },
