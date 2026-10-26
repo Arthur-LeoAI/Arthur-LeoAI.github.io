@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, useState } from 'react';
+import { Fragment, lazy, Suspense, useEffect, useState } from 'react';
 // Static exports use native document navigation and pre-sized local images.
 /* oxlint-disable next/no-html-link-for-pages, next/no-img-element */
 import {
@@ -16,12 +16,13 @@ import {
   type Project,
   type Text,
 } from '@/lib/content';
-import HeroChart from './hero-chart';
+import HeroWorkflow from './hero-workflow';
 import MarketLens from './market-lens';
-import AiLab from './ai-lab';
+import ProjectPreview from './project-preview';
 import { useLang } from './language';
 import { useSiteMotion } from './use-site-motion';
 
+const AiLab = lazy(() => import('./transformer-lab'));
 const archive = process.env.NEXT_PUBLIC_EDITION === 'archive';
 const caseHref = (id: string) => `/work/${id}/`;
 const year = 2026;
@@ -118,11 +119,10 @@ function Home() {
           <a className="wordmark" href="#top">
             {lang === 'zh' ? '李嘉铭 Jiaming Li' : 'Jiaming Li'}
           </a>
-          <nav aria-label="Main navigation">
+          <nav aria-label={t(ui.navigation)}>
             <a href="#experience">{t(ui.nav.experience)}</a>
-            <a href="#ai">{t(ui.nav.ai)}</a>
+            <a href="#skills">{t(ui.nav.skills)}</a>
             <a href="#work">{t(ui.nav.work)}</a>
-            <a href="#about">{t(ui.nav.about)}</a>
             <a href="#contact">{t(ui.nav.contact)}</a>
           </nav>
           <div className="header-actions">
@@ -132,9 +132,9 @@ function Home() {
             </a>
           </div>
         </header>
-        <main id="main">
+        <main id="main" tabIndex={-1}>
           <section id="top" className="hero">
-            <HeroChart />
+            <HeroWorkflow />
             <div className="status" data-reveal="0">
               <span className="dot" />
               {t(ui.status)}
@@ -143,35 +143,86 @@ function Home() {
               <h1 data-reveal="90">
                 <span className="hero-title">
                   {withBreaks(before)}
-                  <em>{accent}</em>
+                  <em>
+                    {lang === 'en'
+                      ? accent.split(' ').map((word, i) => (
+                          <Fragment key={word}>
+                            {i > 0 && ' '}
+                            <span className="hero-word">{word}</span>
+                          </Fragment>
+                        ))
+                      : accent}
+                  </em>
                   {withBreaks(after)}
                 </span>
               </h1>
               <p className="hero-sub" data-reveal="170">
                 {t(ui.heroSub)}
               </p>
+              <p className="hero-targets" data-reveal="200">
+                <strong>{t(ui.targetLabel)}</strong> {t(ui.targetRoles)}
+              </p>
               <div className="hero-actions" data-reveal="240">
                 <a className="pill pill-lg pill-accent" href="#work">
                   {t(ui.seeWork)}
                 </a>
+                <a className="pill pill-lg pill-outline" href="/resume/">
+                  {t(ui.readResume)}
+                </a>
               </div>
             </div>
-            <p className="hero-hint" aria-hidden="true">
-              <span className="hint-pointer">{t(ui.heroHint)}</span>
-              <span className="hint-touch">{t(ui.heroHintTouch)}</span>
-            </p>
           </section>
 
-          <section className="fact-strip" aria-label="Summary">
+          <dl className="fact-strip" aria-label={t(ui.summaryLabel)}>
             {ui.facts.map((f, i) => (
               <div key={f.label.en} data-reveal={String([0, 90, 90, 180][i])}>
-                <span className="label">{t(f.label)}</span>
-                <span>{t(f.value)}</span>
+                <dt className="label">{t(f.label)}</dt>
+                <dd>{t(f.value)}</dd>
               </div>
             ))}
+          </dl>
+
+          <section id="about" className="section">
+            <div className="split about-profile">
+              <figure className="portrait" data-reveal="0">
+                <div>
+                  <img
+                    src="/portrait.jpg"
+                    alt={t(profile.name)}
+                    width="540"
+                    height="680"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </figure>
+              <div className="about-intro" data-reveal="80">
+                <h2 className="h2">{t(ui.aboutTitle)}</h2>
+                <p className="about-lead">{t(ui.heroIntro)}</p>
+                <p className="about-lead">{t(ui.about)}</p>
+                <a className="related" href={profile.linkedin}>
+                  LinkedIn ↗
+                </a>
+              </div>
+            </div>
+            <div className="strengths-head">
+              <h3>{t(ui.bringTitle)}</h3>
+              <p>{t(ui.aboutHello)}</p>
+            </div>
+            <div className="strengths-grid">
+              {ui.strengths.map((item, i) => (
+                <article key={item.title.en} data-reveal={String(i * 80)}>
+                  <h3>{t(item.title)}</h3>
+                  <p>{t(item.body)}</p>
+                  <a className="related" href={item.href}>
+                    {t(item.link)}
+                  </a>
+                </article>
+              ))}
+            </div>
           </section>
 
-          <section id="experience" className="split section">
+          <section id="experience" className="split section ruled">
             <aside className="lens-col">
               <MarketLens />
             </aside>
@@ -202,27 +253,32 @@ function Home() {
             </div>
           </section>
 
-          <section id="ai" className="split section ruled ai-section">
-            <div className="ai-copy">
+          <section id="skills" className="section ruled">
+            <div className="split">
               <h2 className="h2" data-reveal="0">
-                {t(ui.ai.title)}
+                {t(ui.skillsLabel)}
               </h2>
-              <p className="ai-lead" data-reveal="80">
-                {t(ui.ai.lead)}
-              </p>
-              <dl className="ai-points">
-                {ui.ai.points.map((pt, i) => (
-                  <div key={pt.k.en} data-reveal={String(120 + i * 60)}>
-                    <dt>{t(pt.k)}</dt>
-                    <dd>{t(pt.v)}</dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="ai-foundations" data-reveal="360">
-                {t(ui.ai.foundations)}
-              </p>
+              <div>
+                <p className="section-intro">{t(ui.skillsIntro)}</p>
+                <dl className="skills-list">
+                  {skills[lang].map(([k, v]) => (
+                    <div key={k} data-reveal="0">
+                      <dt>{k}</dt>
+                      <dd>{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             </div>
-            <AiLab />
+            <div id="ai" className="skill-demos">
+              <div className="ai-copy">
+                <h3 className="demo-title">{t(ui.ai.title)}</h3>
+                <p className="ai-lead">{t(ui.ai.lead)}</p>
+              </div>
+              <Suspense fallback={<p>{t(ui.ai.lead)}</p>}>
+                <AiLab />
+              </Suspense>
+            </div>
           </section>
 
           <section id="work" className="section ruled">
@@ -233,143 +289,87 @@ function Home() {
               <p>{t(ui.workIntro)}</p>
             </div>
             <div className="work-grid">
-              {byTier('deployment').map((p, i) => (
-                <a
+              {byTier('featured').map((p, i) => (
+                <article
                   className="work-card"
                   key={p.id}
-                  href={caseHref(p.id)}
                   data-reveal={String((i % 2) * 120)}
                 >
-                  <div className="mat" data-tilt="">
-                    <div className="mat-inner">
-                      <ProjectImage image={p.image} alt={t(p.image.caption)} crop />
-                    </div>
-                  </div>
+                  <ProjectPreview project={p} />
                   <div className="meta">
                     <span>
                       {projectNumber(p)} · {t(p.tag)}
                     </span>
                     <span>{t(p.status)}</span>
                   </div>
-                  <h3>{t(p.title)} ↗</h3>
+                  <h3>
+                    <a href={caseHref(p.id)}>{t(p.title)} ↗</a>
+                  </h3>
                   <p>{t(p.summary)}</p>
                   <dl className="card-constraint">
                     <dt>{t(ui.caseSteps.constraints)}</dt>
                     <dd>{t(p.constraints)}</dd>
                   </dl>
                   <span className="stack">{p.stack}</span>
-                </a>
+                </article>
               ))}
             </div>
 
             <div className="supporting">
               <span className="label">{t(ui.supportingTitle)}</span>
               {byTier('supporting').map((p) => (
-                <a
-                  className="supporting-card"
-                  key={p.id}
-                  href={caseHref(p.id)}
-                  data-reveal="0"
-                >
-                  <div className="supporting-thumb" data-tilt="">
-                    <ProjectImage image={p.image} alt={t(p.image.caption)} crop />
-                  </div>
+                <article className="supporting-card" key={p.id} data-reveal="0">
+                  <ProjectPreview project={p} />
                   <div>
                     <div className="meta">
                       <span>
-                        {projectNumber(p)} · {t(ui.supportingTag)}
+                        {projectNumber(p)} · {t(p.tag)}
                       </span>
                       <span>{t(p.status)}</span>
                     </div>
-                    <h3>{t(p.title)} ↗</h3>
+                    <h3>
+                      <a href={caseHref(p.id)}>{t(p.title)} ↗</a>
+                    </h3>
                     <p>{t(p.summary)}</p>
                     <span className="stack">{p.stack}</span>
                   </div>
-                </a>
+                </article>
               ))}
             </div>
-
-            <p className="also-built">
-              <span className="label">{t(ui.alsoBuilt)}</span>
-              {byTier('also').map((p, i) => (
-                <Fragment key={p.id}>
-                  {i > 0 && ' · '}
-                  <a href={caseHref(p.id)}>{t(p.title)}</a>
-                  {' — '}
-                  {t(p.summary)}
-                </Fragment>
-              ))}
-            </p>
           </section>
 
-          <section id="about" className="split section ruled">
-            <div className="about-side">
-              <h2 className="h2" data-reveal="0">
-                {t(ui.aboutTitle)}
-              </h2>
-              <figure className="portrait" data-reveal="120">
-                <div>
-                  <img
-                    src="/portrait.jpg"
-                    alt={t(profile.name)}
-                    width="540"
-                    height="680"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </figure>
-            </div>
-            <div className="about">
-              <div className="about-intro">
-                <h3 className="about-hello" data-reveal="0">
-                  {t(ui.aboutHello)}
-                </h3>
-                <p className="about-lead" data-reveal="80">
-                  {t(ui.heroIntro)}
-                </p>
-                <p className="about-lead" data-reveal="160">
-                  {t(ui.about)}
-                </p>
-                <p className="about-location" data-reveal="200">
-                  <span className="dot" />
-                  {t(location)}
-                </p>
-                <a
-                  className="pill pill-lg pill-outline about-email"
-                  href={`mailto:${profile.email}`}
-                >
-                  {profile.email}
-                </a>
-              </div>
-              <div className="about-cols">
-                <div>
-                  <span className="label">{t(ui.educationLabel)}</span>
-                  {education.map((e) => (
-                    <div key={e.deg.en}>
-                      <div className="strong">{t(e.deg)}</div>
-                      <div className="sub">
-                        {t(e.school)} · {t(e.note)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <span className="label">{t(ui.skillsLabel)}</span>
-                  {skills[lang].map(([k, v]) => (
-                    <div key={k}>
-                      <div className="strong">{k}</div>
-                      <div className="sub">{v}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          <section id="education" className="split section ruled">
+            <h2 className="h2" data-reveal="0">
+              {t(ui.educationLabel)}
+            </h2>
+            <div className="education-list">
+              {education.map((e) => (
+                <article key={e.deg.en} data-reveal="0">
+                  <span className="label">{t(e.date)}</span>
+                  <h3>{t(e.deg)}</h3>
+                  <p>{t(e.school)}</p>
+                  <p className="sub">{t(e.note)}</p>
+                </article>
+              ))}
             </div>
           </section>
         </main>
 
         <footer id="contact" className="contact ruled">
           <h2 data-reveal="0">{t(ui.contactTitle)}</h2>
+          <p className="contact-intro">{t(ui.contactIntro)}</p>
+          <div className="contact-actions">
+            <a className="pill pill-accent" href="/resume/">
+              {t(ui.readResume)}
+            </a>
+            <a
+              className="pill pill-outline"
+              href={lang === 'zh' ? profile.resumePdfZh : profile.resumePdf}
+              download
+            >
+              {t(ui.resumePage.download)}
+            </a>
+          </div>
           <a className="contact-email" href={`mailto:${profile.email}`}>
             {profile.email} ↗
           </a>
@@ -384,9 +384,17 @@ function Case({ p }: { p: Project }) {
   const { lang, t } = useLang();
   useSiteMotion(lang);
   const next = published[(published.indexOf(p) + 1) % published.length];
-  const steps = (['problem', 'constraints', 'built', 'result', 'next'] as const).map(
-    (k) => ({ k, label: ui.caseSteps[k], body: p[k] }),
-  );
+  const steps = (
+    [
+      'problem',
+      'constraints',
+      'contribution',
+      'built',
+      'result',
+      'limitations',
+      'next',
+    ] as const
+  ).map((k) => ({ k, label: ui.caseSteps[k], body: p[k] }));
   return (
     <>
       <Chrome t={t} />
@@ -395,7 +403,7 @@ function Case({ p }: { p: Project }) {
           <a className="wordmark" href="/">
             {lang === 'zh' ? '李嘉铭 Jiaming Li' : 'Jiaming Li'}
           </a>
-          <nav aria-label="Projects">
+          <nav aria-label={t(ui.projectNavigation)}>
             {published.map((x) => (
               <a
                 key={x.id}
@@ -408,14 +416,14 @@ function Case({ p }: { p: Project }) {
           </nav>
           <LangToggle />
         </header>
-        <main id="main">
+        <main id="main" tabIndex={-1}>
           <section className="case-hero">
             <div className="spot" data-spot="rgba(47,138,100,0.12)" />
             <a className="back" href={archive ? '/#projects' : '/#work'}>
               {t(ui.allProjects)}
             </a>
             <div className="case-tag" data-reveal="0">
-              {projectNumber(p)} · {p.tier === 'supporting' ? t(ui.supportingTag) : t(p.tag)}
+              {projectNumber(p)} · {t(p.tag)}
             </div>
             <h1 data-reveal="80">
               {t(p.title)}
@@ -427,28 +435,23 @@ function Case({ p }: { p: Project }) {
             <div className="case-pills" data-reveal="240">
               <span className="pill pill-outline-soft">{t(p.ctx)}</span>
               <span className="pill pill-outline-soft">{t(p.status)}</span>
-              <a
-                className="pill pill-ink"
-                href={`${profile.github}/${p.repo}`}
-              >
+              <a className="pill pill-ink" href={`${profile.github}/${p.repo}`}>
                 {t(ui.viewSource)}
               </a>
             </div>
           </section>
 
           <figure className="case-feature" data-reveal="120">
-            <div className="mat mat-lg" data-tilt="">
-              <div className="mat-inner">
-                <ProjectImage image={p.image} alt={t(p.image.caption)} eager />
-              </div>
-            </div>
+            <ProjectPreview project={p} full />
           </figure>
 
           <ol className="case-steps">
             {steps.map((s, i) => (
               <li key={s.k} className={`case-step step-${s.k}`} data-reveal="0">
                 <div className="step-label">
-                  <span className="step-n">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="step-n">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                   <h2>{t(s.label)}</h2>
                 </div>
                 <div className="step-body">
@@ -488,8 +491,18 @@ function Case({ p }: { p: Project }) {
 
           <section className="case-outcome ruled">
             <div data-reveal="0">
-              <div className="label">{t(ui.stack)}</div>
+              <h2 className="label">{t(ui.stack)}</h2>
               <p>{p.stack}</p>
+            </div>
+            <div data-reveal="0">
+              <h2 className="label">{t(ui.evidenceLabel)}</h2>
+              <p>{t(p.evidence)}</p>
+              <a
+                className="related"
+                href={profile.github + '/' + p.repo + '/' + p.evidencePath}
+              >
+                {t(ui.evidenceLink)}
+              </a>
             </div>
           </section>
 
@@ -513,6 +526,31 @@ function Resume() {
   const { lang, t } = useLang();
   useSiteMotion(lang);
   const r = ui.resumePage;
+  useEffect(() => {
+    // PDFs printed from a local preview must link to the public portfolio.
+    const originals = new Map<HTMLAnchorElement, string>();
+    const beforePrint = () => {
+      document
+        .querySelectorAll<HTMLAnchorElement>('.resume a[href^="/"]')
+        .forEach((a) => {
+          const href = a.getAttribute('href');
+          if (!href) return;
+          originals.set(a, href);
+          a.href = new URL(href, profile.archive).href;
+        });
+    };
+    const afterPrint = () => {
+      originals.forEach((href, a) => a.setAttribute('href', href));
+      originals.clear();
+    };
+    window.addEventListener('beforeprint', beforePrint);
+    window.addEventListener('afterprint', afterPrint);
+    return () => {
+      window.removeEventListener('beforeprint', beforePrint);
+      window.removeEventListener('afterprint', afterPrint);
+      afterPrint();
+    };
+  }, []);
   return (
     <>
       <Chrome t={t} />
@@ -581,7 +619,10 @@ function Resume() {
                   href={caseHref(p.id)}
                   data-reveal="0"
                 >
-                  <div className="strong">{t(p.title)} ↗</div>
+                  <div className="strong">
+                    {t(p.title)} ↗{' '}
+                    <span className="project-status">{t(p.status)}</span>
+                  </div>
                   <div className="sub">{t(p.summary)}</div>
                   <div className="stack">{p.stack}</div>
                 </a>
@@ -633,7 +674,9 @@ function Archive() {
   const [filter, setFilter] = useState<(typeof filters)[number]>('All');
   useSiteMotion(`${lang}-${filter}`);
   const a = ui.archive;
-  const list = published.filter((p) => filter === 'All' || p.cat.includes(filter));
+  const list = published.filter(
+    (p) => filter === 'All' || p.cat.includes(filter),
+  );
   return (
     <>
       <Chrome t={t} wide={false} />
@@ -645,7 +688,7 @@ function Archive() {
             </a>
             <p>{t(a.tagline)}</p>
           </div>
-          <nav aria-label="Archive navigation">
+          <nav aria-label={t(ui.archiveNavigation)}>
             {a.nav.map((n) => (
               <a key={n.href} href={n.href}>
                 {t(n.label)}
@@ -668,7 +711,7 @@ function Archive() {
             <div className="archive-head">
               <h1 data-reveal="0">{t(a.title)}</h1>
               <fieldset className="filters">
-                <legend className="sr-only">Filter projects</legend>
+                <legend className="sr-only">{t(ui.filterLabel)}</legend>
                 {filters.map((f) => (
                   <button
                     key={f}
@@ -694,7 +737,11 @@ function Archive() {
                   data-reveal={String((i % 3) * 90)}
                 >
                   <div className="archive-thumb" data-tilt="">
-                    <ProjectImage image={p.image} alt={t(p.image.caption)} crop />
+                    <ProjectImage
+                      image={p.image}
+                      alt={t(p.image.caption)}
+                      crop
+                    />
                   </div>
                   <div className="meta">
                     <span>

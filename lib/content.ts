@@ -17,8 +17,8 @@ export const profile = {
 };
 
 type Image = { src: string; width: number; height: number; caption: Text };
-// deployment = main case studies; supporting = smaller proof of a skill; also = one-line mention.
-export type Tier = 'deployment' | 'supporting' | 'also';
+// Display priority only; lifecycle is explicitly described by each project's status.
+export type Tier = 'featured' | 'supporting' | 'also';
 export type Project = {
   id: string;
   tier: Tier;
@@ -39,7 +39,11 @@ export type Project = {
   // Every case follows: business problem → constraints → what I built → result → next.
   problem: Text;
   constraints: Text;
+  contribution: Text;
   built: Text;
+  limitations: Text;
+  evidence: Text;
+  evidencePath: string;
   result: Text;
   next: Text;
   facts: TextList;
@@ -49,10 +53,10 @@ export type Project = {
 export const projects: Project[] = [
   // Reserved flagship slot. Fill every field with confirmed facts (no invented numbers),
   // add screenshots built on synthetic data, add 'listing-compliance' to scripts/build.mjs,
-  // then delete `draft: true` to publish it as Deployment 01.
+  // then delete `draft: true` to publish it as a featured case.
   {
     id: 'listing-compliance',
-    tier: 'deployment',
+    tier: 'featured',
     rank: 1,
     draft: true,
     cat: ['AI', 'Data'],
@@ -69,7 +73,10 @@ export const projects: Project[] = [
     },
     tag: { en: 'Applied AI', zh: '应用 AI' },
     ctx: { en: 'TODO', zh: 'TODO' },
-    status: { en: 'TODO', zh: 'TODO' },
+    status: {
+      en: 'Planned · not published',
+      zh: '计划中 · 未公开',
+    },
     subtitle: { en: 'TODO', zh: 'TODO' },
     summary: { en: 'TODO', zh: 'TODO' },
     stack: 'TODO',
@@ -80,11 +87,24 @@ export const projects: Project[] = [
     next: { en: 'TODO', zh: 'TODO' },
     facts: { en: [], zh: [] },
     gallery: [],
+    contribution: {
+      en: 'Not yet documented.',
+      zh: '尚未记录。',
+    },
+    limitations: {
+      en: 'Planned project; not part of the published portfolio.',
+      zh: '计划中项目，不属于已公开作品。',
+    },
+    evidence: {
+      en: 'No completed evidence yet.',
+      zh: '暂无已完成的证明材料。',
+    },
+    evidencePath: '',
   },
   {
     id: 'mcda',
-    tier: 'deployment',
-    rank: 3,
+    tier: 'featured',
+    rank: 1,
     cat: ['Data'],
     repo: 'MCDA-Tool-2.0',
     image: {
@@ -99,14 +119,17 @@ export const projects: Project[] = [
     title: { en: 'MCDA Tool', zh: 'MCDA 决策工具' },
     tag: { en: 'Decision intelligence', zh: '决策分析' },
     ctx: { en: 'MaREI · Ireland', zh: 'MaREI · 爱尔兰' },
-    status: { en: 'Research project', zh: '科研项目' },
+    status: {
+      en: 'Completed research project',
+      zh: '已完成的科研项目',
+    },
     subtitle: {
       en: 'Making complex decisions tangible.',
       zh: '让复杂决策变得看得见、摸得着。',
     },
     summary: {
-      en: 'An interactive decision tool for exploring the trade-offs in end-of-life tyre recovery.',
-      zh: '交互式决策工具，用于比较废旧轮胎回收方案之间的取舍。',
+      en: 'An Excel-to-web decision tool that makes criteria, weights and recovery-option trade-offs visible.',
+      zh: '把 Excel 分析转为网页决策工具，让准则、权重和回收方案之间的取舍清晰可见。',
     },
     stack: 'JavaScript · D3.js · Excel · Node.js',
     problem: {
@@ -118,20 +141,24 @@ export const projects: Project[] = [
       zh: '原有流程基于 Excel。研究人员需要自己调整准则与权重，每个排序结果都必须可解释，而不是一个黑箱分数。',
     },
     built: {
-      en: 'I developed the interactive analysis tool during The End of Tire research project at MaREI: structured Excel inputs, adjustable criteria and weights, value locking, and live weighted-sum, TOPSIS and Pareto views that make assumptions visible.',
-      zh: '我在 MaREI 的 The End of Tire 研究项目中开发了这个交互式分析工具：结构化的 Excel 输入、可调的准则与权重、数值锁定，以及实时的加权求和、TOPSIS 与帕累托视图，让每个假设都清晰可见。',
+      en: 'Structured Excel inputs feed adjustable criteria and weights, value locking, and weighted-sum, TOPSIS and Pareto views. Rankings update as assumptions change, so the reasoning can be inspected.',
+      zh: '把结构化 Excel 数据接入可调准则、权重与数值锁定功能，并以加权求和、TOPSIS 和帕累托视图呈现结果。假设变化时排序同步更新，便于检查推理过程。',
     },
     result: {
-      en: 'The research compared five alternatives within a team of more than seven people. The tool supports user-defined inputs; no time-saving or performance uplift is claimed.',
-      zh: '研究团队（7 人以上）用它比较了 5 种方案。工具支持用户自定义输入；不声称节省时间或提升绩效。',
+      en: 'The completed tool exposes editable inputs and live rankings in a web interface. The public source and synthetic-data screenshots demonstrate the analysis workflow; commercial adoption and time savings have not been measured.',
+      zh: '已完成的工具提供可编辑输入和实时排序。公开源码与模拟数据截图展示了分析流程；尚未测量商业采用情况或节省的时间。',
     },
     next: {
       en: 'Extend the case study with documented validation and additional sensitivity scenarios.',
       zh: '补充有记录的验证过程，并增加更多敏感性分析场景。',
     },
     facts: {
-      en: ['5 research alternatives', '7+ team members', 'Adjustable decision weights'],
-      zh: ['5 个研究方案', '7+ 团队成员', '可调决策权重'],
+      en: [
+        'Excel input workflow',
+        'Adjustable decision weights',
+        'Weighted-sum, TOPSIS & Pareto',
+      ],
+      zh: ['Excel 数据输入', '可调决策权重', '加权求和、TOPSIS 与帕累托分析'],
     },
     gallery: [
       {
@@ -171,10 +198,23 @@ export const projects: Project[] = [
         },
       },
     ],
+    contribution: {
+      en: 'I developed the interactive analysis tool during The End of Tire research project at MaREI, translating an Excel-based analysis process into a web interface.',
+      zh: '我在 MaREI 的 The End of Tire 科研项目中开发交互分析工具，将基于 Excel 的分析流程转为网页界面。',
+    },
+    limitations: {
+      en: 'Rankings depend on input quality, chosen criteria and weights. Public screenshots use synthetic alternatives; they do not establish an optimal real-world recovery decision or independently validate the research.',
+      zh: '排序依赖输入质量、准则和权重。公开截图使用模拟方案，不能据此认定真实回收决策的最优解，也不构成对研究结果的独立验证。',
+    },
+    evidence: {
+      en: 'README.txt documents Excel input, value locking and weighted ranking; app.js contains TOPSIS and Pareto implementations. Screenshots below show synthetic examples.',
+      zh: 'README.txt 记录了 Excel 输入、数值锁定与加权排序；app.js 包含 TOPSIS 和帕累托实现。下方截图使用模拟示例。',
+    },
+    evidencePath: 'blob/main/README.txt',
   },
   {
     id: 'drone',
-    tier: 'deployment',
+    tier: 'featured',
     rank: 2,
     cat: ['Data'],
     repo: 'Drone-monitoring-platform-demo',
@@ -189,15 +229,21 @@ export const projects: Project[] = [
     },
     title: { en: 'Drone Monitoring', zh: '无人机监控平台' },
     tag: { en: 'Real-time data', zh: '实时数据' },
-    ctx: { en: 'Sun Yat-sen University', zh: '中山大学' },
-    status: { en: 'Demo + production platform', zh: '演示版 + 生产平台' },
+    ctx: {
+      en: 'Personal demo · related university work',
+      zh: '个人演示 · 关联高校工作经历',
+    },
+    status: {
+      en: 'Working demo · simulated telemetry',
+      zh: '可运行演示 · 模拟遥测',
+    },
     subtitle: {
       en: 'From telemetry to a clearer picture.',
       zh: '从遥测数据到一目了然的画面。',
     },
     summary: {
-      en: 'A personal telemetry demo, plus a production monitoring platform I co-developed.',
-      zh: '个人遥测演示项目，以及我参与开发的生产监控平台。',
+      en: 'A telemetry demo connecting data ingestion, time-series storage and a live monitoring dashboard.',
+      zh: '连接数据接入、时序存储与实时监控看板的遥测演示项目。',
     },
     stack: 'React · WebSocket · InfluxDB · Docker',
     problem: {
@@ -205,16 +251,16 @@ export const projects: Project[] = [
       zh: '如何把源源不断的无人机遥测数据变成有用、持续更新的监控视图？',
     },
     constraints: {
-      en: 'Telemetry arrives continuously, so the view has to update without reloads. The public demo must run entirely on simulated data, separate from the production platform.',
-      zh: '遥测数据持续涌入，界面必须在不刷新的情况下实时更新；公开演示版必须完全使用模拟数据，与生产平台分开。',
+      en: 'Telemetry needs to update without page reloads. The public demo uses simulated data and is separate from the university platform I co-developed.',
+      zh: '遥测数据需要在不刷新页面的情况下持续更新。公开演示使用模拟数据，与我参与开发的高校平台分开。',
     },
     built: {
-      en: 'I built a personal real-time UAV telemetry demo and co-developed a separate production platform at Sun Yat-sen University. Telemetry enters an HTTP API, is stored in InfluxDB and streamed over WebSocket to a React and Leaflet dashboard.',
-      zh: '我独立开发了实时无人机遥测演示版，并在中山大学参与开发另一套生产平台。遥测数据经 HTTP 进入 API，存入 InfluxDB，再通过 WebSocket 推送到 React + Leaflet 看板。',
+      en: 'An HTTP API accepts telemetry, stores it in InfluxDB and broadcasts updates over WebSocket. A React and Leaflet dashboard displays flight status, position and trajectory; Docker Compose supports local setup.',
+      zh: 'HTTP API 接收遥测数据，存入 InfluxDB，再通过 WebSocket 广播更新。React 与 Leaflet 看板展示飞行状态、位置和轨迹；Docker Compose 支持本地启动。',
     },
     result: {
-      en: 'The public demo includes a simulator and trajectory status. Screens shown here come from the demo with simulated data.',
-      zh: '公开演示版包含模拟器与轨迹状态。本页截图均来自演示版，使用模拟数据。',
+      en: 'The repository provides a simulator, sample payloads, a dashboard and local startup instructions. The public evidence demonstrates a monitoring workflow with simulated telemetry.',
+      zh: '仓库提供模拟器、示例数据、看板和本地启动说明。公开材料展示的是基于模拟遥测的监控流程。',
     },
     next: {
       en: 'Add documented load tests and clearer operational diagnostics.',
@@ -253,6 +299,19 @@ export const projects: Project[] = [
         },
       },
     ],
+    contribution: {
+      en: 'I built the personal telemetry demo. Separately, I co-developed a monitoring platform at Sun Yat-sen University; this public case demonstrates the demo implementation, not the university deployment.',
+      zh: '我独立开发了个人遥测演示版，另在中山大学参与开发监控平台。本公开案例展示演示版的实现，不代表高校平台的部署情况。',
+    },
+    limitations: {
+      en: 'Simulated telemetry does not prove field reliability, production security, scale or operational impact. No deployment evidence or load-test results for the separate university platform are included here.',
+      zh: '模拟遥测不能证明实地可靠性、生产安全性、规模或运营影响。此处未提供另一套高校平台的部署证据或压力测试结果。',
+    },
+    evidence: {
+      en: 'The public README describes the HTTP API, WebSocket stream, InfluxDB setup, simulator and local run instructions. All portfolio captures use simulated telemetry.',
+      zh: '公开 README 说明了 HTTP API、WebSocket 数据流、InfluxDB 配置、模拟器和本地运行方式。作品集截图全部使用模拟遥测数据。',
+    },
+    evidencePath: 'blob/main/README.md',
   },
   {
     id: 'motai',
@@ -265,21 +324,24 @@ export const projects: Project[] = [
       width: 1440,
       height: 900,
       caption: {
-        en: 'MoTai chapter-writing workspace with fictional content.',
-        zh: 'MoTai 章节写作工作台（虚构内容）。',
+        en: 'Earlier MoTai interface with fictional content; the current repository has a revised workspace.',
+        zh: 'MoTai 早期界面（虚构内容）；当前仓库已更新工作台。',
       },
     },
     title: { en: 'MoTai', zh: 'MoTai' },
     tag: { en: 'Human-centred AI', zh: '以人为本的 AI' },
     ctx: { en: 'Independent collaboration', zh: '独立合作项目' },
-    status: { en: 'Actively maintained', zh: '持续维护' },
+    status: {
+      en: 'Working desktop prototype',
+      zh: '可运行桌面原型',
+    },
     subtitle: {
       en: 'More structure. More room to create.',
       zh: '结构更清晰，创作空间更大。',
     },
     summary: {
-      en: 'A local-first writing workspace that connects characters, world-building and AI-assisted chapters.',
-      zh: '本地优先的写作工作台，把人物、世界观与 AI 辅助章节连在一起。',
+      en: 'A local-first writing prototype that connects story context, LLM APIs and author review in one workflow.',
+      zh: '本地优先的写作原型，把故事上下文、大模型 API 与作者审核连接到同一流程。',
     },
     stack: 'Electron · JavaScript · Local JSON · AI APIs',
     problem: {
@@ -287,24 +349,28 @@ export const projects: Project[] = [
       zh: 'AI 如何辅助长篇创作，同时不丢失人物、上下文和作者的掌控？',
     },
     constraints: {
-      en: 'Stories stay on the writer’s machine, AI has to remain optional, and the model provider must be configurable rather than hard-wired.',
-      zh: '作品必须保存在作者本地，AI 功能必须是可选的，模型服务商也必须可配置而非写死。',
+      en: 'Manuscripts stay local. AI access depends on a configured runtime and provider; generated content needs author review before it becomes part of a story.',
+      zh: '文稿保存在本地。AI 依赖运行环境及服务商配置；生成内容需经作者审核后才能写入作品。',
     },
     built: {
-      en: 'I began MoTai with a friend and developed the AI-assisted writing workflows. A story bible, relationships and a timeline are passed as structured context to configurable LLM APIs, with human review of generated text, local storage, exports and backups.',
-      zh: '我和朋友一起发起 MoTai，并开发了 AI 辅助写作流程：故事设定集、人物关系和时间线作为结构化上下文传给可配置的大模型 API，生成内容经人工审阅，数据本地存储，支持导出与备份。',
+      en: 'Story materials and chapter context feed LLM-assisted planning and writing. The current repository documents draft review before writing, local storage, exports and backups, with AI credentials managed by the local runtime.',
+      zh: '将故事资料与章节上下文用于大模型辅助规划和写作。当前仓库记录了写入前草案审核、本地存储、导出及备份功能；AI 凭据由本地运行环境管理。',
     },
     result: {
-      en: 'The desktop application supports planning and chapter writing in a connected workspace. AI services require a user-configured provider.',
-      zh: '桌面应用在同一工作台内支持规划与章节写作。AI 功能需用户自行配置服务商。',
+      en: 'A desktop prototype and source code are available. The current README describes planning, chapter writing and review before accepting generated material. Local beta work is ongoing; no user adoption or productivity gain is claimed.',
+      zh: '已有桌面原型与源码。当前 README 说明了规划、章节写作及生成内容接受前的审核流程。本地内测工作仍在推进；不声称用户采用规模或生产力提升。',
     },
     next: {
-      en: 'Continue improving continuity checks and the author’s ability to review generated content.',
-      zh: '继续改进剧情连贯性检查，并让作者更方便地审阅生成内容。',
+      en: 'Complete the documented local beta checks and evaluate continuity and author review with representative writing tasks.',
+      zh: '完成已记录的本地内测检查，并用有代表性的写作任务评估连贯性与作者审核流程。',
     },
     facts: {
-      en: ['Local-first workspace', 'Configurable AI providers', 'Backup & export'],
-      zh: ['本地优先', '可配置 AI 服务商', '备份与导出'],
+      en: [
+        'Local manuscript storage',
+        'LLM-assisted drafting',
+        'Author review before writing',
+      ],
+      zh: ['本地文稿存储', '大模型辅助草拟', '作者审核后写入'],
     },
     gallery: [
       {
@@ -312,8 +378,8 @@ export const projects: Project[] = [
         width: 1440,
         height: 900,
         caption: {
-          en: 'Story bible for a fictional example.',
-          zh: '虚构示例的故事设定集。',
+          en: 'Earlier interface: story bible using fictional content.',
+          zh: '早期界面：使用虚构内容的故事设定集。',
         },
       },
       {
@@ -321,8 +387,8 @@ export const projects: Project[] = [
         width: 1440,
         height: 900,
         caption: {
-          en: 'AI-assisted writing panel, provider optional.',
-          zh: 'AI 辅助写作面板，服务商可选。',
+          en: 'Earlier AI panel. Current provider access is managed by the local runtime.',
+          zh: '早期 AI 面板。当前服务商访问由本地运行环境管理。',
         },
       },
       {
@@ -330,16 +396,29 @@ export const projects: Project[] = [
         width: 1440,
         height: 900,
         caption: {
-          en: 'Export to common document formats.',
-          zh: '导出为常见文档格式。',
+          en: 'Earlier interface: document export workflow.',
+          zh: '早期界面：文档导出流程。',
         },
       },
     ],
+    contribution: {
+      en: 'I started MoTai with a friend and developed AI-assisted writing workflows, connecting structured story context to model APIs and keeping the author in control of accepted text.',
+      zh: '我与朋友一起发起 MoTai，并开发 AI 辅助写作流程，将结构化故事上下文连接到模型 API，由作者决定接受哪些文本。',
+    },
+    limitations: {
+      en: 'Local beta checks remain in progress. Model output still needs review, and earlier interface captures do not represent every current feature. No production reliability or paid adoption is evidenced here.',
+      zh: '本地内测检查仍在进行。模型输出仍需审核，早期界面截图未覆盖当前全部功能。此处未提供生产可靠性或付费采用的证明。',
+    },
+    evidence: {
+      en: 'The linked README describes the current workflow and links to beta progress. The gallery records an earlier interface using fictional content, rather than a new acceptance test of the latest release.',
+      zh: '链接中的 README 介绍当前流程并提供内测进度入口。图库记录了使用虚构内容的早期界面，不代表对最新版本重新进行了验收。',
+    },
+    evidencePath: 'blob/main/README.md',
   },
   {
     id: 'connoisseur',
-    tier: 'also',
-    rank: 1,
+    tier: 'supporting',
+    rank: 2,
     cat: ['Product'],
     repo: 'connoisseur',
     image: {
@@ -354,7 +433,10 @@ export const projects: Project[] = [
     title: { en: 'Connoisseur', zh: 'Connoisseur' },
     tag: { en: 'Business systems', zh: '业务系统' },
     ctx: { en: 'Independent collaboration', zh: '独立合作项目' },
-    status: { en: 'Mock-first MVP', zh: 'MVP（模拟数据）' },
+    status: {
+      en: 'Working MVP · mock data',
+      zh: '可运行 MVP · 模拟数据',
+    },
     subtitle: {
       en: 'A clearer path from request to order.',
       zh: '从需求到订单，路径更清晰。',
@@ -373,8 +455,8 @@ export const projects: Project[] = [
       zh: '尚无生产后端：MVP 需要先用内存数据和模拟支付验证流程，再接入真实的数据存储与支付服务。',
     },
     built: {
-      en: 'I began this project with a friend to organise international commerce information into a sourcing workflow. Customer cases connect requests, quotations, addresses and a timeline; an admin workspace supports the other side of the process.',
-      zh: '我和朋友一起发起这个项目，把跨境商务信息整理成采购流程：客户案例串联需求、报价、地址和时间线，后台工作台支撑流程的另一端。',
+      en: 'Customer cases connect requests, quotations, addresses and a timeline. A separate admin workspace supports the other side of the process, using an in-memory store and mock payments to explore the handoffs.',
+      zh: '客户案例串联需求、报价、地址和时间线。独立的后台工作台支持流程另一端，通过内存存储和模拟支付探索业务交接。',
     },
     result: {
       en: 'The current MVP uses in-memory data and mock payments. Supabase is a planned migration target, not a connected production database.',
@@ -385,7 +467,11 @@ export const projects: Project[] = [
       zh: '先验证流程，再把数据存储与支付迁移到生产服务。',
     },
     facts: {
-      en: ['Request → quote → order', 'Customer & admin views', 'Mock payments'],
+      en: [
+        'Request → quote → order',
+        'Customer & admin views',
+        'Mock payments',
+      ],
       zh: ['需求 → 报价 → 订单', '客户端与后台', '模拟支付'],
     },
     gallery: [
@@ -417,11 +503,24 @@ export const projects: Project[] = [
         },
       },
     ],
+    contribution: {
+      en: 'I started this project with a friend to organise cross-border sourcing information into a traceable request-to-order workflow. This case presents our shared MVP without attributing every component to me.',
+      zh: '我与朋友一起发起项目，将跨境采购信息组织为可追踪的需求到订单流程。本案例展示合作完成的 MVP，不把所有组件都归为个人完成。',
+    },
+    limitations: {
+      en: 'In-memory data resets on restart. Payments are mocked and Supabase is a schema target, not a connected production database. The prototype does not establish real fulfilment or customer adoption.',
+      zh: '内存数据在重启后重置。支付为模拟流程，Supabase 只是数据库结构迁移目标，尚未接入生产数据库。原型不证明真实履约或客户采用。',
+    },
+    evidence: {
+      en: 'The README lists implemented customer and admin routes, mock payments and persistence limits. Portfolio screenshots use fictional orders.',
+      zh: 'README 列出了已实现的客户与后台路由、模拟支付及持久化限制。作品集截图使用虚构订单。',
+    },
+    evidencePath: 'blob/main/README.md',
   },
 ];
 
-const tierOrder: Record<Tier, number> = { deployment: 0, supporting: 1, also: 2 };
-/** Published projects in display order: deployments, then supporting, then also-built. */
+const tierOrder: Record<Tier, number> = { featured: 0, supporting: 1, also: 2 };
+/** Published projects in display order: featured, then supporting, then also-built. */
 export const published = projects
   .filter((p) => !p.draft)
   .sort((a, b) => tierOrder[a.tier] - tierOrder[b.tier] || a.rank - b.rank);
@@ -446,16 +545,16 @@ export const experience: {
     },
     points: {
       en: [
-        'Manage Amazon operations across eight European marketplaces, each with approximately 2,000 SKUs.',
-        'Work in restricted product categories where advertising is not allowed, so listing quality and compliance are the main levers.',
-        'Analyse sales, traffic, fee, product and competitor data to identify optimisation opportunities.',
-        'Keyword, competitor and product research with Seller Central, Helium 10, Keepa and Amalytix.',
+        'Manage Amazon marketplace operations across Europe and the US; added US marketplace responsibility in October 2026.',
+        'Analyse sales, traffic, fees, product and competitor data to prioritise listing and operational improvements.',
+        'Maintain localised listings and investigate compliance issues in restricted product categories.',
+        'Use Seller Central, Helium 10, Keepa and Amalytix for keyword, competitor and product research.',
       ],
       zh: [
-        '负责亚马逊欧洲 8 个站点的日常运营，每个站点约 2,000 个 SKU。',
-        '所在品类受限、不允许投放广告，商品页质量与合规是最主要的抓手。',
-        '分析销售、流量、费用、产品及竞品数据，发现优化机会。',
-        '使用 Seller Central、Helium 10、Keepa、Amalytix 开展关键词、竞品与选品分析。',
+        '负责欧洲及美国 Amazon 站点运营；于 2026 年 10 月接手美国站。',
+        '分析销售、流量、费用、产品及竞品数据，确定商品页及运营改进的优先级。',
+        '维护本地化商品信息，排查受限品类中的合规问题。',
+        '使用 Seller Central、Helium 10、Keepa 和 Amalytix 开展关键词、竞品与产品研究。',
       ],
     },
     project: null,
@@ -466,35 +565,38 @@ export const experience: {
     org: { en: 'Sun Yat-sen University · Shenzhen', zh: '中山大学 · 深圳' },
     points: {
       en: [
-        'Built a real-time monitoring platform covering ingestion, storage, analysis and reporting.',
-        'Time-series pipelines with InfluxDB and MySQL for monitoring and anomaly detection.',
-        'Interactive map and status dashboards for operational analysis.',
+        'Co-developed a real-time monitoring platform connecting data ingestion, storage and reporting.',
+        'Worked with InfluxDB and MySQL time-series data for monitoring and anomaly analysis.',
+        'Built interactive map and status dashboards to make incoming telemetry easier to inspect.',
       ],
       zh: [
-        '搭建实时数据监控平台，覆盖数据接入、存储、分析与报表。',
-        '基于 InfluxDB 与 MySQL 开发时序数据管道，用于监控与异常检测。',
-        '开发交互式地图与状态看板，支持运营分析。',
+        '参与开发实时监控平台，连接数据接入、存储与报表流程。',
+        '使用 InfluxDB 与 MySQL 时序数据支持监控和异常分析。',
+        '开发交互式地图与状态看板，让持续接入的遥测数据更易检查。',
       ],
     },
     project: 'drone',
   },
   {
     date: { en: 'May — Sep 2025', zh: '2025.05 — 2025.09' },
-    role: { en: 'Data Analyst & Research Assistant', zh: '数据分析师 / 研究助理' },
+    role: {
+      en: 'Data Analyst & Research Assistant',
+      zh: '数据分析师 / 研究助理',
+    },
     org: {
       en: 'MaREI, University College Cork · Ireland',
       zh: 'MaREI 研究中心，科克大学 · 爱尔兰',
     },
     points: {
       en: [
-        'MCDA models to score and rank five tyre-recovery alternatives for a 7+ person research team.',
-        'Python pipelines for data cleaning, validation and sensitivity analysis.',
-        'Turned the Excel-based process into an interactive web tool.',
+        'Developed MCDA models to compare tyre-recovery alternatives and make decision criteria explicit.',
+        'Used Python for data cleaning, validation and sensitivity analysis.',
+        'Translated an Excel-based analysis process into an interactive web tool with adjustable weights and rankings.',
       ],
       zh: [
-        '构建 MCDA 模型，为 7 人以上研究团队评分排序 5 种轮胎回收方案。',
-        '用 Python 搭建数据清洗、校验与敏感性分析流程。',
-        '将基于 Excel 的流程改造为交互式网页工具。',
+        '开发 MCDA 模型比较轮胎回收方案，明确决策准则。',
+        '使用 Python 进行数据清洗、校验与敏感性分析。',
+        '将基于 Excel 的分析流程转为交互网页工具，支持调整权重和查看排序。',
       ],
     },
     project: 'mcda',
@@ -511,8 +613,8 @@ export const education: { deg: Text; school: Text; date: Text; note: Text }[] =
       school: { en: 'University College Cork', zh: '爱尔兰科克大学' },
       date: { en: 'Sep 2024 – Mar 2026', zh: '2024.09 – 2026.03' },
       note: {
-        en: 'Second Class Honours (2:1), top 10%',
-        zh: '二等一荣誉（2:1），前 10%',
+        en: 'Interactive media and software development',
+        zh: '交互媒体与软件开发',
       },
     },
     {
@@ -525,54 +627,80 @@ export const education: { deg: Text; school: Text; date: Text; note: Text }[] =
         zh: '太原科技大学',
       },
       date: { en: 'Sep 2020 – Jun 2024', zh: '2020.09 – 2024.06' },
-      note: { en: 'Top 10% of cohort', zh: '专业前 10%' },
+      note: {
+        en: 'Data computation and applied mathematics',
+        zh: '数据计算与应用数学',
+      },
     },
   ];
 
 export const skills: Record<Lang, [string, string][]> = {
   en: [
-    ['AI & ML', 'LLM APIs · Structured outputs · Transformers & embeddings · scikit-learn · Workflow automation'],
-    ['Engineering', 'Python · JavaScript/TypeScript · React · InfluxDB · WebSocket · Docker · Git'],
-    ['Data & BI', 'SQL · Python · Excel · Power BI · Tableau'],
-    ['E-commerce ops', 'Seller Central · Helium 10 · Keepa · Amalytix'],
+    [
+      'Data analysis',
+      'Python · SQL · Excel · Data cleaning · Sensitivity analysis',
+    ],
+    ['Web & systems', 'JavaScript / TypeScript · React · Node.js · Git'],
+    ['Data workflows', 'HTTP APIs · WebSocket · InfluxDB · MySQL · Docker'],
+    [
+      'Applied AI',
+      'LLM API integration · Structured context · Human review · Workflow prototyping',
+    ],
+    ['Marketplace tools', 'Seller Central · Helium 10 · Keepa · Amalytix'],
   ],
   zh: [
-    ['AI 与机器学习', 'LLM API · 结构化输出 · Transformer 与向量嵌入 · scikit-learn · 自动化工作流'],
-    ['工程开发', 'Python · JavaScript/TypeScript · React · InfluxDB · WebSocket · Docker · Git'],
-    ['数据与 BI', 'SQL · Python · Excel · Power BI · Tableau'],
-    ['电商运营', 'Seller Central · Helium 10 · Keepa · Amalytix'],
+    ['数据分析', 'Python · SQL · Excel · 数据清洗 · 敏感性分析'],
+    ['网页与系统', 'JavaScript / TypeScript · React · Node.js · Git'],
+    ['数据流程', 'HTTP API · WebSocket · InfluxDB · MySQL · Docker'],
+    ['应用 AI', '大模型 API 集成 · 结构化上下文 · 人工审核 · 工作流原型'],
+    ['电商运营工具', 'Seller Central · Helium 10 · Keepa · Amalytix'],
   ],
 };
 
 /** Location line used everywhere except the hero label (About, résumé, meta, archive). */
 export const location: Text = {
-  en: 'Based in China · Open to Europe, North America & Oceania · Visa sponsorship required',
-  zh: '现居中国 · 意向欧洲、北美及大洋洲 · 需要工作签证担保',
+  en: 'Based in China · Open to Europe & the UK, North America, Australia & New Zealand · Visa sponsorship required',
+  zh: '现居中国 · 意向欧洲及英国、北美、澳大利亚与新西兰 · 需要工作签证担保',
 };
 
 // Interface copy shared by every page.
 export const ui = {
   nav: {
-    experience: { en: 'Experience', zh: '经历' },
-    ai: { en: 'AI', zh: 'AI' },
-    work: { en: 'Deployments', zh: '部署案例' },
-    about: { en: 'About', zh: '关于' },
-    contact: { en: 'Contact', zh: '联系' },
+    work: {
+      en: 'Case studies',
+      zh: '案例',
+    },
+    experience: {
+      en: 'Experience',
+      zh: '经历',
+    },
+    skills: {
+      en: 'Skills',
+      zh: '技能',
+    },
+    contact: {
+      en: 'Contact',
+      zh: '联系',
+    },
   },
   resume: { en: 'Résumé', zh: '简历' },
   // Hero label above the headline.
   status: {
-    en: 'Applied AI · Data · Business Operations · Open to Europe, North America & Oceania · Visa sponsorship needed',
-    zh: '应用 AI · 数据 · 业务运营 · 意向欧洲、北美及大洋洲 · 需要工作签证担保',
+    en: 'Applied AI · Business understanding · Technical implementation',
+    zh: 'AI 应用 · 业务理解 · 技术实现',
   },
   // Title parts are [before, accent, after]; "\n" becomes a line break.
   heroTitle: {
-    en: ['Putting AI to work\n', 'where the business actually runs', '.'],
-    zh: ['让 AI 走进\n', '业务真正运转的地方', '。'],
-  } as TextList,
+    en: [
+      'Turning complex business processes into ',
+      'data-driven, AI-assisted workflows',
+      '.',
+    ],
+    zh: ['把复杂业务流程转化为', '数据驱动、AI 辅助的工作流', '。'],
+  },
   heroSub: {
-    en: 'I combine data analysis, e-commerce operations and engineering to turn messy operational data into tools teams use every day.',
-    zh: '我把数据分析、电商运营和工程能力结合起来，把杂乱的业务数据变成团队每天都在用的工具。',
+    en: 'I combine business experience, software development and LLM integration to build practical AI-assisted tools.',
+    zh: '结合业务经验、软件开发与大模型集成，构建解决实际问题的 AI 辅助工具。',
   },
   heroHint: {
     en: 'Move your cursor to bring order to the data',
@@ -583,42 +711,63 @@ export const ui = {
     zh: '向下滑动，让杂乱的数据归位',
   },
   aboutHello: {
-    en: 'Hi, I’m Jiaming Li. I build data and AI tools that teams rely on every day.',
-    zh: '你好，我是李嘉铭。我做的是团队每天都离不开的数据与 AI 工具。',
+    en: 'Business context. Clear analysis. Working tools.',
+    zh: '理解业务，分析问题，实现工具。',
   },
   heroIntro: {
-    en: 'Right now I run Amazon operations across eight European marketplaces, in restricted categories where advertising isn’t allowed. Before that, I co-developed a real-time monitoring platform at Sun Yat-sen University and built a decision tool for a research team at MaREI in Ireland.',
-    zh: '目前我负责亚马逊欧洲 8 个站点的运营，所在品类受限、不能投放广告。此前，我在中山大学参与开发了实时监控平台，并在爱尔兰 MaREI 研究中心为科研团队搭建了决策工具。',
+    en: 'I’m a Computer Science MSc graduate from University College Cork, with hands-on experience in European and US Amazon operations. That business background shapes how I approach AI: start with the problem, understand the workflow, then build a useful tool.',
+    zh: '我毕业于爱尔兰科克大学，获计算机科学硕士学位，目前从事欧洲及美国 Amazon 运营。这段业务经历塑造了我应用 AI 的方式：从实际问题出发，理解工作流程，再把解决思路实现为工具。',
   },
-  seeWork: { en: 'See the work ↓', zh: '看看我做的工具 ↓' },
+  seeWork: {
+    en: 'Explore case studies ↓',
+    zh: '查看精选案例 ↓',
+  },
   facts: [
     {
-      label: { en: 'Now', zh: '现任' },
-      value: { en: 'E-commerce Operator, Triple A', zh: '电商运营专员，Triple A' },
-    },
-    {
-      label: { en: 'Scope', zh: '范围' },
+      label: {
+        en: 'Current work',
+        zh: '当前工作',
+      },
       value: {
-        en: '8 EU markets · ~2,000 SKUs each',
-        zh: '欧洲 8 站点 · 每站约 2,000 SKU',
+        en: 'Amazon operations · Europe & US',
+        zh: 'Amazon 运营 · 欧洲及美国',
       },
     },
     {
-      label: { en: 'Focus', zh: '方向' },
+      label: {
+        en: 'Education',
+        zh: '教育背景',
+      },
       value: {
-        en: 'Applied AI · Data · Business Ops',
-        zh: '应用 AI · 数据 · 业务运营',
+        en: 'MSc Computer Science · UCC',
+        zh: '计算机科学硕士 · 科克大学',
       },
     },
     {
-      label: { en: 'Stack', zh: '技术栈' },
+      label: {
+        en: 'Toolkit',
+        zh: '工具',
+      },
       value: {
-        en: 'Python · SQL · LLM APIs · React',
-        zh: 'Python · SQL · LLM API · React',
+        en: 'Python · SQL · Excel · React',
+        zh: 'Python · SQL · Excel · React',
+      },
+    },
+    {
+      label: {
+        en: 'Direction',
+        zh: '职业方向',
+      },
+      value: {
+        en: 'AI applications & solutions',
+        zh: 'AI 应用与解决方案',
       },
     },
   ],
-  experienceTitle: { en: 'Experience', zh: '工作经历' },
+  experienceTitle: {
+    en: 'Professional experience',
+    zh: '工作经历',
+  },
   // Interactive "market lens" beside Experience. Its numbers are synthetic.
   lens: {
     kicker: { en: 'Try it · synthetic data', zh: '动手试试 · 模拟数据' },
@@ -655,144 +804,75 @@ export const ui = {
       zh: '数字仅作演示，并非公司真实数据。',
     },
   },
-  // AI section: production practice first, theory in one line. Demo numbers are synthetic.
+  // Numerical teaching model, computed locally with fixed untrained weights.
   ai: {
-    title: { en: 'AI in production', zh: '在生产环境中用好 AI' },
+    title: { en: 'Inside a Transformer', zh: '走进 Transformer' },
     lead: {
-      en: 'Calling a model is the easy part. The work is making its output dependable enough to sit inside a business process.',
-      zh: '调用模型并不难，难的是让模型输出足够可靠，能真正嵌入业务流程。',
-    },
-    points: [
-      {
-        k: { en: 'Schema validation', zh: '结构校验' },
-        v: {
-          en: 'Model output is typed JSON, validated against a schema before anything downstream reads it.',
-          zh: '模型输出为有类型的 JSON，下游使用前先按 Schema 校验。',
-        },
-      },
-      {
-        k: { en: 'Evaluation', zh: '评估' },
-        v: {
-          en: 'A fixed set of test cases with expected answers, re-run whenever a prompt or model changes.',
-          zh: '维护一组带预期答案的固定测试用例，每次修改提示词或更换模型都重新运行。',
-        },
-      },
-      {
-        k: { en: 'Human review', zh: '人工审核' },
-        v: {
-          en: 'Flagged or low-confidence results go to a review queue; a person approves before anything is published.',
-          zh: '被标记或置信度低的结果进入审核队列，由人确认后才发布。',
-        },
-      },
-      {
-        k: { en: 'Error handling', zh: '错误处理' },
-        v: {
-          en: 'Retries with backoff, a fallback path when a provider fails, and a log entry for every call so failures can be traced.',
-          zh: '带退避的重试、服务商失败时的兜底路径，每次调用都有日志，便于追踪问题。',
-        },
-      },
-    ],
-    foundations: {
-      en: 'Foundations: machine learning and neural networks from applied mathematics, transformer internals (tokens, embeddings, self-attention), scikit-learn models, and LLM APIs integrated into MoTai.',
-      zh: '基础：应用数学打下的机器学习与神经网络功底，理解 Transformer 内部机制（分词、向量嵌入、自注意力），用过 scikit-learn 建模，并在 MoTai 中集成了大模型 API。',
-    },
-    lab: {
-      tabs: {
-        pipeline: { en: 'Production pipeline', zh: '生产流水线' },
-        attention: { en: 'Self-attention', zh: '自注意力' },
-      },
-      kicker: { en: 'Interactive · synthetic data', zh: '可交互 · 模拟数据' },
-      attention: {
-        file: 'attention.head-1',
-        hint: {
-          en: 'Hover a token to see where it looks. Each row of the matrix sums to 1 after softmax.',
-          zh: '把鼠标移到某个词上，看它在“关注”哪些词。经过 softmax 后，矩阵每一行之和为 1。',
-        },
-        attends: { en: 'attends most to', zh: '最关注' },
-        query: { en: 'Query', zh: '查询词' },
-        keys: { en: 'Keys', zh: '键' },
-        note: {
-          en: 'Hand-set weights to illustrate the mechanism; not output from a trained model.',
-          zh: '权重为手工设定，仅用于说明机制，并非训练模型的实际输出。',
-        },
-      },
-      pipeline: {
-        file: 'listing-check.pipeline',
-        run: { en: 'Run pipeline ▶', zh: '运行流水线 ▶' },
-        running: { en: 'Running…', zh: '运行中…' },
-        rerun: { en: 'Run again ↻', zh: '再运行一次 ↻' },
-        steps: [
-          {
-            label: { en: 'Load listing export', zh: '加载商品数据导出' },
-            out: { en: 'synthetic sample · several languages', zh: '模拟样本 · 多种语言' },
-            warn: false,
-          },
-          {
-            label: { en: 'LLM API call · structured output', zh: '调用大模型 API · 结构化输出' },
-            out: { en: 'one typed JSON result per listing', zh: '每个商品一条有类型的 JSON 结果' },
-            warn: false,
-          },
-          {
-            label: { en: 'Schema validation', zh: 'Schema 校验' },
-            out: { en: 'invalid response → retried with backoff → valid', zh: '响应不合规 → 退避重试 → 通过' },
-            warn: true,
-          },
-          {
-            label: { en: 'Regression eval', zh: '回归评估' },
-            out: { en: 'fixed test set re-run · all pass', zh: '固定测试集重跑 · 全部通过' },
-            warn: false,
-          },
-          {
-            label: { en: 'Human review queue', zh: '人工审核队列' },
-            out: { en: 'flagged items approved or rejected', zh: '被标记的条目逐条确认或驳回' },
-            warn: false,
-          },
-          {
-            label: { en: 'Publish + log', zh: '发布并记录日志' },
-            out: { en: 'every call traceable', zh: '每次调用都可追溯' },
-            warn: false,
-          },
-        ],
-        result: {
-          en: 'Only validated, reviewed output reaches the live listing. Failures are retried or routed to a person, never silently dropped.',
-          zh: '只有通过校验和审核的结果才会上线；失败会重试或转人工，绝不会被静默丢弃。',
-        },
-        note: {
-          en: 'Simulated run on synthetic data, not real company or customer data.',
-          zh: '基于模拟数据的演示运行，不含任何公司或客户真实数据。',
-        },
-      },
+      en: 'Follow a token through a tiny decoder. Change the position encoding, attention head, causal mask and temperature to see what each part actually does.',
+      zh: '跟随一个词元走过微型解码器。改变位置编码、注意力头、因果掩码与温度，观察每个部分如何影响计算。',
     },
   },
   relatedProject: { en: 'Related case: ', zh: '相关案例：' },
-  workTitle: { en: 'Deployments', zh: '部署案例' },
+  workTitle: { en: 'Selected case studies', zh: '精选项目案例' },
   workIntro: {
-    en: 'Each case follows the same structure: business problem, constraints, what I built, result, and what I would improve next.',
-    zh: '每个案例按同一结构展开：业务问题、约束条件、我构建了什么、结果，以及下一步怎么改进。',
+    en: 'Decision support, monitoring and workflow prototypes. Each case explains the problem, my contribution, implemented features and supporting evidence.',
+    zh: '决策支持、监控与工作流原型。每个案例说明问题背景、个人贡献、已实现功能与成果依据。',
   },
-  supportingTitle: { en: 'Supporting evidence', zh: '补充证明' },
+  supportingTitle: {
+    en: 'More workflow projects',
+    zh: '更多工作流项目',
+  },
   supportingTag: { en: 'LLM API integration', zh: '大模型 API 集成' },
   alsoBuilt: { en: 'Also built', zh: '其他项目' },
-  aboutTitle: { en: 'About', zh: '关于我' },
+  aboutTitle: { en: 'Hi, I’m Jiaming.', zh: '你好，我是李嘉铭。' },
   about: {
-    en: 'My background spans applied mathematics, computer science and European e-commerce. Studying in Ireland taught me to work well in international teams. I’m looking for roles where AI, data and business operations meet: applied AI, solutions engineering, or sales and business operations.',
-    zh: '我的背景横跨应用数学、计算机科学与欧洲电商。在爱尔兰的求学经历让我习惯在国际化团队中协作。我希望找到 AI、数据与业务运营交汇的岗位：应用 AI、解决方案工程，或销售与业务运营。',
+    en: 'My projects span LLM-powered desktop workflows, research decision support and monitoring interfaces. I’m looking for AI application, solutions and implementation roles where I can connect business needs with software, data and human review.',
+    zh: '我的项目涵盖大模型驱动的桌面工作流、科研决策支持和监控界面。现在希望寻找 AI 应用开发、解决方案与实施相关岗位，将业务需求与软件、数据及人工审核结合起来。',
   },
   educationLabel: { en: 'Education', zh: '教育背景' },
-  skillsLabel: { en: 'Skills', zh: '技能' },
-  contactTitle: {
-    en: 'Got a workflow AI could help run?',
-    zh: '有想让 AI 帮上忙的业务流程吗？',
+  skillsLabel: {
+    en: 'Technical skills',
+    zh: '技术技能',
   },
-  allProjects: { en: '← All deployments', zh: '← 全部案例' },
+  contactTitle: {
+    en: 'Let’s talk about your team.',
+    zh: '聊聊你的团队与机会。',
+  },
+  allProjects: {
+    en: '← All case studies',
+    zh: '← 全部案例',
+  },
   viewSource: { en: 'View source on GitHub ↗', zh: '在 GitHub 查看源码 ↗' },
   // Fixed case structure labels, in order.
   caseSteps: {
-    problem: { en: 'Business problem', zh: '业务问题' },
-    constraints: { en: 'Constraints', zh: '约束条件' },
-    built: { en: 'What I built', zh: '我构建了什么' },
-    result: { en: 'Result', zh: '结果' },
-    next: { en: 'What I’d improve next', zh: '下一步改进' },
+    problem: {
+      en: 'Problem',
+      zh: '问题',
+    },
+    constraints: {
+      en: 'Context & constraints',
+      zh: '背景与约束',
+    },
+    contribution: {
+      en: 'My contribution',
+      zh: '个人贡献',
+    },
+    built: {
+      en: 'Approach & implementation',
+      zh: '方法与实现',
+    },
+    result: {
+      en: 'Outcomes & evidence',
+      zh: '成果与依据',
+    },
+    limitations: {
+      en: 'Limitations',
+      zh: '局限',
+    },
+    next: {
+      en: 'Future work',
+      zh: '后续计划',
+    },
   },
   walkthrough: { en: 'Interface walkthrough', zh: '界面一览' },
   stack: { en: 'Stack', zh: '技术栈' },
@@ -801,15 +881,18 @@ export const ui = {
     back: { en: '← Jiaming Li', zh: '← 李嘉铭' },
     download: { en: 'Download PDF ↓', zh: '下载 PDF ↓' },
     headline: {
-      en: 'Applied AI · Data · Business Operations',
-      zh: '应用 AI · 数据 · 业务运营',
+      en: 'Applied AI · Software Development · Business Workflows',
+      zh: 'AI 应用 · 软件开发 · 业务工作流',
     },
     summary: {
-      en: 'I combine data analysis, e-commerce operations and engineering to build tools teams use every day. I currently run Amazon operations across eight European marketplaces in restricted categories; before that, I co-developed a production telemetry platform and built a decision tool for a research team. Background in applied mathematics and computer science.',
-      zh: '我把数据分析、电商运营和工程能力结合起来，做团队每天都在用的工具。现负责亚马逊欧洲 8 个站点在受限品类下的运营；此前参与开发了生产级遥测监控平台，并为科研团队搭建了决策工具。应用数学本科、计算机科学硕士。',
+      en: 'MSc Computer Science (Interactive Media), University College Cork. Combine European and US Amazon operations experience with Python, SQL, web development and LLM API integration. Projects include AI-assisted desktop workflows, research decision support and monitoring interfaces. Seeking AI application development, solutions and implementation roles.',
+      zh: '爱尔兰科克大学计算机科学硕士（交互媒体）。结合欧洲及美国 Amazon 运营经验、Python、SQL、网页开发与大模型 API 集成，完成 AI 辅助桌面工作流、科研决策支持与监控界面等项目。寻求 AI 应用开发、解决方案与实施相关岗位。',
     },
     experience: { en: 'Experience', zh: '工作经历' },
-    projects: { en: 'Deployments', zh: '部署案例' },
+    projects: {
+      en: 'Selected projects',
+      zh: '精选项目',
+    },
     education: { en: 'Education', zh: '教育背景' },
     skills: { en: 'Skills', zh: '专业技能' },
     languages: { en: 'Languages', zh: '语言' },
@@ -820,12 +903,15 @@ export const ui = {
   },
   archive: {
     tagline: {
-      en: 'Putting AI to work where the business actually runs.',
-      zh: '让 AI 走进业务真正运转的地方。',
+      en: 'Business understanding, data analysis and technical implementation.',
+      zh: '结合业务理解、数据分析与技术实现。',
     },
     nav: [
       { href: '#projects', label: { en: '01 — Projects', zh: '01 — 项目' } },
-      { href: '#experience', label: { en: '02 — Experience', zh: '02 — 经历' } },
+      {
+        href: '#experience',
+        label: { en: '02 — Experience', zh: '02 — 经历' },
+      },
       { href: '/resume/', label: { en: '03 — Résumé', zh: '03 — 简历' } },
     ],
     open: { en: 'Open to opportunities', zh: '正在求职' },
@@ -842,5 +928,104 @@ export const ui = {
     label: { en: '404 · Page not found', zh: '404 · 页面不存在' },
     title: { en: 'A different direction.', zh: '换个方向看看。' },
     back: { en: 'Return to Jiaming’s portfolio →', zh: '返回李嘉铭的作品集 →' },
+  },
+  bringTitle: {
+    en: 'What I bring',
+    zh: '我能带来什么',
+  },
+  strengths: [
+    {
+      title: {
+        en: 'Understand the operation',
+        zh: '理解业务运营',
+      },
+      body: {
+        en: 'European and US marketplace experience: listings, compliance, performance analysis and day-to-day problem-solving.',
+        zh: '欧洲及美国电商经验：商品信息、合规、绩效分析与日常问题排查。',
+      },
+      href: '#experience',
+      link: {
+        en: 'View experience →',
+        zh: '查看经历 →',
+      },
+    },
+    {
+      title: {
+        en: 'Make decisions explainable',
+        zh: '让决策可解释',
+      },
+      body: {
+        en: 'Structure data, compare alternatives and expose assumptions. The MCDA tool shows how changing priorities changes a decision.',
+        zh: '组织数据、比较方案、呈现假设。MCDA 工具展示了优先级变化如何影响决策。',
+      },
+      href: '/work/mcda/',
+      link: {
+        en: 'Explore decision support →',
+        zh: '查看决策支持案例 →',
+      },
+    },
+    {
+      title: {
+        en: 'Turn a process into a tool',
+        zh: '把流程实现为工具',
+      },
+      body: {
+        en: 'Build interfaces and data flows, then explore AI assistance with human review. Evidence ranges from research tools to working prototypes.',
+        zh: '构建界面与数据流程，探索带人工审核的 AI 辅助。作品包括科研工具和可运行原型。',
+      },
+      href: '/work/motai/',
+      link: {
+        en: 'Explore AI-assisted work →',
+        zh: '查看 AI 辅助案例 →',
+      },
+    },
+  ],
+  targetLabel: {
+    en: 'Seeking AI opportunities',
+    zh: '正在寻找 AI 相关机会',
+  },
+  targetRoles: {
+    en: 'AI Application Development · AI Solutions & Implementation · Workflow Automation',
+    zh: 'AI 应用开发 · AI 解决方案与实施 · 工作流自动化',
+  },
+  skillsIntro: {
+    en: 'Tools used across marketplace work, research and software projects. The case studies show where and how they are applied.',
+    zh: '这些工具用于电商工作、科研与软件项目。具体应用方式可在案例中查看。',
+  },
+  contactIntro: {
+    en: 'Looking for someone to connect business needs with practical AI applications? I’m open to AI application, solutions, implementation and workflow automation roles. View my résumé or get in touch.',
+    zh: '你的团队需要将业务需求转化为实用的 AI 应用吗？我正在寻找 AI 应用、解决方案、实施与工作流自动化相关岗位。欢迎查看简历或联系我。',
+  },
+  readResume: {
+    en: 'View résumé →',
+    zh: '查看简历 →',
+  },
+  evidenceLabel: {
+    en: 'Evidence & source',
+    zh: '证明材料与源码',
+  },
+  evidenceLink: {
+    en: 'Read project documentation ↗',
+    zh: '阅读项目说明 ↗',
+  },
+  navigation: {
+    en: 'Main navigation',
+    zh: '主导航',
+  },
+  projectNavigation: {
+    en: 'Case study navigation',
+    zh: '案例导航',
+  },
+  archiveNavigation: {
+    en: 'Archive navigation',
+    zh: '项目档案导航',
+  },
+  filterLabel: {
+    en: 'Filter projects',
+    zh: '筛选项目',
+  },
+  summaryLabel: {
+    en: 'Professional summary',
+    zh: '职业背景概要',
   },
 } satisfies Record<string, unknown>;

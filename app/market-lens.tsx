@@ -65,35 +65,39 @@ export default function MarketLens() {
         style={{ height: markets.length * rowHeight }}
       >
         <span className="lens-mean-area" aria-hidden="true">
-          <span className="lens-mean" style={{ left: `${(mean / max) * 100}%` }}>
+          <span
+            className="lens-mean"
+            style={{ left: `${(mean / max) * 100}%` }}
+          >
             <span>
               {t(l.mean)} {format[metric](Math.round(mean * 10) / 10)}
             </span>
           </span>
         </span>
         {markets.map((x) => (
-            <button
-              key={x.id}
-              className="lens-row"
-              data-active={x.id === active || undefined}
-              style={{
-                transform: `translateY(${order.indexOf(x.id) * rowHeight}px)`,
-              }}
-              onMouseEnter={() => setActive(x.id)}
-              onFocus={() => setActive(x.id)}
-              onClick={() => setActive(x.id)}
-            >
-              <span className="lens-name">
-                {t(l.market)} {x.id}
-              </span>
-              <span className="lens-track">
-                <span
-                  className="lens-bar"
-                  style={{ width: `${(x[metric] / max) * 100}%` }}
-                />
-              </span>
-              <span className="lens-value">{format[metric](x[metric])}</span>
-            </button>
+          <button
+            key={x.id}
+            className="lens-row"
+            data-active={x.id === active || undefined}
+            aria-pressed={x.id === active}
+            style={{
+              transform: `translateY(${order.indexOf(x.id) * rowHeight}px)`,
+            }}
+            onMouseEnter={() => setActive(x.id)}
+            onFocus={() => setActive(x.id)}
+            onClick={() => setActive(x.id)}
+          >
+            <span className="lens-name">
+              {t(l.market)} {x.id}
+            </span>
+            <span className="lens-track">
+              <span
+                className="lens-bar"
+                style={{ width: `${(x[metric] / max) * 100}%` }}
+              />
+            </span>
+            <span className="lens-value">{format[metric](x[metric])}</span>
+          </button>
         ))}
       </div>
       <div className="lens-readout" aria-live="polite">
