@@ -221,7 +221,9 @@ function Home() {
             <div className="strengths-grid">
               {ui.strengths.map((item, i) => (
                 <article key={item.title.en} data-reveal={String(i * 80)}>
-                  <span className="strength-n">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="strength-n">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                   <h3>{t(item.title)}</h3>
                   <p>{t(item.body)}</p>
                 </article>
@@ -293,6 +295,11 @@ function Home() {
                   <span className="stack">{p.stack}</span>
                   <p className="card-links">
                     <a href={caseHref(p.id)}>{t(ui.caseLinks.caseStudy)}</a>
+                    {p.liveUrl && (
+                      <a href={p.liveUrl} target="_blank" rel="noreferrer">
+                        {t(ui.caseLinks.live)}
+                      </a>
+                    )}
                     <a href={`${profile.github}/${p.repo}`}>
                       {t(ui.caseLinks.code)}
                     </a>
@@ -320,6 +327,11 @@ function Home() {
                     <span className="stack">{p.stack}</span>
                     <p className="card-links">
                       <a href={caseHref(p.id)}>{t(ui.caseLinks.caseStudy)}</a>
+                      {p.liveUrl && (
+                        <a href={p.liveUrl} target="_blank" rel="noreferrer">
+                          {t(ui.caseLinks.live)}
+                        </a>
+                      )}
                       <a href={`${profile.github}/${p.repo}`}>
                         {t(ui.caseLinks.code)}
                       </a>
@@ -380,7 +392,6 @@ function Home() {
               <strong>{t(ui.lab.teaserLink)}</strong>
             </a>
           </section>
-
         </main>
 
         <footer id="contact" className="contact contact-dark">
@@ -463,6 +474,16 @@ function Case({ p }: { p: Project }) {
             <div className="case-pills" data-reveal="240">
               <span className="pill pill-outline-soft">{t(p.ctx)}</span>
               <span className="pill pill-outline-soft">{t(p.status)}</span>
+              {p.liveUrl && (
+                <a
+                  className="pill pill-accent"
+                  href={p.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t(ui.caseLinks.live)}
+                </a>
+              )}
               <a className="pill pill-ink" href={`${profile.github}/${p.repo}`}>
                 {t(ui.viewSource)}
               </a>
@@ -499,23 +520,25 @@ function Case({ p }: { p: Project }) {
             ))}
           </ol>
 
-          <section className="case-gallery ruled">
-            <h2 className="h2" data-reveal="0">
-              {t(ui.walkthrough)}
-            </h2>
-            <div className="gallery-grid">
-              {p.gallery.map((g, i) => (
-                <figure key={g.src} data-reveal={String((i % 2) * 120)}>
-                  <div className="mat" data-tilt="">
-                    <div className="mat-inner">
-                      <ProjectImage image={g} alt={t(g.caption)} crop />
+          {!p.liveUrl && (
+            <section className="case-gallery ruled">
+              <h2 className="h2" data-reveal="0">
+                {t(ui.walkthrough)}
+              </h2>
+              <div className="gallery-grid">
+                {p.gallery.map((g, i) => (
+                  <figure key={g.src} data-reveal={String((i % 2) * 120)}>
+                    <div className="mat" data-tilt="">
+                      <div className="mat-inner">
+                        <ProjectImage image={g} alt={t(g.caption)} crop />
+                      </div>
                     </div>
-                  </div>
-                  <figcaption>{t(g.caption)}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </section>
+                    <figcaption>{t(g.caption)}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          )}
 
           <section className="case-outcome ruled">
             <div data-reveal="0">

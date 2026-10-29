@@ -28,6 +28,8 @@ export type Project = {
   draft?: boolean;
   cat: Category[];
   repo: string;
+  /** Public deployment. When set, a live preview window replaces the screenshots. */
+  liveUrl?: string;
   image: Image;
   title: Text;
   tag: Text;
@@ -107,6 +109,7 @@ export const projects: Project[] = [
     rank: 1,
     cat: ['Data'],
     repo: 'MCDA-Tool-2.0',
+    liveUrl: 'https://mcda.arthur-jiaming-li.workers.dev/',
     image: {
       src: '/projects/mcda/mcda-overview.webp',
       width: 1440,
@@ -421,6 +424,7 @@ export const projects: Project[] = [
     rank: 2,
     cat: ['Product'],
     repo: 'connoisseur',
+    liveUrl: 'https://valerain.com/',
     image: {
       src: '/projects/connoisseur/connoisseur-quote-timeline.webp',
       width: 1440,
@@ -1004,6 +1008,7 @@ export const ui = {
     github: { en: 'GitHub ↗', zh: 'GitHub ↗' },
   },
   caseLinks: {
+    live: { en: 'Live site ↗', zh: '在线访问 ↗' },
     code: { en: 'Code ↗', zh: '源码 ↗' },
     caseStudy: { en: 'Case study →', zh: '查看案例 →' },
   },

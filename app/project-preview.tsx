@@ -23,7 +23,7 @@ export default function ProjectPreview({
   const [loaded, setLoaded] = useState(false);
   const [scale, setScale] = useState(1);
   const viewport = useRef<HTMLDivElement>(null);
-  const url = sources[project.id];
+  const url = project.liveUrl ?? sources[project.id];
   const previewTitle = `${t(project.title)} ${say('interactive project preview', '交互项目预览')}`;
   useEffect(() => {
     const el = viewport.current;
@@ -133,8 +133,8 @@ export default function ProjectPreview({
               )
             : project.id === 'connoisseur'
               ? say(
-                  'Mock-data MVP. No real payments or customer information.',
-                  '模拟数据 MVP，不涉及真实付款与客户信息。',
+                  'Live deployment of the Connoisseur sourcing service.',
+                  'Connoisseur 采购服务的线上部署版本。',
                 )
               : say(
                   'Synthetic decision data; no research findings.',
