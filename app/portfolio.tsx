@@ -255,6 +255,12 @@ function Home() {
                 <article className="exp-row" key={x.role.en} data-reveal="0">
                   <div className="exp-frame" aria-hidden="true">
                     <ExperienceScene index={i} />
+                    {/* Ink trail down to the next role's frame, so the three read as one strip. */}
+                    {i < experience.length - 1 && (
+                      <span className="exp-link">
+                        <span className="exp-link-dot" />
+                      </span>
+                    )}
                   </div>
                   <span className="exp-date">{t(x.date)}</span>
                   <div className="exp-body">

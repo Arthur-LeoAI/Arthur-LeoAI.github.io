@@ -3195,20 +3195,102 @@ footer[id] {
 
 /* Experience: one hand-inked frame per role, beside its own role */
 .exp-section {
-  --exp-cols: minmax(220px, 0.9fr) minmax(100px, 0.42fr) minmax(0, 1.75fr);
+  --frame-w: clamp(220px, 25vw, 320px);
+  --exp-gap: clamp(20px, 3vw, 40px);
+  --exp-cols: var(--frame-w) minmax(100px, 0.42fr) minmax(0, 1.75fr);
 }
 .exp-head {
   display: grid;
   grid-template-columns: var(--exp-cols);
-  column-gap: clamp(20px, 3vw, 40px);
+  column-gap: var(--exp-gap);
 }
 .exp-head .exp-title {
   grid-column: 2 / -1;
 }
 #experience .exp-row {
   grid-template-columns: var(--exp-cols);
-  column-gap: clamp(20px, 3vw, 40px);
+  column-gap: var(--exp-gap);
   align-items: start;
+  /* Dividers only under the text, so the frames read as one unbroken strip. */
+  border-top: 0;
+  background: linear-gradient(var(--line), var(--line)) no-repeat right top /
+    calc(100% - var(--frame-w) - var(--exp-gap)) 1px;
+}
+/* The frame column stretches to the row's full height so the trail can reach the next frame. */
+#experience .exp-frame {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.exp-link {
+  position: relative;
+  flex: 1;
+  width: 28px;
+  min-height: 40px;
+  /* Run through this row's bottom padding, the divider and the next row's top padding. */
+  margin-bottom: -53px;
+  z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='44' viewBox='0 0 28 44'%3E%3Cpath d='M14 0 C 24 11 24 11 14 22 C 4 33 4 33 14 44' fill='none' stroke='%231b1a17' stroke-width='1.8' stroke-linecap='round' stroke-dasharray='0.5 6.5'/%3E%3C/svg%3E") repeat-y center top;
+  opacity: 0.75;
+  transform-origin: top;
+  transform: scaleY(0);
+  transition: transform 1s var(--ease) 1.4s;
+}
+.exp-scene[data-drawn] + .exp-link {
+  transform: none;
+}
+/* Arrowhead just above the next frame */
+.exp-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  transform: translateX(-50%) rotate(45deg);
+}
+/* A data point travelling down the trail */
+.exp-link-dot {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: #c96442;
+  opacity: 0;
+}
+.exp-scene[data-drawn] + .exp-link .exp-link-dot {
+  animation: exp-travel 3.2s ease-in-out 2.4s infinite;
+}
+@keyframes exp-travel {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: calc(100% - 18px);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .exp-link {
+    transform: none;
+    transition: none;
+  }
+  .exp-link-dot {
+    display: none;
+  }
 }
 /* Each frame settles in from a slight tilt when it scrolls into view, then draws itself. */
 .exp-scene {
@@ -3347,7 +3429,8 @@ footer[id] {
 /* Narrower screens: date sits above the role; phones stack the frame on top. */
 @media (max-width: 1100px) {
   .exp-section {
-    --exp-cols: minmax(200px, 0.9fr) minmax(0, 1.6fr);
+    --frame-w: clamp(200px, 32vw, 300px);
+    --exp-cols: var(--frame-w) minmax(0, 1.6fr);
   }
   #experience .exp-row {
     grid-template-areas:
@@ -3379,10 +3462,15 @@ footer[id] {
       'body';
     grid-template-rows: auto;
     row-gap: 8px;
+    border-top: 1px solid var(--line);
+    background: none;
   }
   .exp-frame {
     max-width: 420px;
     margin-bottom: 8px;
+  }
+  .exp-link {
+    display: none;
   }
 }
 
