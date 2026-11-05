@@ -2,9 +2,10 @@
 import { useEffect, useRef } from 'react';
 import { useLang } from './language';
 
-// Hero background, drawn in a hand-inked style: scattered data scraps on the left are
-// integrated into a table, run through an AI step and a three-step workflow, and land on an
-// insight board where opportunities are circled and a decision is ticked.
+// Hero background, drawn in a hand-inked style: scattered data scraps on the left pass an
+// AI step that integrates them and filters out noise, then a data-analysis table and a
+// three-step workflow, and land on an insight board where an opportunity is circled and a
+// decision is ticked.
 // Hover a scrap to nudge it, click it to send it through; click empty hero space to send all.
 // Every value is decorative.
 const ink = '27,26,23';
@@ -14,12 +15,12 @@ const paper = '#fbf9f4';
 const fragments = ['1,284', '€31k', 'SKU-2041', '#N/A', 'CTR 1.9%', 'qty 36', '“FR”', '0.072', 'null', '3.4★'];
 const captions = {
   en: {
-    full: ['Scattered data', 'Integrate', 'AI analysis', 'Workflow', 'Opportunity · decision'],
-    short: ['Data', 'Integrate', 'AI', 'Workflow', 'Decision'],
+    full: ['Scattered data', 'AI: integrate & filter', 'Data analysis', 'Workflow', 'Opportunity · decision'],
+    short: ['Data', 'AI filter', 'Analysis', 'Workflow', 'Decision'],
   },
   zh: {
-    full: ['零散数据', '整合', 'AI 分析', '自动化流程', '发现商机 · 做出判断'],
-    short: ['数据', '整合', 'AI', '流程', '判断'],
+    full: ['零散数据', 'AI 整合筛选', '数据分析', '自动化流程', '发现商机 · 做出判断'],
+    short: ['数据', 'AI 筛选', '分析', '流程', '判断'],
   },
 };
 
@@ -67,6 +68,7 @@ export default function HeroAI() {
     let packets: Packet[] = [];
     let rows = 0; // filled rows in the integration table
     let aiGlow = 0;
+    let rejects: { x: number; y: number; age: number }[] = []; // scraps the AI filtered out
     const ticks = [0, 0, 0];
     let points: number[] = [0.22, 0.3, 0.27, 0.38];
     let opp = -1; // index of the circled opportunity point
@@ -217,7 +219,7 @@ export default function HeroAI() {
         case 1:
           return [st.integ + 30 + (st.ai - 30 - st.integ - 30) * e, bandY];
         case 2:
-          return [st.ai + 26 + (flowX(0) - st.ai - 26) * e, bandY];
+          return [st.ai + 36 + (flowX(0) - st.ai - 36) * e, bandY];
         case 3:
         case 4: {
           const a = flowX(k.seg - 3);
@@ -232,8 +234,8 @@ export default function HeroAI() {
       }
     };
     const arrive = (k: Packet) => {
-      if (k.seg === 0) rows = (rows % 4) + 1;
-      if (k.seg === 1) aiGlow = 1;
+      if (k.seg === 0) aiGlow = 1;
+      if (k.seg === 1) rows = (rows % 4) + 1;
       if (k.seg >= 2 && k.seg <= 4) ticks[k.seg - 2] = 1;
       if (k.seg === 5) {
         const prev = points[points.length - 1];
@@ -352,50 +354,75 @@ export default function HeroAI() {
       }
       caption(cap[0], st.data, capY, hoverStation === 0);
 
-      // 2. Integrate: a table that fills row by row.
-      const tw = compact ? 40 : 64;
-      const th = compact ? 30 : 46;
-      blob(st.integ, bandY, compact ? 26 : 40, 11, hoverStation === 1 ? 0.26 : 0.14);
-      ctx.strokeStyle = `rgba(${ink},0.85)`;
-      ctx.lineWidth = 1.3;
-      rect(st.integ - tw / 2, bandY - th / 2, tw, th, 21, paper);
-      ctx.fillStyle = `rgba(${sage},0.85)`;
-      ctx.fillRect(st.integ - tw / 2 + 2, bandY - th / 2 + 2, tw - 4, th / 5 - 1);
-      for (let i = 0; i < 4; i++) {
-        const ry = bandY - th / 2 + (th / 5) * (i + 1) + th / 10;
-        if (i < rows) {
-          ctx.fillStyle = `rgba(${sage},0.35)`;
-          ctx.fillRect(st.integ - tw / 2 + 5, ry - 1.5, (tw - 10) * (0.5 + 0.45 * hash(i + rows * 3)), 3);
-        }
-      }
-      caption(cap[1], st.integ, capY, hoverStation === 1);
-
-      // 3. AI: a hand-drawn chip, glowing while it processes.
+      // 2. AI integrates and filters: a hand-drawn chip; some scraps are dropped as noise.
       aiGlow *= Math.exp(-dt * 1.6);
       const cs = compact ? 30 : 46;
-      blob(st.ai, bandY, (compact ? 26 : 40) * (1 + 0.15 * aiGlow), 31, (hoverStation === 2 ? 0.3 : 0.2) + aiGlow * 0.25);
+      blob(st.integ, bandY, (compact ? 26 : 40) * (1 + 0.15 * aiGlow), 31, (hoverStation === 1 ? 0.3 : 0.2) + aiGlow * 0.25);
       ctx.strokeStyle = `rgba(${ink},0.85)`;
       ctx.lineWidth = 1.4;
       ctx.beginPath();
       for (let i = 0; i < 3; i++) {
         const o = -cs / 4 + (i * cs) / 4;
-        line(st.ai + o, bandY - cs / 2, st.ai + o, bandY - cs / 2 - 6, 40 + i, 0.6);
-        line(st.ai + o, bandY + cs / 2, st.ai + o, bandY + cs / 2 + 6, 50 + i, 0.6);
-        line(st.ai - cs / 2, bandY + o, st.ai - cs / 2 - 6, bandY + o, 60 + i, 0.6);
-        line(st.ai + cs / 2, bandY + o, st.ai + cs / 2 + 6, bandY + o, 70 + i, 0.6);
+        line(st.integ + o, bandY - cs / 2, st.integ + o, bandY - cs / 2 - 6, 40 + i, 0.6);
+        line(st.integ + o, bandY + cs / 2, st.integ + o, bandY + cs / 2 + 6, 50 + i, 0.6);
+        line(st.integ - cs / 2, bandY + o, st.integ - cs / 2 - 6, bandY + o, 60 + i, 0.6);
+        line(st.integ + cs / 2, bandY + o, st.integ + cs / 2 + 6, bandY + o, 70 + i, 0.6);
       }
       ctx.stroke();
-      rect(st.ai - cs / 2, bandY - cs / 2, cs, cs, 81, paper);
+      rect(st.integ - cs / 2, bandY - cs / 2, cs, cs, 81, paper);
       ctx.fillStyle = aiGlow > 0.3 ? `rgb(${clay})` : `rgb(${ink})`;
       ctx.font = `italic ${compact ? 15 : 22}px 'Instrument Serif', serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText('AI', st.ai, bandY + 1);
+      ctx.fillText('AI', st.integ, bandY + 1);
       if (aiGlow > 0.05) {
         ctx.strokeStyle = `rgba(${clay},${aiGlow * 0.6})`;
         ctx.lineWidth = 1.2;
-        loop(st.ai, bandY, cs * (1.2 - aiGlow * 0.4), cs * (0.95 - aiGlow * 0.3), 7);
+        loop(st.integ, bandY, cs * (1.2 - aiGlow * 0.4), cs * (0.95 - aiGlow * 0.3), 7);
       }
+      for (const r of rejects) {
+        r.age += dt;
+        ctx.strokeStyle = `rgba(${clay},${Math.max(0, 0.8 - r.age * 0.6)})`;
+        ctx.lineWidth = 1.4;
+        const ry = r.y + r.age * 26;
+        const rs = compact ? 3 : 4;
+        ctx.beginPath();
+        line(r.x - rs, ry - rs, r.x + rs, ry + rs, 23, 0.4);
+        line(r.x + rs, ry - rs, r.x - rs, ry + rs, 29, 0.4);
+        ctx.stroke();
+      }
+      rejects = rejects.filter((r) => r.age < 1.4);
+      caption(cap[1], st.integ, capY, hoverStation === 1);
+
+      // 3. Data analysis: a table that fills row by row, under a magnifying glass.
+      const tw = compact ? 40 : 64;
+      const th = compact ? 30 : 46;
+      blob(st.ai, bandY, compact ? 26 : 40, 11, hoverStation === 2 ? 0.26 : 0.14);
+      ctx.strokeStyle = `rgba(${ink},0.85)`;
+      ctx.lineWidth = 1.3;
+      rect(st.ai - tw / 2, bandY - th / 2, tw, th, 21, paper);
+      ctx.fillStyle = `rgba(${sage},0.85)`;
+      ctx.fillRect(st.ai - tw / 2 + 2, bandY - th / 2 + 2, tw - 4, th / 5 - 1);
+      for (let i = 0; i < 4; i++) {
+        const ry = bandY - th / 2 + (th / 5) * (i + 1) + th / 10;
+        if (i < rows) {
+          ctx.fillStyle = `rgba(${sage},0.35)`;
+          ctx.fillRect(st.ai - tw / 2 + 5, ry - 1.5, (tw - 10) * (0.5 + 0.45 * hash(i + rows * 3)), 3);
+        }
+      }
+      ctx.strokeStyle = `rgba(${ink},0.85)`;
+      ctx.lineWidth = 1.5;
+      const gx = st.ai + tw / 2 - 4;
+      const gy = bandY + th / 2 - 6;
+      const gr = compact ? 6 : 9;
+      ctx.fillStyle = 'rgba(251,249,244,0.55)';
+      ctx.beginPath();
+      ctx.arc(gx, gy, gr, 0, Math.PI * 2);
+      ctx.fill();
+      loop(gx, gy, gr, gr, 17);
+      ctx.beginPath();
+      line(gx + gr * 0.7, gy + gr * 0.7, gx + gr * 1.6, gy + gr * 1.6, 19, 0.5);
+      ctx.stroke();
       caption(cap[2], st.ai, capY, hoverStation === 2);
 
       // 4. Workflow: three steps that tick as work passes through.
@@ -478,6 +505,12 @@ export default function HeroAI() {
       for (const k of packets) {
         k.p += dt * speed[k.seg] * (compact ? 1.2 : 1);
         if (k.p >= 1) {
+          // The AI step drops roughly one scrap in four as noise.
+          if (k.seg === 0 && hash(k.sx * 0.37 + k.sy) < 0.25) {
+            aiGlow = 1;
+            rejects.push({ x: st.integ + 14, y: bandY + 18, age: 0 });
+            continue;
+          }
           arrive(k);
           k.seg++;
           k.p = 0;

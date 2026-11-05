@@ -668,13 +668,13 @@ export const skills: Record<Lang, [string, string][]> = {
 };
 
 /**
- * Skills on the 3D sphere beside Experience. Chosen from what BA, implementation, marketing-analytics
+ * Skills in the hand-drawn skill tree beside Experience. Chosen from what BA, implementation, marketing-analytics
  * and applied-AI job postings ask for most (SQL, Python, data analysis and visualisation, process
  * work, LLM integration, workflow automation), limited to skills the owner's experience or projects
- * show. `core` marks the most-requested ones, drawn larger. Market-demanded skills without evidence
+ * show. `core` marks the most-requested ones (exactly seven, drawn at the branch tips); the rest are listed under the drawing. Market-demanded skills without evidence
  * yet (BI tools, A/B testing, GA4, RAG/evaluation, requirements & UAT) are left out until confirmed.
  */
-export const sphereSkills: { label: Text; core?: boolean }[] = [
+export const skillTree: { label: Text; core?: boolean }[] = [
   { label: { en: 'SQL', zh: 'SQL' }, core: true },
   { label: { en: 'Python', zh: 'Python' }, core: true },
   { label: { en: 'Data analysis', zh: '数据分析' }, core: true },
@@ -969,8 +969,12 @@ export const ui = {
   },
   sphere: {
     kicker: {
-      en: 'Core skills · drag to turn',
-      zh: '核心技能 · 拖动旋转',
+      en: 'Core skills',
+      zh: '核心技能',
+    },
+    more: {
+      en: 'Also:',
+      zh: '另有：',
     },
   },
   readResume: {
