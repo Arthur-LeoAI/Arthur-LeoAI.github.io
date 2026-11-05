@@ -667,6 +667,36 @@ export const skills: Record<Lang, [string, string][]> = {
   ],
 };
 
+/**
+ * Skills on the 3D sphere beside Experience. Chosen from what BA, implementation, marketing-analytics
+ * and applied-AI job postings ask for most (SQL, Python, data analysis and visualisation, process
+ * work, LLM integration, workflow automation), limited to skills the owner's experience or projects
+ * show. `core` marks the most-requested ones, drawn larger. Market-demanded skills without evidence
+ * yet (BI tools, A/B testing, GA4, RAG/evaluation, requirements & UAT) are left out until confirmed.
+ */
+export const sphereSkills: { label: Text; core?: boolean }[] = [
+  { label: { en: 'SQL', zh: 'SQL' }, core: true },
+  { label: { en: 'Python', zh: 'Python' }, core: true },
+  { label: { en: 'Data analysis', zh: '数据分析' }, core: true },
+  { label: { en: 'Process mapping', zh: '流程梳理' }, core: true },
+  { label: { en: 'LLM API integration', zh: '大模型 API 集成' }, core: true },
+  { label: { en: 'Workflow automation', zh: '工作流自动化' }, core: true },
+  { label: { en: 'Excel', zh: 'Excel' }, core: true },
+  { label: { en: 'Data visualisation', zh: '数据可视化' } },
+  { label: { en: 'Data cleaning', zh: '数据清洗' } },
+  { label: { en: 'Competitor analysis', zh: '竞品分析' } },
+  { label: { en: 'Ad campaign optimisation', zh: '广告投放优化' } },
+  { label: { en: 'Localisation', zh: '本地化' } },
+  { label: { en: 'Decision analysis', zh: '决策分析' } },
+  { label: { en: 'Sensitivity analysis', zh: '敏感性分析' } },
+  { label: { en: 'Prompt & context design', zh: '提示与上下文设计' } },
+  { label: { en: 'Human-in-the-loop review', zh: '人工审核闭环' } },
+  { label: { en: 'APIs & data integration', zh: 'API 与数据集成' } },
+  { label: { en: 'React / TypeScript', zh: 'React / TypeScript' } },
+  { label: { en: 'Git', zh: 'Git' } },
+  { label: { en: 'Docker', zh: 'Docker' } },
+];
+
 /** Location line used everywhere except the hero label (About, résumé, meta, archive). */
 export const location: Text = {
   en: 'Based in China · Open to Europe & the UK, North America, Australia & New Zealand · Visa sponsorship required',
@@ -939,8 +969,8 @@ export const ui = {
   },
   sphere: {
     kicker: {
-      en: 'Toolkit · drag to rotate, click a group',
-      zh: '技能 · 拖动旋转，点击分组高亮',
+      en: 'Core skills · drag to turn',
+      zh: '核心技能 · 拖动旋转',
     },
   },
   readResume: {

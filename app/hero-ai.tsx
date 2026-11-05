@@ -1,35 +1,55 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import { useLang } from './language';
 
-// Hero background: "raw data → AI → insight".
-// Scattered data fragments (numbers, IDs, table cells) drift on the left, get pulled into a
-// glowing ✦ AI spark at the bottom centre, and every few fragments the spark sends a small
-// chart card out to the right. Hover the spark to speed it up; click the hero to process
-// everything on screen. All values are decorative.
+// Hero background, drawn in a hand-inked style: scattered data scraps on the left are
+// integrated into a table, run through an AI step and a three-step workflow, and land on an
+// insight board where opportunities are circled and a decision is ticked.
+// Hover a scrap to nudge it, click it to send it through; click empty hero space to send all.
+// Every value is decorative.
 const ink = '27,26,23';
-const accent = '31,92,69';
-const card = '#fbf9f4';
-const fragments = [
-  '1,284', '0.072', '€31k', 'SKU-2041', '2026-10-03', 'null', 'Δ −4.1%', 'CTR 1.9%',
-  '#N/A', '8,402', 'qty 36', '“FR”', '12.5', 'n=640', 'id 7731', '3.4★', 'TRUE', '0.18',
-];
+const clay = '201,100,66';
+const sage = '31,92,69';
+const paper = '#fbf9f4';
+const fragments = ['1,284', '€31k', 'SKU-2041', '#N/A', 'CTR 1.9%', 'qty 36', '“FR”', '0.072', 'null', '3.4★'];
+const captions = {
+  en: {
+    full: ['Scattered data', 'Integrate', 'AI analysis', 'Workflow', 'Opportunity · decision'],
+    short: ['Data', 'Integrate', 'AI', 'Workflow', 'Decision'],
+  },
+  zh: {
+    full: ['零散数据', '整合', 'AI 分析', '自动化流程', '发现商机 · 做出判断'],
+    short: ['数据', '整合', 'AI', '流程', '判断'],
+  },
+};
 
-type Token = {
-  text: string | null; // null = a little table-cell grid
+type Scrap = {
+  kind: number; // 0 text, 1 sheet, 2 sticky note, 3 dot cluster
+  text: string;
   x: number;
   y: number;
+  dx: number; // pointer push offset
+  dy: number;
   rot: number;
-  age: number;
-  life: number;
-  phase: number;
-  pull: number; // 0 = floating, >0 = being pulled into the spark
-  sx: number;
-  sy: number;
+  seed: number;
+  born: number;
 };
-type Output = { kind: number; t: number; tx: number; ty: number; age: number; seed: number };
+type Packet = { seg: number; p: number; sx: number; sy: number; scrap: Scrap | null };
+
+// Stable pseudo-random numbers so the "ink" doesn't flicker between frames.
+const hash = (n: number) => {
+  const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return x - Math.floor(x);
+};
 
 export default function HeroAI() {
   const ref = useRef<HTMLCanvasElement>(null);
+  const { lang } = useLang();
+  const langRef = useRef(lang);
+  useEffect(() => {
+    langRef.current = lang;
+  }, [lang]);
+
   useEffect(() => {
     const canvas = ref.current;
     const ctx = canvas?.getContext('2d');
@@ -39,16 +59,26 @@ export default function HeroAI() {
     let W = 0;
     let H = 0;
     let compact = false;
-    let spark = { x: 0, y: 0 };
-    let tokens: Token[] = [];
-    let outputs: Output[] = [];
+    let wide = false; // board sits at mid-right only when there is room beside the copy
+    let bandY = 0;
+    let st = { data: 0, integ: 0, ai: 0, flow: 0, flowGap: 40 };
+    let board = { x: 0, y: 0, w: 0, h: 0 };
+    let scraps: Scrap[] = [];
+    let packets: Packet[] = [];
+    let rows = 0; // filled rows in the integration table
+    let aiGlow = 0;
+    const ticks = [0, 0, 0];
+    let points: number[] = [0.22, 0.3, 0.27, 0.38];
+    let opp = -1; // index of the circled opportunity point
+    let oppDraw = 0;
+    let decision = 0;
+    let hoverStation = -1;
     let raf = 0;
     let visible = true;
     let last = performance.now();
-    let spawnClock = 0;
-    let absorbed = 0;
-    let glow = 0;
-    let hover = 0;
+    let clock = 0;
+    let releaseClock = 0;
+    let seedN = 1;
     const m = { x: -9999, y: -9999, on: false };
 
     const layout = () => {
@@ -60,244 +90,462 @@ export default function HeroAI() {
       canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       compact = W < 720;
-      spark = { x: W / 2, y: H - (compact ? 40 : 52) };
+      wide = W >= 1180;
+      bandY = H - (compact ? 74 : 92);
+      st = compact
+        ? { data: W * 0.1, integ: W * 0.3, ai: W * 0.5, flow: W * 0.7, flowGap: 17 }
+        : wide
+          ? { data: W * 0.11, integ: W * 0.27, ai: W * 0.5, flow: W * 0.71, flowGap: 40 }
+          : { data: W * 0.08, integ: W * 0.25, ai: W * 0.45, flow: W * 0.65, flowGap: 34 };
+      board = compact
+        ? { x: W * 0.9, y: bandY, w: 56, h: 40 }
+        : wide
+          ? { x: W * 0.885, y: H * 0.5, w: Math.min(230, W * 0.17), h: 132 }
+          : { x: W * 0.87, y: bandY, w: 110, h: 66 };
     };
 
-    const spawn = (instant = false) => {
-      const maxTokens = compact ? 9 : 16;
-      if (tokens.length >= maxTokens) return;
-      const left = compact ? [0.08, 0.32] : [0.05, 0.26];
-      tokens.push({
-        text: Math.random() < 0.18 ? null : fragments[Math.floor(Math.random() * fragments.length)],
-        x: W * (left[0] + Math.random() * (left[1] - left[0])),
-        y: H * (0.12 + Math.random() * 0.62),
-        rot: (Math.random() - 0.5) * 0.28,
-        age: instant ? Math.random() * 3 : 0,
-        life: 3 + Math.random() * 3.5,
-        phase: Math.random() * Math.PI * 2,
-        pull: 0,
-        sx: 0,
-        sy: 0,
-      });
+    const spawn = () => {
+      const max = compact ? 5 : 9;
+      if (scraps.length >= max) return;
+      const kind = Math.floor(hash(seedN * 3.1) * 4);
+      const s: Scrap = {
+        kind,
+        text: fragments[Math.floor(hash(seedN * 7.7) * fragments.length)],
+        x: compact ? W * (0.03 + hash(seedN * 1.3) * 0.13) : W * (0.035 + hash(seedN * 1.3) * 0.15),
+        y: compact ? bandY - 46 + hash(seedN * 2.9) * 40 : H * (0.16 + hash(seedN * 2.9) * 0.56),
+        dx: 0,
+        dy: 0,
+        rot: (hash(seedN * 5.3) - 0.5) * 0.5,
+        seed: seedN,
+        born: clock,
+      };
+      seedN++;
+      scraps.push(s);
     };
 
-    const emit = () => {
-      if (outputs.length >= (compact ? 2 : 4)) outputs.shift();
-      const right = compact ? [0.62, 0.86] : [0.74, 0.92];
-      outputs.push({
-        kind: Math.floor(Math.random() * 3),
-        t: 0,
-        tx: W * (right[0] + Math.random() * (right[1] - right[0])),
-        ty: H * (0.14 + Math.random() * 0.56),
-        age: 0,
-        seed: Math.random() * 1000,
-      });
+    const release = (s: Scrap) => {
+      scraps = scraps.filter((k) => k !== s);
+      packets.push({ seg: 0, p: 0, sx: s.x + s.dx, sy: s.y + s.dy, scrap: s });
     };
 
-    // A four-pointed AI spark (✦), as used by most AI products.
-    const star = (x: number, y: number, r: number, rot: number) => {
+    // ---------- hand-drawn primitives ----------
+    const line = (x1: number, y1: number, x2: number, y2: number, seed: number, wob = 1.4) => {
+      const mx = (x1 + x2) / 2 + (hash(seed) - 0.5) * wob * 2;
+      const my = (y1 + y2) / 2 + (hash(seed + 1) - 0.5) * wob * 2;
+      ctx.moveTo(x1 + (hash(seed + 2) - 0.5) * wob, y1 + (hash(seed + 3) - 0.5) * wob);
+      ctx.quadraticCurveTo(mx, my, x2 + (hash(seed + 4) - 0.5) * wob, y2 + (hash(seed + 5) - 0.5) * wob);
+    };
+    const rect = (x: number, y: number, w: number, h: number, seed: number, fill?: string) => {
+      if (fill) {
+        ctx.fillStyle = fill;
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 4);
+        ctx.fill();
+      }
+      ctx.beginPath();
+      line(x, y, x + w, y, seed);
+      line(x + w, y, x + w, y + h, seed + 10);
+      line(x + w, y + h, x, y + h, seed + 20);
+      line(x, y + h, x, y, seed + 30);
+      ctx.stroke();
+    };
+    // Organic blob behind each station, like a painted backdrop.
+    const blob = (x: number, y: number, r: number, seed: number, alpha: number) => {
+      const n = 9;
+      const pts: [number, number][] = [];
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2;
+        const rr = r * (0.82 + 0.3 * hash(seed + i) + 0.05 * Math.sin(clock * 0.6 + i + seed));
+        pts.push([x + Math.cos(a) * rr * 1.18, y + Math.sin(a) * rr * 0.9]);
+      }
+      ctx.fillStyle = `rgba(${clay},${alpha})`;
+      ctx.beginPath();
+      const mid = (a: [number, number], b: [number, number]) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+      const s = mid(pts[n - 1], pts[0]);
+      ctx.moveTo(s[0], s[1]);
+      for (let i = 0; i < n; i++) {
+        const q = mid(pts[i], pts[(i + 1) % n]);
+        ctx.quadraticCurveTo(pts[i][0], pts[i][1], q[0], q[1]);
+      }
+      ctx.fill();
+    };
+    // A pen loop that slightly overshoots, as if circled by hand.
+    const loop = (x: number, y: number, rx: number, ry: number, seed: number, amount = 1) => {
+      ctx.beginPath();
+      const a0 = -2.2 + hash(seed);
+      const end = a0 + (Math.PI * 2 + 0.45) * amount;
+      for (let a = a0; a <= end; a += 0.12) {
+        const k = 1 + 0.08 * Math.sin(a * 2 + seed) + (a - a0) * 0.012;
+        const px = x + Math.cos(a) * rx * k;
+        const py = y + Math.sin(a) * ry * k;
+        if (a === a0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    };
+    const tick = (x: number, y: number, s: number, amount: number) => {
+      if (amount <= 0) return;
+      ctx.beginPath();
+      ctx.moveTo(x - s, y);
+      const a = Math.min(1, amount * 2);
+      ctx.lineTo(x - s + s * 0.8 * a, y + s * 0.8 * a);
+      if (amount > 0.5) {
+        const b = (amount - 0.5) * 2;
+        ctx.lineTo(x - s * 0.2 + s * 1.4 * b, y + s * 0.8 - s * 1.6 * b);
+      }
+      ctx.stroke();
+    };
+
+    // ---------- path segments ----------
+    const flowX = (i: number) => st.flow + (i - 1) * st.flowGap;
+    const boardPoint = (i: number) => {
+      const n = 7;
+      const px = board.x - board.w / 2 + 12 + ((board.w - 24) * i) / (n - 1);
+      const py = board.y + board.h / 2 - 12 - (board.h - 30) * points[i];
+      return [px, py];
+    };
+    const segPoint = (k: Packet): [number, number] => {
+      const p = k.p;
+      const e = p * p * (3 - 2 * p);
+      const quad = (ax: number, ay: number, cx: number, cy: number, bx: number, by: number): [number, number] => [
+        (1 - e) * (1 - e) * ax + 2 * (1 - e) * e * cx + e * e * bx,
+        (1 - e) * (1 - e) * ay + 2 * (1 - e) * e * cy + e * e * by,
+      ];
+      switch (k.seg) {
+        case 0:
+          return quad(k.sx, k.sy, k.sx + 30, bandY + 10, st.integ - 30, bandY);
+        case 1:
+          return [st.integ + 30 + (st.ai - 30 - st.integ - 30) * e, bandY];
+        case 2:
+          return [st.ai + 26 + (flowX(0) - st.ai - 26) * e, bandY];
+        case 3:
+        case 4: {
+          const a = flowX(k.seg - 3);
+          return [a + (flowX(k.seg - 2) - a) * e, bandY];
+        }
+        default: {
+          const [bx, by] = boardPoint(Math.min(points.length, 6));
+          return !wide
+            ? quad(flowX(2), bandY, (flowX(2) + bx) / 2, bandY - 10, bx, by)
+            : quad(flowX(2) + 12, bandY, bx - 10, bandY, bx, by);
+        }
+      }
+    };
+    const arrive = (k: Packet) => {
+      if (k.seg === 0) rows = (rows % 4) + 1;
+      if (k.seg === 1) aiGlow = 1;
+      if (k.seg >= 2 && k.seg <= 4) ticks[k.seg - 2] = 1;
+      if (k.seg === 5) {
+        const prev = points[points.length - 1];
+        const v = Math.max(0.12, Math.min(0.92, (prev > 0.84 ? 0.3 : prev) + (hash(seedN * 9.1) - 0.25) * 0.24));
+        points.push(v);
+        if (points.length > 7) {
+          points = points.slice(-7);
+          if (opp >= 0) opp--;
+        }
+        // Circle the biggest jump as the opportunity, then tick the decision.
+        let best = -1;
+        let gain = 0.06;
+        for (let i = 1; i < points.length; i++)
+          if (points[i] - points[i - 1] > gain) {
+            gain = points[i] - points[i - 1];
+            best = i;
+          }
+        if (best !== opp) {
+          opp = best;
+          oppDraw = 0;
+          decision = 0;
+        }
+      }
+    };
+
+    // ---------- drawing ----------
+    const drawScrap = (s: Scrap, x: number, y: number, scale: number, alpha: number, hot: boolean) => {
       ctx.save();
       ctx.translate(x, y);
-      ctx.rotate(rot);
-      ctx.beginPath();
-      for (let i = 0; i < 4; i++) {
-        const a = (i * Math.PI) / 2;
-        const b = a + Math.PI / 4;
-        const px = Math.cos(a) * r;
-        const py = Math.sin(a) * r;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-        ctx.quadraticCurveTo(Math.cos(b) * r * 0.16, Math.sin(b) * r * 0.16, Math.cos(a + Math.PI / 2) * r, Math.sin(a + Math.PI / 2) * r);
+      ctx.rotate(s.rot + (hot ? Math.sin(clock * 12) * 0.06 : 0));
+      ctx.scale(scale, scale);
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = `rgba(${ink},0.75)`;
+      ctx.lineWidth = 1.2;
+      const sd = s.seed * 100;
+      if (s.kind === 0) {
+        ctx.fillStyle = `rgba(${hot ? clay : ink},0.8)`;
+        ctx.font = `500 ${compact ? 10 : 12}px ui-monospace, Menlo, Consolas, monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(s.text, 0, 0);
+      } else if (s.kind === 1) {
+        rect(-20, -12, 40, 24, sd, paper);
+        ctx.beginPath();
+        line(-20, 0, 20, 0, sd + 40, 0.8);
+        line(-7, -12, -7, 12, sd + 50, 0.8);
+        line(6, -12, 6, 12, sd + 60, 0.8);
+        ctx.stroke();
+      } else if (s.kind === 2) {
+        rect(-14, -14, 28, 28, sd, `rgba(${clay},0.22)`);
+        ctx.beginPath();
+        line(-9, -5, 8, -5, sd + 40, 1.2);
+        line(-9, 1, 5, 1, sd + 50, 1.2);
+        line(-9, 7, 7, 7, sd + 60, 1.2);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = `rgba(${ink},0.6)`;
+        for (let i = 0; i < 6; i++) {
+          ctx.beginPath();
+          ctx.arc((hash(sd + i) - 0.5) * 30, (hash(sd + i + 9) - 0.5) * 20, 2 + hash(sd + i + 3) * 1.6, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
-      ctx.closePath();
       ctx.restore();
+      ctx.globalAlpha = 1;
     };
 
-    const drawCard = (o: Output, x: number, y: number, alpha: number) => {
-      const w = compact ? 64 : 92;
-      const h = compact ? 42 : 58;
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = card;
-      ctx.strokeStyle = `rgba(${accent},0.45)`;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.roundRect(x - w / 2, y - h / 2, w, h, 6);
-      ctx.fill();
-      ctx.stroke();
-      const pad = compact ? 8 : 11;
-      const ix = x - w / 2 + pad;
-      const iy = y - h / 2 + pad;
-      const iw = w - pad * 2;
-      const ih = h - pad * 2;
-      const grow = Math.min(1, o.age * 1.5);
-      ctx.fillStyle = `rgba(${accent},0.85)`;
-      ctx.strokeStyle = `rgba(${accent},0.85)`;
-      if (o.kind === 0) {
-        // Bar chart
-        for (let i = 0; i < 4; i++) {
-          const v = 0.35 + 0.6 * Math.abs(Math.sin(o.seed + i * 1.7));
-          const bw = iw / 4 - 3;
-          ctx.fillRect(ix + i * (iw / 4), iy + ih * (1 - v * grow), bw, ih * v * grow);
-        }
-      } else if (o.kind === 1) {
-        // Trend line with end dot
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        const n = 6;
-        let ex = ix;
-        let ey = iy + ih;
-        for (let i = 0; i <= n * grow; i++) {
-          ex = ix + (iw * i) / n;
-          ey = iy + ih * (0.85 - (i / n) * 0.6 + 0.15 * Math.sin(o.seed + i * 2.1));
-          if (i === 0) ctx.moveTo(ex, ey);
-          else ctx.lineTo(ex, ey);
-        }
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(ex, ey, 2.6, 0, Math.PI * 2);
-        ctx.fill();
-      } else {
-        // Donut
-        const cx = x - w / 2 + pad + ih / 2;
-        const cy = y;
-        const r = ih / 2;
-        ctx.lineWidth = compact ? 4 : 6;
-        ctx.strokeStyle = `rgba(${accent},0.18)`;
-        ctx.beginPath();
-        ctx.arc(cx, cy, r - 3, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.strokeStyle = `rgba(${accent},0.85)`;
-        ctx.beginPath();
-        ctx.arc(cx, cy, r - 3, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * 0.68 * grow);
-        ctx.stroke();
-        ctx.fillStyle = `rgba(${ink},0.25)`;
-        for (let i = 0; i < 2; i++) ctx.fillRect(cx + r + 6, cy - 7 + i * 10, (iw - ih - 6) * (i ? 0.6 : 0.9), 3);
-      }
-      ctx.globalAlpha = 1;
+    const caption = (text: string, x: number, y: number, hot: boolean) => {
+      const zh = langRef.current === 'zh';
+      ctx.font = zh
+        ? `${hot ? 600 : 500} ${compact ? 11 : 13}px 'Noto Serif SC', serif`
+        : `italic ${compact ? 13 : 17}px 'Instrument Serif', serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = hot ? `rgb(${clay})` : `rgba(${ink},0.7)`;
+      ctx.fillText(text, x, y);
     };
 
     const draw = (dt: number) => {
       ctx.clearRect(0, 0, W, H);
-      const t = performance.now() / 1000;
+      const cap = captions[langRef.current === 'zh' ? 'zh' : 'en'][compact ? 'short' : 'full'];
+      const capY = bandY + (compact ? 26 : 34);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
 
-      // Faint guide curves: left → spark → right.
-      ctx.strokeStyle = `rgba(${accent},0.12)`;
-      ctx.lineWidth = 1;
-      ctx.setLineDash([3, 6]);
+      // Dashed pen path joining the stations.
+      ctx.strokeStyle = `rgba(${ink},0.22)`;
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([2, 6]);
       ctx.beginPath();
-      ctx.moveTo(W * 0.16, H * 0.5);
-      ctx.quadraticCurveTo(W * 0.22, spark.y, spark.x - 30, spark.y);
-      ctx.moveTo(spark.x + 30, spark.y);
-      ctx.quadraticCurveTo(W * 0.78, spark.y, W * 0.84, H * 0.45);
+      line(st.integ + 34, bandY, st.ai - 30, bandY, 901, 2);
+      line(st.ai + 30, bandY, flowX(0) - 14, bandY, 911, 2);
+      if (wide) {
+        ctx.moveTo(flowX(2) + 14, bandY);
+        ctx.quadraticCurveTo(board.x - 10, bandY, board.x - 10, board.y + board.h / 2 + 4);
+      } else {
+        line(flowX(2) + 10, bandY, board.x - board.w / 2 - 4, bandY, 921, 2);
+      }
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Raw data fragments
+      // 1. Scattered data
+      for (const s of scraps) {
+        const bx = s.x + Math.sin(clock * 0.5 + s.seed) * 5;
+        const by = s.y + Math.cos(clock * 0.45 + s.seed * 1.7) * 4;
+        const d = m.on ? Math.hypot(bx + s.dx - m.x, by + s.dy - m.y) : 999;
+        if (d < 80) {
+          const f = (80 - d) / 80;
+          s.dx += ((bx + s.dx - m.x) / (d || 1)) * f * 60 * dt;
+          s.dy += ((by + s.dy - m.y) / (d || 1)) * f * 60 * dt;
+        }
+        s.dx *= Math.exp(-dt * 1.2);
+        s.dy *= Math.exp(-dt * 1.2);
+        const fade = Math.min(1, (clock - s.born) / 0.8);
+        drawScrap(s, bx + s.dx, by + s.dy, compact ? 0.75 : 1, fade * 0.85, d < 34);
+      }
+      caption(cap[0], st.data, capY, hoverStation === 0);
+
+      // 2. Integrate: a table that fills row by row.
+      const tw = compact ? 40 : 64;
+      const th = compact ? 30 : 46;
+      blob(st.integ, bandY, compact ? 26 : 40, 11, hoverStation === 1 ? 0.26 : 0.14);
+      ctx.strokeStyle = `rgba(${ink},0.85)`;
+      ctx.lineWidth = 1.3;
+      rect(st.integ - tw / 2, bandY - th / 2, tw, th, 21, paper);
+      ctx.fillStyle = `rgba(${sage},0.85)`;
+      ctx.fillRect(st.integ - tw / 2 + 2, bandY - th / 2 + 2, tw - 4, th / 5 - 1);
+      for (let i = 0; i < 4; i++) {
+        const ry = bandY - th / 2 + (th / 5) * (i + 1) + th / 10;
+        if (i < rows) {
+          ctx.fillStyle = `rgba(${sage},0.35)`;
+          ctx.fillRect(st.integ - tw / 2 + 5, ry - 1.5, (tw - 10) * (0.5 + 0.45 * hash(i + rows * 3)), 3);
+        }
+      }
+      caption(cap[1], st.integ, capY, hoverStation === 1);
+
+      // 3. AI: a hand-drawn chip, glowing while it processes.
+      aiGlow *= Math.exp(-dt * 1.6);
+      const cs = compact ? 30 : 46;
+      blob(st.ai, bandY, (compact ? 26 : 40) * (1 + 0.15 * aiGlow), 31, (hoverStation === 2 ? 0.3 : 0.2) + aiGlow * 0.25);
+      ctx.strokeStyle = `rgba(${ink},0.85)`;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      for (let i = 0; i < 3; i++) {
+        const o = -cs / 4 + (i * cs) / 4;
+        line(st.ai + o, bandY - cs / 2, st.ai + o, bandY - cs / 2 - 6, 40 + i, 0.6);
+        line(st.ai + o, bandY + cs / 2, st.ai + o, bandY + cs / 2 + 6, 50 + i, 0.6);
+        line(st.ai - cs / 2, bandY + o, st.ai - cs / 2 - 6, bandY + o, 60 + i, 0.6);
+        line(st.ai + cs / 2, bandY + o, st.ai + cs / 2 + 6, bandY + o, 70 + i, 0.6);
+      }
+      ctx.stroke();
+      rect(st.ai - cs / 2, bandY - cs / 2, cs, cs, 81, paper);
+      ctx.fillStyle = aiGlow > 0.3 ? `rgb(${clay})` : `rgb(${ink})`;
+      ctx.font = `italic ${compact ? 15 : 22}px 'Instrument Serif', serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.font = `500 ${compact ? 10 : 12}px ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace`;
-      const next: Token[] = [];
-      for (const k of tokens) {
-        k.age += dt;
-        if (k.pull === 0 && k.age > k.life) {
-          k.pull = 0.0001;
-          k.sx = k.x;
-          k.sy = k.y;
-        }
-        let x: number;
-        let y: number;
-        let a: number;
-        let s = 1;
-        if (k.pull > 0) {
-          k.pull += dt * (0.55 + hover * 0.9);
-          if (k.pull >= 1) {
-            absorbed++;
-            glow = 1;
-            if (absorbed % 3 === 0) emit();
-            continue;
-          }
-          const p = k.pull * k.pull;
-          const cx = (k.sx + spark.x) / 2;
-          const cy = Math.max(k.sy, spark.y) + 20;
-          x = (1 - p) * (1 - p) * k.sx + 2 * (1 - p) * p * cx + p * p * spark.x;
-          y = (1 - p) * (1 - p) * k.sy + 2 * (1 - p) * p * cy + p * p * spark.y;
-          a = 0.55 * (1 - p) + 0.15;
-          s = 1 - 0.6 * p;
-        } else {
-          x = k.x + Math.sin(t * 0.6 + k.phase) * 6;
-          y = k.y + Math.cos(t * 0.5 + k.phase) * 5;
-          a = Math.min(1, k.age / 0.8) * 0.5;
-        }
-        const near = m.on && Math.hypot(x - m.x, y - m.y) < 70;
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(k.pull > 0 ? k.rot * (1 - k.pull) : k.rot);
-        ctx.scale(s, s);
-        if (k.text) {
-          ctx.fillStyle = near || k.pull > 0 ? `rgba(${accent},${Math.min(1, a + 0.3)})` : `rgba(${ink},${a})`;
-          ctx.fillText(k.text, 0, 0);
-        } else {
-          ctx.strokeStyle = near || k.pull > 0 ? `rgba(${accent},${a + 0.2})` : `rgba(${ink},${a * 0.8})`;
-          ctx.lineWidth = 1;
-          for (let r = 0; r < 2; r++)
-            for (let c = 0; c < 3; c++) ctx.strokeRect(-24 + c * 16, -10 + r * 10, 16, 10);
-        }
-        ctx.restore();
-        next.push(k);
+      ctx.fillText('AI', st.ai, bandY + 1);
+      if (aiGlow > 0.05) {
+        ctx.strokeStyle = `rgba(${clay},${aiGlow * 0.6})`;
+        ctx.lineWidth = 1.2;
+        loop(st.ai, bandY, cs * (1.2 - aiGlow * 0.4), cs * (0.95 - aiGlow * 0.3), 7);
       }
-      tokens = next;
+      caption(cap[2], st.ai, capY, hoverStation === 2);
 
-      // Insight cards flying out to the right
-      const outs: Output[] = [];
-      for (const o of outputs) {
-        o.age += dt;
-        o.t = Math.min(1, o.t + dt * 0.8);
-        const e = 1 - Math.pow(1 - o.t, 3);
-        const cx = (spark.x + o.tx) / 2 + 40;
-        const cy = Math.max(spark.y, o.ty) + 10;
-        const x = (1 - e) * (1 - e) * spark.x + 2 * (1 - e) * e * cx + e * e * o.tx;
-        const y = (1 - e) * (1 - e) * spark.y + 2 * (1 - e) * e * cy + e * e * o.ty;
-        const fade = o.age > 6 ? Math.max(0, 1 - (o.age - 6) / 1.2) : Math.min(1, o.t * 2);
-        if (fade <= 0) continue;
-        drawCard(o, x, y, fade * 0.95);
-        outs.push(o);
+      // 4. Workflow: three steps that tick as work passes through.
+      const bs = compact ? 14 : 22;
+      blob(st.flow, bandY, compact ? 30 : 58, 51, hoverStation === 3 ? 0.24 : 0.12);
+      for (let i = 0; i < 3; i++) {
+        ticks[i] *= Math.exp(-dt * 0.9);
+        const x = flowX(i);
+        ctx.strokeStyle = `rgba(${ink},0.85)`;
+        ctx.lineWidth = 1.3;
+        rect(x - bs / 2, bandY - bs / 2, bs, bs, 91 + i * 7, ticks[i] > 0.1 ? `rgba(${sage},${0.15 + ticks[i] * 0.3})` : paper);
+        if (i < 2) {
+          ctx.beginPath();
+          line(x + bs / 2 + 3, bandY, flowX(i + 1) - bs / 2 - 3, bandY, 120 + i, 0.8);
+          ctx.moveTo(flowX(i + 1) - bs / 2 - 7, bandY - 3);
+          ctx.lineTo(flowX(i + 1) - bs / 2 - 3, bandY);
+          ctx.lineTo(flowX(i + 1) - bs / 2 - 7, bandY + 3);
+          ctx.stroke();
+        }
+        if (ticks[i] > 0.05) {
+          ctx.strokeStyle = `rgba(${sage},${Math.min(1, ticks[i] * 1.6)})`;
+          ctx.lineWidth = 1.8;
+          tick(x, bandY, bs * 0.28, Math.min(1, (1 - ticks[i]) * 6 + 0.2));
+        }
       }
-      outputs = outs;
+      caption(cap[3], st.flow, capY, hoverStation === 3);
 
-      // The spark
-      glow *= Math.exp(-dt * 2.5);
-      const pulse = 0.5 + 0.5 * Math.sin(t * 1.6);
-      const R = (compact ? 13 : 17) * (1 + 0.12 * glow + 0.12 * hover);
-      const halo = ctx.createRadialGradient(spark.x, spark.y, 0, spark.x, spark.y, R * 3.4);
-      halo.addColorStop(0, `rgba(${accent},${0.22 + 0.2 * glow + 0.08 * pulse})`);
-      halo.addColorStop(1, `rgba(${accent},0)`);
-      ctx.fillStyle = halo;
+      // 5. Insight board: trend with a confidence band, a circled opportunity, a ticked decision.
+      const bx0 = board.x - board.w / 2;
+      const by0 = board.y - board.h / 2;
+      blob(board.x, board.y, Math.max(board.w, board.h) * 0.55, 71, hoverStation === 4 ? 0.22 : 0.1);
+      ctx.strokeStyle = `rgba(${ink},0.85)`;
+      ctx.lineWidth = 1.3;
+      rect(bx0, by0, board.w, board.h, 131, paper);
+      const pts = points.map((_, i) => boardPoint(i));
+      if (!compact) {
+        ctx.fillStyle = `rgba(${clay},0.16)`;
+        ctx.beginPath();
+        pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y - 7 - i) : ctx.moveTo(x, y - 7)));
+        for (let i = pts.length - 1; i >= 0; i--) ctx.lineTo(pts[i][0], pts[i][1] + 7 + i);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = `rgba(${ink},0.35)`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        line(bx0 + 10, by0 + board.h - 10, bx0 + board.w - 8, by0 + board.h - 10, 141, 0.8);
+        line(bx0 + 10, by0 + 10, bx0 + 10, by0 + board.h - 10, 151, 0.8);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `rgb(${sage})`;
+      ctx.lineWidth = compact ? 1.4 : 1.8;
       ctx.beginPath();
-      ctx.arc(spark.x, spark.y, R * 3.4, 0, Math.PI * 2);
+      pts.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
+      ctx.stroke();
+      ctx.fillStyle = `rgb(${sage})`;
+      const [lx, ly] = pts[pts.length - 1];
+      ctx.beginPath();
+      ctx.arc(lx, ly, compact ? 2 : 3, 0, Math.PI * 2);
       ctx.fill();
-      const rot = reduce ? 0 : t * 0.25;
-      star(spark.x, spark.y, R, rot);
-      ctx.fillStyle = `rgb(${accent})`;
-      ctx.fill();
-      star(spark.x + R * 1.05, spark.y - R * 1.05, R * 0.38, -rot);
-      ctx.fill();
+      if (opp >= 0 && opp < pts.length) {
+        oppDraw = Math.min(1, oppDraw + dt * 1.2);
+        ctx.strokeStyle = `rgb(${clay})`;
+        ctx.lineWidth = compact ? 1.3 : 1.8;
+        loop(pts[opp][0], pts[opp][1], compact ? 7 : 13, compact ? 6 : 10, opp * 13, oppDraw);
+        if (oppDraw >= 1) decision = Math.min(1, decision + dt * 1.4);
+        // Decision mark in the board's corner.
+        const dx = bx0 + board.w - (compact ? 9 : 16);
+        const dy = by0 + (compact ? 9 : 16);
+        ctx.strokeStyle = `rgba(${clay},${decision})`;
+        ctx.lineWidth = 1.3;
+        if (decision > 0) loop(dx, dy, compact ? 6 : 10, compact ? 6 : 10, 3, Math.min(1, decision * 1.3));
+        ctx.lineWidth = compact ? 1.4 : 1.8;
+        tick(dx, dy, compact ? 3 : 5, decision);
+      }
+      caption(cap[4], board.x, wide ? by0 + board.h + 12 : Math.max(capY, by0 + board.h + 6), hoverStation === 4);
+
+      // Moving work items
+      const speed = [0.55, 0.9, 1.2, 2.2, 2.2, 0.8];
+      const nextPackets: Packet[] = [];
+      for (const k of packets) {
+        k.p += dt * speed[k.seg] * (compact ? 1.2 : 1);
+        if (k.p >= 1) {
+          arrive(k);
+          k.seg++;
+          k.p = 0;
+          if (k.seg > 5) continue;
+        }
+        const [x, y] = segPoint(k);
+        if (k.seg === 0 && k.scrap) {
+          drawScrap(k.scrap, x, y, (compact ? 0.75 : 1) * (1 - 0.6 * k.p), 0.85, false);
+        } else if (k.seg === 1) {
+          ctx.fillStyle = `rgba(${sage},0.85)`;
+          ctx.beginPath();
+          ctx.roundRect(x - 7, y - 3, 14, 6, 2);
+          ctx.fill();
+        } else {
+          ctx.fillStyle = `rgb(${clay})`;
+          ctx.beginPath();
+          ctx.arc(x, y, compact ? 2.6 : 3.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        nextPackets.push(k);
+      }
+      packets = nextPackets;
     };
+
+    const stations = () => [
+      [st.data, compact ? bandY - 26 : H * 0.44],
+      [st.integ, bandY],
+      [st.ai, bandY],
+      [st.flow, bandY],
+      [board.x, board.y],
+    ];
+
 
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
-      // Allow larger steps so throttled tabs still progress (normal 60fps is unaffected).
+      // Larger steps are allowed so throttled tabs still progress.
       const dt = Math.min(0.25, (now - last) / 1000);
       last = now;
       if (!visible) return;
-      spawnClock += dt;
-      if (spawnClock > 0.5) {
-        spawnClock = 0;
+      clock += dt;
+      releaseClock += dt;
+      if (releaseClock > 1.7) {
+        releaseClock = 0;
+        if (scraps.length > (compact ? 2 : 4)) release(scraps[0]);
         spawn();
       }
-      const d = m.on ? Math.hypot(m.x - spark.x, m.y - spark.y) : 999;
-      hover += ((d < 70 ? 1 : 0) - hover) * Math.min(1, dt * 6);
-      canvas.parentElement?.toggleAttribute('data-hot', d < 70);
+      if (scraps.length < (compact ? 3 : 5)) spawn();
+      hoverStation = -1;
+      if (m.on)
+        stations().forEach(([x, y], i) => {
+          if (i > 0 && Math.hypot(m.x - x, m.y - y) < (compact ? 28 : 44)) hoverStation = i;
+        });
+      canvas.parentElement?.toggleAttribute('data-hot', hoverStation > 0 || nearScrap() !== null);
       draw(dt);
+    };
+
+    const nearScrap = (force = false) => {
+      if (!m.on && !force) return null;
+      let best: Scrap | null = null;
+      let bd = 34;
+      for (const s of scraps) {
+        const d = Math.hypot(s.x + s.dx - m.x, s.y + s.dy - m.y);
+        if (d < bd) {
+          bd = d;
+          best = s;
+        }
+      }
+      return best;
     };
 
     const move = (e: PointerEvent) => {
@@ -311,12 +559,16 @@ export default function HeroAI() {
     };
     const click = (e: PointerEvent) => {
       if ((e.target as Element).closest('a,button,input,select')) return;
-      for (const k of tokens)
-        if (k.pull === 0) {
-          k.pull = 0.0001;
-          k.sx = k.x;
-          k.sy = k.y;
-        }
+      const r = canvas.getBoundingClientRect();
+      m.x = e.clientX - r.left;
+      m.y = e.clientY - r.top;
+      const s = nearScrap(true);
+      if (s) {
+        release(s);
+        return;
+      }
+      // Anywhere else: send everything through, staggered.
+      scraps.forEach((k, i) => setTimeout(() => scraps.includes(k) && release(k), i * 160));
     };
 
     const io = new IntersectionObserver(([e]) => {
@@ -324,19 +576,21 @@ export default function HeroAI() {
     });
     const ro = new ResizeObserver(() => {
       layout();
+      scraps = [];
+      packets = [];
+      for (let i = 0; i < (compact ? 4 : 7); i++) spawn();
+      scraps.forEach((s) => (s.born = -1));
       if (reduce) draw(0);
     });
     layout();
-    for (let i = 0; i < (compact ? 7 : 12); i++) spawn(true);
     io.observe(canvas);
     ro.observe(canvas);
     if (reduce) {
-      emit();
-      emit();
-      outputs.forEach((o) => {
-        o.t = 1;
-        o.age = 2;
-      });
+      rows = 3;
+      points = [0.22, 0.3, 0.27, 0.38, 0.58, 0.62, 0.7];
+      opp = 4;
+      oppDraw = 1;
+      decision = 1;
       draw(0);
     } else {
       addEventListener('pointermove', move, { passive: true });
