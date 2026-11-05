@@ -25,7 +25,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import HeroAI from './hero-ai';
-import SkillTree from './skill-tree';
+import SkillPainting from './skill-painting';
 import ProjectPreview from './project-preview';
 import ProcessMap from './process-map';
 import { useLang } from './language';
@@ -246,7 +246,7 @@ function Home() {
 
           <section id="experience" className="split section ruled">
             <aside className="lens-col">
-              <SkillTree />
+              <SkillPainting />
             </aside>
             <div>
               <h2 className="h2 exp-title" data-reveal="0">
