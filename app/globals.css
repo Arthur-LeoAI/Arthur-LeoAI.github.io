@@ -3193,7 +3193,7 @@ footer[id] {
   color: var(--accent);
 }
 
-/* Oil-paint study beside Experience, with the skills listed under it */
+/* Van Gogh's Sunflowers beside Experience, with the skills listed under it */
 .lens-col .skill-painting {
   position: sticky;
   top: 96px;
@@ -3206,16 +3206,18 @@ footer[id] {
 }
 .painting {
   width: 100%;
-  aspect-ratio: 4 / 5;
   border-radius: 4px;
   overflow: hidden;
   background: var(--surface);
 }
-.painting canvas {
+.painting img {
   display: block;
   width: 100%;
-  height: 100%;
-  cursor: pointer;
+  height: auto;
+  transition: transform 1.2s var(--ease);
+}
+.painting:hover img {
+  transform: scale(1.04);
 }
 .skill-painting figcaption {
   display: flex;

@@ -668,7 +668,7 @@ export const skills: Record<Lang, [string, string][]> = {
 };
 
 /**
- * Skills listed under the oil-paint study beside Experience. Chosen from what BA, implementation, marketing-analytics
+ * Skills listed under the Sunflowers painting beside Experience. Chosen from what BA, implementation, marketing-analytics
  * and applied-AI job postings ask for most (SQL, Python, data analysis and visualisation, process
  * work, LLM integration, workflow automation), limited to skills the owner's experience or projects
  * show. `core` marks the most-requested ones (listed first, larger). Market-demanded skills without evidence
@@ -973,12 +973,12 @@ export const ui = {
       zh: '核心技能',
     },
     note: {
-      en: 'Oil study, painted in code · click to repaint',
-      zh: '用代码绘制的油画习作 · 点击重新作画',
+      en: 'Vincent van Gogh, Sunflowers, 1888 · National Gallery, London',
+      zh: '文森特·梵高，《向日葵》，1888 年 · 伦敦国家美术馆',
     },
-    repaint: {
-      en: 'Click to repaint',
-      zh: '点击重新作画',
+    alt: {
+      en: 'Vincent van Gogh, Sunflowers (1888): a vase of fifteen sunflowers against a yellow wall',
+      zh: '梵高《向日葵》（1888）：黄色背景前插着十五朵向日葵的花瓶',
     },
   },
   readResume: {
