@@ -541,9 +541,12 @@ export const experience: {
   /** Tools named in this role's points or linked case; shown as tags. */
   tools: string[];
   project: string | null;
+  /** Caption on this role's illustrated frame beside the timeline (year · place). */
+  frame: Text;
 }[] = [
   {
     date: { en: 'May 2026 — Present', zh: '2026.05 — 至今' },
+    frame: { en: '2026 · Shenzhen', zh: '2026 · 深圳' },
     role: {
       en: 'Cross-border E-commerce Operations',
       zh: '跨境电商运营',
@@ -569,6 +572,7 @@ export const experience: {
   },
   {
     date: { en: 'Jan — Apr 2026', zh: '2026.01 — 2026.04' },
+    frame: { en: '2026 · Shenzhen', zh: '2026 · 深圳' },
     role: { en: 'Data Platform Full-stack Engineer', zh: '数据平台全栈工程师' },
     org: { en: 'Sun Yat-sen University · Shenzhen', zh: '中山大学 · 深圳' },
     points: {
@@ -588,6 +592,7 @@ export const experience: {
   },
   {
     date: { en: 'May — Sep 2025', zh: '2025.05 — 2025.09' },
+    frame: { en: '2025 · Cork, Ireland', zh: '2025 · 爱尔兰科克' },
     role: {
       en: 'Data Analyst & Research Assistant',
       zh: '数据分析师 / 研究助理',
@@ -938,29 +943,7 @@ export const ui = {
     en: 'About me ↓',
     zh: '关于我 ↓',
   },
-  skillArt: {
-    kicker: {
-      en: 'How I work with AI',
-      zh: '我如何用 AI',
-    },
-    // The painting itself is the point: an old masterpiece, rebuilt live by code.
-    statement: {
-      en: 'I use AI as a tool to build workflows that create real value.',
-      zh: '用 AI 做工具，搭建真正创造价值的工作流。',
-    },
-    keywords: {
-      en: ['AI tools', 'Workflow automation', 'Data analysis', 'Process design'],
-      zh: ['AI 工具', '工作流自动化', '数据分析', '流程设计'],
-    },
-    repaint: {
-      en: 'Click to repaint',
-      zh: '点击重新作画',
-    },
-    alt: {
-      en: 'Vincent van Gogh, Sunflowers (1888): a vase of fifteen sunflowers against a yellow wall',
-      zh: '梵高《向日葵》（1888）：黄色背景前插着十五朵向日葵的花瓶',
-    },
-  },
+
   readResume: {
     en: 'View résumé →',
     zh: '查看简历 →',
