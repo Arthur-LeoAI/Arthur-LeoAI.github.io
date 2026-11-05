@@ -3193,24 +3193,37 @@ footer[id] {
   color: var(--accent);
 }
 
-/* Experience: one hand-inked frame per role beside the timeline */
-.exp-frames {
-  position: sticky;
-  top: 110px;
-  aspect-ratio: 4 / 3;
+/* Experience: one hand-inked frame per role, beside its own role */
+.exp-section {
+  --exp-cols: minmax(220px, 0.9fr) minmax(100px, 0.42fr) minmax(0, 1.75fr);
 }
-.exp-frame {
-  position: absolute;
-  inset: 0;
+.exp-head {
+  display: grid;
+  grid-template-columns: var(--exp-cols);
+  column-gap: clamp(20px, 3vw, 40px);
+}
+.exp-head .exp-title {
+  grid-column: 2 / -1;
+}
+#experience .exp-row {
+  grid-template-columns: var(--exp-cols);
+  column-gap: clamp(20px, 3vw, 40px);
+  align-items: start;
+}
+/* Each frame settles in from a slight tilt when it scrolls into view, then draws itself. */
+.exp-scene {
+  transform: translateY(18px) rotate(-2.5deg) scale(0.97);
   opacity: 0;
-  transform: translateY(10px) rotate(-0.6deg);
   transition:
-    opacity 0.5s var(--ease),
-    transform 0.6s var(--ease);
+    transform 0.9s cubic-bezier(0.2, 0.9, 0.25, 1.15),
+    opacity 0.5s ease;
 }
-.exp-frame[data-active] {
-  opacity: 1;
+.exp-scene[data-drawn] {
   transform: none;
+  opacity: 1;
+}
+.exp-row:hover .exp-scene[data-drawn] {
+  transform: rotate(-0.6deg) translateY(-3px);
 }
 .exp-scene {
   display: block;
@@ -3282,17 +3295,17 @@ footer[id] {
 .exp-scene .dots {
   opacity: 0;
 }
-.exp-scene[data-active] .ink {
-  animation: exp-draw 1.4s var(--ease) forwards;
+.exp-scene[data-drawn] .ink {
+  animation: exp-draw 1.5s var(--ease) 0.35s forwards;
 }
-.exp-scene[data-active] .wash:not(.paper),
-.exp-scene[data-active] .dot,
-.exp-scene[data-active] .pin circle,
-.exp-scene[data-active] .frame-note {
-  animation: exp-fade 0.6s ease 0.7s forwards;
+.exp-scene[data-drawn] .wash:not(.paper),
+.exp-scene[data-drawn] .dot,
+.exp-scene[data-drawn] .pin circle,
+.exp-scene[data-drawn] .frame-note {
+  animation: exp-fade 0.6s ease 1.1s forwards;
 }
-.exp-scene[data-active] .dots {
-  animation: exp-dots 0.6s ease 0.7s forwards;
+.exp-scene[data-drawn] .dots {
+  animation: exp-dots 0.6s ease 1.1s forwards;
 }
 @keyframes exp-draw {
   to {
@@ -3322,36 +3335,54 @@ footer[id] {
   .exp-scene .dots {
     opacity: 0.55;
   }
-  .exp-scene[data-active] * {
+  .exp-scene * {
     animation: none !important;
   }
+  .exp-scene {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
 }
-/* The role currently shown in the frame */
-#experience .exp-row {
-  transition: opacity 0.4s var(--ease);
-}
-#experience .exp-row[data-current] .exp-date {
-  color: #c96442;
-}
-#experience .exp-row[data-current] h3 {
-  color: var(--accent);
-}
-/* Narrow screens: no sticky frame; each role shows its own frame above its text. */
-.exp-frame-inline {
-  display: none;
+/* Narrower screens: date sits above the role; phones stack the frame on top. */
+@media (max-width: 1100px) {
+  .exp-section {
+    --exp-cols: minmax(200px, 0.9fr) minmax(0, 1.6fr);
+  }
+  #experience .exp-row {
+    grid-template-areas:
+      'frame date'
+      'frame body';
+    grid-template-rows: auto 1fr;
+  }
+  .exp-frame {
+    grid-area: frame;
+  }
+  #experience .exp-date {
+    grid-area: date;
+  }
+  .exp-body {
+    grid-area: body;
+  }
 }
 @media (max-width: 760px) {
-  #experience .lens-col {
-    display: none;
+  .exp-section {
+    --exp-cols: minmax(0, 1fr);
   }
-  .exp-frame-inline {
-    display: block;
+  .exp-head .exp-title {
+    grid-column: 1;
+  }
+  #experience .exp-row {
+    grid-template-areas:
+      'frame'
+      'date'
+      'body';
+    grid-template-rows: auto;
+    row-gap: 8px;
+  }
+  .exp-frame {
     max-width: 420px;
-    margin-bottom: 14px;
-  }
-  /* Inline frames draw in when their role scrolls into view. */
-  .exp-row:not([data-seen]) .exp-frame-inline .exp-scene .ink {
-    animation: none;
+    margin-bottom: 8px;
   }
 }
 

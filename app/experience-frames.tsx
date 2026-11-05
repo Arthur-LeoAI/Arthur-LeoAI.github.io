@@ -1,12 +1,11 @@
 'use client';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import { experience } from '@/lib/content';
 import { useLang } from './language';
 
-// One hand-inked frame per role in Experience. On wide screens a single sticky frame sits
-// beside the timeline and switches (drawing itself in) as each role reaches the middle of
-// the screen; on narrow screens each role shows its own small frame above the text.
-// The drawings only show the kind of work; facts and numbers stay in the text.
+// One hand-inked frame per role in Experience, always shown beside (or, on narrow screens,
+// above) its role. When the role scrolls into view the frame settles in from a slight tilt
+// and draws itself. The drawings only show the kind of work; facts stay in the text.
 
 const ink = { pathLength: 1, className: 'ink' } as const;
 
@@ -130,14 +129,34 @@ function SceneDecision() {
 
 const scenes = [SceneEcommerce, SceneDataPlatform, SceneDecision];
 
-export function ExperienceScene({ index, active = true }: { index: number; active?: boolean }) {
+export default function ExperienceScene({ index }: { index: number }) {
   const { t } = useLang();
   const id = useId().replace(/:/g, '');
   const Scene = scenes[index];
   const caption = experience[index]?.frame;
+  const ref = useRef<SVGSVGElement>(null);
+  // Draw the frame once it is well inside the viewport (at once under reduced motion).
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.setAttribute('data-drawn', '');
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        el.setAttribute('data-drawn', '');
+        io.disconnect();
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   if (!Scene) return null;
   return (
-    <svg className="exp-scene" viewBox="0 0 400 300" data-active={active ? '' : undefined} aria-hidden="true">
+    <svg ref={ref} className="exp-scene" viewBox="0 0 400 300" aria-hidden="true">
       <defs>
         {/* Slight wobble so the lines look drawn by hand. */}
         <filter id={`wob${id}`} x="-3%" y="-3%" width="106%" height="106%">
@@ -152,53 +171,12 @@ export function ExperienceScene({ index, active = true }: { index: number; activ
       </g>
       {caption && (
         <g className="caption">
-          <rect x="18" y="18" width="174" height="34" rx="4" />
+          <rect x="18" y="18" width="204" height="34" rx="4" />
           <text x="30" y="42">
             {t(caption)}
           </text>
         </g>
       )}
     </svg>
-  );
-}
-
-export default function ExperienceFrames() {
-  const [active, setActive] = useState(0);
-  useEffect(() => {
-    const rows = [...document.querySelectorAll<HTMLElement>('#experience .exp-row')];
-    if (!rows.length) return;
-    const mark = (i: number) => {
-      setActive(i);
-      rows.forEach((r, k) => r.toggleAttribute('data-current', k === i));
-    };
-    // The current role is the last one whose top has passed the middle of the screen.
-    let current = -1;
-    const update = () => {
-      const mid = innerHeight * 0.5;
-      let i = 0;
-      rows.forEach((r, k) => {
-        if (r.getBoundingClientRect().top < mid) i = k;
-      });
-      if (i !== current) {
-        current = i;
-        mark(i);
-      }
-    };
-    update();
-    addEventListener('scroll', update, { passive: true });
-    addEventListener('resize', update);
-    return () => {
-      removeEventListener('scroll', update);
-      removeEventListener('resize', update);
-    };
-  }, []);
-  return (
-    <div className="exp-frames">
-      {experience.map((x, i) => (
-        <div key={x.role.en} className="exp-frame" data-active={i === active ? '' : undefined}>
-          <ExperienceScene index={i} active={i === active} />
-        </div>
-      ))}
-    </div>
   );
 }

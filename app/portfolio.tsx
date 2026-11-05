@@ -25,7 +25,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import HeroAI from './hero-ai';
-import ExperienceFrames, { ExperienceScene } from './experience-frames';
+import ExperienceScene from './experience-frames';
 import ProjectPreview from './project-preview';
 import ProcessMap from './process-map';
 import { useLang } from './language';
@@ -244,21 +244,20 @@ function Home() {
             </div>
           </section>
 
-          <section id="experience" className="split section ruled">
-            <aside className="lens-col" aria-hidden="true">
-              <ExperienceFrames />
-            </aside>
-            <div>
+          <section id="experience" className="section ruled exp-section">
+            <div className="exp-head">
               <h2 className="h2 exp-title" data-reveal="0">
                 {t(ui.experienceTitle)}
               </h2>
+            </div>
+            <div>
               {experience.map((x, i) => (
                 <article className="exp-row" key={x.role.en} data-reveal="0">
+                  <div className="exp-frame" aria-hidden="true">
+                    <ExperienceScene index={i} />
+                  </div>
                   <span className="exp-date">{t(x.date)}</span>
-                  <div>
-                    <div className="exp-frame-inline" aria-hidden="true">
-                      <ExperienceScene index={i} />
-                    </div>
+                  <div className="exp-body">
                     <h3>{t(x.role)}</h3>
                     <div className="org">{t(x.org)}</div>
                     <ul>
