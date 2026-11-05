@@ -16,8 +16,16 @@ import {
   type Project,
   type Text,
 } from '@/lib/content';
-import HeroNetwork from './hero-network';
-import MarketLens from './market-lens';
+import {
+  ClipboardCheck,
+  LineChart,
+  Rocket,
+  Search,
+  Workflow,
+  Wrench,
+} from 'lucide-react';
+import HeroAI from './hero-ai';
+import SkillsSphere from './skills-sphere';
 import ProjectPreview from './project-preview';
 import ProcessMap from './process-map';
 import { useLang } from './language';
@@ -99,6 +107,9 @@ function ProjectImage({
   );
 }
 
+// One icon per "How I work" step, in order.
+const stepIcons = [Search, ClipboardCheck, Workflow, Wrench, Rocket, LineChart];
+
 const withBreaks = (text: string) =>
   text.split('\n').map((line, i) => (
     <Fragment key={`${i}-${line}`}>
@@ -136,7 +147,7 @@ function Home() {
         </header>
         <main id="main" tabIndex={-1}>
           <section id="top" className="hero">
-            <HeroNetwork />
+            <HeroAI />
             <div className="status" data-reveal="0">
               <span className="dot" />
               {t(ui.status)}
@@ -165,8 +176,8 @@ function Home() {
                 <a className="pill pill-lg pill-accent" href="#work">
                   {t(ui.seeWork)}
                 </a>
-                <a className="pill pill-lg pill-outline" href="/resume/">
-                  {t(ui.readResume)}
+                <a className="pill pill-lg pill-outline" href="#about">
+                  {t(ui.aboutMe)}
                 </a>
               </div>
               <p className="hero-links" data-reveal="280">
@@ -174,10 +185,6 @@ function Home() {
                 <a href={profile.github}>{t(ui.heroLinks.github)}</a>
               </p>
             </div>
-            <p className="hero-hint" aria-hidden="true">
-              <span className="hint-pointer">{t(ui.heroHint)}</span>
-              <span className="hint-touch">{t(ui.heroHintTouch)}</span>
-            </p>
           </section>
 
           <dl className="fact-strip" aria-label={t(ui.summaryLabel)}>
@@ -220,20 +227,26 @@ function Home() {
             </div>
             <div className="strengths-grid">
               {ui.strengths.map((item, i) => (
-                <article key={item.title.en} data-reveal={String(i * 80)}>
+                <a
+                  className="strength-card"
+                  key={item.title.en}
+                  href={item.href}
+                  data-reveal={String(i * 80)}
+                >
                   <span className="strength-n">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <h3>{t(item.title)}</h3>
                   <p>{t(item.body)}</p>
-                </article>
+                  <span className="strength-link">{t(item.link)}</span>
+                </a>
               ))}
             </div>
           </section>
 
           <section id="experience" className="split section ruled">
             <aside className="lens-col">
-              <MarketLens />
+              <SkillsSphere />
             </aside>
             <div>
               <h2 className="h2 exp-title" data-reveal="0">
@@ -352,7 +365,15 @@ function Home() {
             <ol className="approach-steps">
               {ui.approach.steps.map((step, i) => (
                 <li key={step.title.en} data-reveal={String(i * 60)}>
-                  <span className="step-dot">{i + 1}</span>
+                  <span className="step-icon" aria-hidden="true">
+                    {(() => {
+                      const Icon = stepIcons[i];
+                      return <Icon size={22} strokeWidth={1.6} />;
+                    })()}
+                  </span>
+                  <span className="step-n">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                   <h3>{t(step.title)}</h3>
                   <p>{t(step.body)}</p>
                   {step.href && (
@@ -520,7 +541,7 @@ function Case({ p }: { p: Project }) {
             ))}
           </ol>
 
-          {!p.liveUrl && (
+          {p.gallery.length > 0 && (
             <section className="case-gallery ruled">
               <h2 className="h2" data-reveal="0">
                 {t(ui.walkthrough)}

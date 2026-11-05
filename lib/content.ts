@@ -111,12 +111,12 @@ export const projects: Project[] = [
     repo: 'MCDA-Tool-2.0',
     liveUrl: 'https://mcda.arthur-jiaming-li.workers.dev/',
     image: {
-      src: '/projects/mcda/mcda-overview.webp',
+      src: '/projects/mcda/mcda-live.png',
       width: 1440,
       height: 1000,
       caption: {
-        en: 'MCDA interface showing synthetic alternatives, rankings and charts.',
-        zh: 'MCDA 界面：模拟方案、排序与图表。',
+        en: 'Home page of the live MCDA tool, with an example conclusion and ranking.',
+        zh: '线上 MCDA 工具首页，附示例结论与排序。',
       },
     },
     title: { en: 'MCDA Tool', zh: 'MCDA 决策工具' },
@@ -426,12 +426,12 @@ export const projects: Project[] = [
     repo: 'connoisseur',
     liveUrl: 'https://valerain.com/',
     image: {
-      src: '/projects/connoisseur/connoisseur-quote-timeline.webp',
+      src: '/projects/connoisseur/connoisseur-live.jpg',
       width: 1440,
       height: 1000,
       caption: {
-        en: 'Demo order showing a quotation and sourcing timeline.',
-        zh: '演示订单：报价与采购时间线。',
+        en: 'Home page of the live Connoisseur site (valerain.com).',
+        zh: 'Connoisseur 线上网站首页（valerain.com）。',
       },
     },
     title: { en: 'Connoisseur', zh: 'Connoisseur' },
@@ -708,14 +708,6 @@ export const ui = {
     en: ['I turn business processes\ninto ', 'systems that work', '.'],
     zh: ['把业务流程，\n变成', '真正好用的系统', '。'],
   },
-  heroHint: {
-    en: 'Hover a node to send a signal · click to fire the inputs',
-    zh: '悬停节点发送信号 · 点击激活输入层',
-  },
-  heroHintTouch: {
-    en: 'Tap to fire the inputs',
-    zh: '轻点激活输入层',
-  },
   heroIntro: {
     en: 'Computer Science MSc, University College Cork. I map how a process really runs, then design and build the tool, integration or AI-assisted step that improves it. My current role in European and North American Amazon operations keeps me close to the day-to-day work those systems have to fit.',
     zh: '爱尔兰科克大学计算机科学硕士。我先弄清一个流程实际如何运转，再设计并搭建改进它的工具、系统集成或 AI 辅助环节。目前在欧洲及北美 Amazon 运营一线工作，让我始终贴近这些系统要服务的日常业务。',
@@ -769,42 +761,6 @@ export const ui = {
   experienceTitle: {
     en: 'Professional experience',
     zh: '工作经历',
-  },
-  // Interactive "market lens" beside Experience. Its numbers are synthetic.
-  lens: {
-    kicker: { en: 'Try it · synthetic data', zh: '动手试试 · 模拟数据' },
-    title: { en: 'Data first: where should we act?', zh: '用数据判断：先改进哪里？' },
-    hint: {
-      en: 'Switch the metric, then hover a market.',
-      zh: '切换指标，再把鼠标移到某个站点上。',
-    },
-    market: { en: 'Market', zh: '站点' },
-    metrics: {
-      sales: { en: 'Sales', zh: '销售额' },
-      traffic: { en: 'Traffic', zh: '流量' },
-      conversion: { en: 'Conversion', zh: '转化率' },
-    },
-    flag: {
-      en: 'High traffic, low conversion: check the listing and price first.',
-      zh: '流量高、转化低：先检查商品页与定价。',
-    },
-    healthy: {
-      en: 'Conversion at or above average: protect stock and visibility.',
-      zh: '转化率不低于平均：重点保证库存与曝光。',
-    },
-    lowTraffic: {
-      en: 'Converts well but lacks traffic: improve keywords and search visibility.',
-      zh: '转化不错但流量不足：优化关键词与搜索曝光。',
-    },
-    weak: {
-      en: 'Low traffic and low conversion: review listing content and assortment first.',
-      zh: '流量和转化都偏低：先检查商品页内容与选品。',
-    },
-    mean: { en: 'Average', zh: '平均' },
-    note: {
-      en: 'Illustrative numbers only, not company data.',
-      zh: '数字仅作演示，并非公司真实数据。',
-    },
   },
   // Numerical teaching model, computed locally with fixed untrained weights.
   ai: {
@@ -934,9 +890,11 @@ export const ui = {
         zh: '梳理真实流程',
       },
       body: {
-        en: 'Find where the work actually breaks before choosing a fix.',
-        zh: '先找到工作真正卡住的地方，再选解决方案。',
+        en: 'At Triple A, I analyse sales, traffic and competitor data to find where performance really breaks.',
+        zh: '在 Triple A，我分析销售、流量和竞品数据，找出业绩真正卡住的地方。',
       },
+      href: '#experience',
+      link: { en: 'See my experience →', zh: '查看工作经历 →' },
     },
     {
       title: {
@@ -944,9 +902,11 @@ export const ui = {
         zh: '把流程做成工具',
       },
       body: {
-        en: 'From spreadsheet workflows to tools people use.',
-        zh: '把表格流程做成好用的工具。',
+        en: 'MCDA turned an Excel-based research process into a web decision tool.',
+        zh: 'MCDA 把基于 Excel 的科研流程做成了网页决策工具。',
       },
+      href: '/work/mcda/',
+      link: { en: 'See the MCDA case →', zh: '查看 MCDA 案例 →' },
     },
     {
       title: {
@@ -954,9 +914,11 @@ export const ui = {
         zh: '把数据与 AI 接入工作流',
       },
       body: {
-        en: 'Data flows and AI steps, with people in the loop.',
-        zh: '接通数据与 AI，保留人工把关。',
+        en: 'MoTai wires LLM APIs into a writing workflow, with the author reviewing generated text.',
+        zh: 'MoTai 把大模型 API 接入写作流程，生成内容由作者审核。',
       },
+      href: '/work/motai/',
+      link: { en: 'See the MoTai case →', zh: '查看 MoTai 案例 →' },
     },
   ],
   targetLabel: {
@@ -970,6 +932,16 @@ export const ui = {
   contactIntro: {
     en: 'Open to implementation, business systems, process and AI adoption roles.',
     zh: '正在寻找系统实施、业务系统、流程分析与 AI 落地推广岗位。',
+  },
+  aboutMe: {
+    en: 'About me ↓',
+    zh: '关于我 ↓',
+  },
+  sphere: {
+    kicker: {
+      en: 'Toolkit · drag to rotate, click a group',
+      zh: '技能 · 拖动旋转，点击分组高亮',
+    },
   },
   readResume: {
     en: 'View résumé →',

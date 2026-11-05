@@ -288,7 +288,7 @@ em {
   flex-direction: column;
   align-items: center;
 }
-.hero-network {
+.hero-bg {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -301,12 +301,12 @@ em {
   -webkit-mask-image: radial-gradient(ellipse 40% 36% at 50% 40%, rgba(0, 0, 0, 0.14), #000 100%);
   mask-image: radial-gradient(ellipse 40% 36% at 50% 40%, rgba(0, 0, 0, 0.14), #000 100%);
 }
-.hero-network canvas {
+.hero-bg canvas {
   display: block;
   width: 100%;
   height: 100%;
 }
-.hero:has(.hero-network[data-hot]) {
+.hero:has(.hero-bg[data-hot]) {
   cursor: pointer;
 }
 .skill-demos .ai-copy {
@@ -2316,7 +2316,7 @@ img.crop {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 32px;
 }
-.strengths-grid article {
+.strengths-grid .strength-card {
   border-top: 1px solid var(--line);
   padding-top: 22px;
 }
@@ -2966,7 +2966,7 @@ footer[id] {
   margin-top: 48px;
   gap: 16px;
 }
-.strengths-grid article {
+.strengths-grid .strength-card {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--card);
@@ -3121,4 +3121,232 @@ footer[id] {
 .approach-steps li:nth-child(n) {
   padding-left: 0;
   border-left: 0;
+}
+
+/* Sticky header: stays in view while scrolling, full-width frosted band */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  isolation: isolate;
+  padding: 14px 0;
+  border-bottom: 0;
+}
+.site-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: -1px;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: rgba(244, 241, 234, 0.9);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  z-index: -1;
+}
+main section[id],
+footer[id] {
+  scroll-margin-top: 84px;
+}
+@media (max-width: 900px) {
+  .site-header {
+    padding: 10px 0;
+    row-gap: 8px;
+  }
+  .site-header nav {
+    order: 3;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 20px;
+    font-size: 14px;
+    scrollbar-width: none;
+  }
+  main section[id],
+  footer[id] {
+    scroll-margin-top: 112px;
+  }
+}
+
+/* About cards: each links to the role or project behind it */
+.strengths-grid .strength-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--ink);
+  transition:
+    border-color 0.2s,
+    transform 0.25s var(--ease);
+}
+.strengths-grid .strength-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  color: var(--ink);
+}
+.strength-link {
+  margin-top: auto;
+  padding-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+/* 3D skills sphere (no frame) */
+.lens-col .sphere {
+  position: sticky;
+  top: 96px;
+}
+.sphere {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sphere-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+.sphere-stage:active {
+  cursor: grabbing;
+}
+.sphere-stage::before {
+  content: '';
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(31, 92, 69, 0.1), transparent 70%);
+  pointer-events: none;
+}
+.sphere-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  padding: 2px 6px;
+  background: transparent;
+  font: 600 13px/1.2 var(--sans);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: filter 0.2s;
+  will-change: transform, opacity;
+}
+.sphere-tag:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.sphere-tag[data-dim] {
+  filter: grayscale(1) opacity(0.25);
+}
+.sphere-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.sphere-legend button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  padding: 2px 0;
+  background: transparent;
+  font-size: 13px;
+  cursor: pointer;
+}
+.sphere-legend button[aria-pressed='true'] {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.sphere-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Project screenshots with a live-site badge */
+.project-shot {
+  position: relative;
+}
+.live-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(27, 26, 23, 0.82);
+  color: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+}
+.live-badge:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+.live-badge .preview-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #6fd3a5;
+  box-shadow: 0 0 0 3px rgba(111, 211, 165, 0.25);
+}
+
+/* How I work: icon per step */
+.step-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, var(--accent), #2f8a64);
+  color: var(--bg);
+  margin-bottom: 10px;
+  transition: transform 0.3s var(--ease);
+}
+.approach-steps li:nth-child(even) .step-icon {
+  background: var(--card);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+.approach-steps li:hover .step-icon {
+  transform: translateY(-4px) rotate(-4deg);
+}
+.approach-steps .step-n {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--subtle);
+}
+.approach-steps::before {
+  top: 26px;
+  left: 26px;
+  right: 26px;
+  background: linear-gradient(90deg, var(--accent), var(--line) 85%);
+}
+@media (max-width: 560px) {
+  .site-header nav {
+    display: none;
+  }
+  main section[id],
+  footer[id] {
+    scroll-margin-top: 72px;
+  }
+  .lens-col .sphere {
+    position: static;
+  }
+  .sphere-stage {
+    max-width: 340px;
+    margin: 0 auto;
+  }
 }
