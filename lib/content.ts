@@ -972,9 +972,9 @@ export const ui = {
       en: 'Core skills',
       zh: '核心技能',
     },
-    note: {
-      en: 'Vincent van Gogh, Sunflowers, 1888 · National Gallery, London',
-      zh: '文森特·梵高，《向日葵》，1888 年 · 伦敦国家美术馆',
+    repaint: {
+      en: 'Click to repaint',
+      zh: '点击重新作画',
     },
     alt: {
       en: 'Vincent van Gogh, Sunflowers (1888): a vase of fifteen sunflowers against a yellow wall',
