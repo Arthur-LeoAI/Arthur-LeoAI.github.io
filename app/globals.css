@@ -3222,31 +3222,29 @@ footer[id] {
   flex-direction: column;
   gap: 10px;
 }
-.painting-core,
-.painting-more {
+.painting-statement {
+  font: italic 400 22px/1.3 var(--serif);
+  color: var(--ink);
+}
+html[lang='zh-CN'] .painting-statement {
+  font-style: normal;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.painting-keywords {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
+  gap: 8px;
 }
-.painting-core {
-  gap: 2px 14px;
-  font: italic 400 22px/1.25 var(--serif);
-  color: var(--accent);
-}
-html[lang='zh-CN'] .painting-core {
-  font-style: normal;
-  font-size: 18px;
-}
-.painting-more {
-  gap: 4px 6px;
+.painting-keywords li {
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
   font-size: 13px;
-  color: var(--muted);
-}
-.painting-more li:not(:last-child)::after {
-  content: ' ·';
-  color: var(--subtle);
+  color: var(--accent);
 }
 
 /* Project screenshots with a live-site badge */

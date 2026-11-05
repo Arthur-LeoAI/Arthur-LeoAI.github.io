@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { skillList, ui } from '@/lib/content';
+import { ui } from '@/lib/content';
 import { useLang } from './language';
 
 // Van Gogh's Sunflowers, repainted live in brush strokes beside Experience. The public-domain
@@ -8,7 +8,7 @@ import { useLang } from './language';
 // each stroke takes its colour from it and runs along its edges (perpendicular to the colour
 // gradient), from broad strokes to fine ones, each with a lighter ridge like impasto. It paints
 // itself in when the section scrolls into view; click it to repaint with new strokes.
-// The skills are listed under it, each once.
+// Under it: one line on working with AI, and four keywords.
 
 const SRC = '/art/van-gogh-sunflowers.jpg';
 const REF_W = 240; // reference resolution for colour and direction sampling
@@ -19,7 +19,7 @@ const hash = (n: number) => {
 };
 
 export default function SkillPainting() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const wrap = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -205,8 +205,6 @@ export default function SkillPainting() {
     };
   }, []);
 
-  const core = skillList.filter((s) => s.core);
-  const more = skillList.filter((s) => !s.core);
   return (
     <figure className="skill-painting" data-reveal="0">
       <span className="label">{t(ui.skillArt.kicker)}</span>
@@ -215,14 +213,10 @@ export default function SkillPainting() {
         <span className="sr-only">{t(ui.skillArt.alt)}</span>
       </div>
       <figcaption>
-        <ul className="painting-core">
-          {core.map((s) => (
-            <li key={s.label.en}>{t(s.label)}</li>
-          ))}
-        </ul>
-        <ul className="painting-more">
-          {more.map((s) => (
-            <li key={s.label.en}>{t(s.label)}</li>
+        <p className="painting-statement">{t(ui.skillArt.statement)}</p>
+        <ul className="painting-keywords">
+          {ui.skillArt.keywords[lang].map((k) => (
+            <li key={k}>{k}</li>
           ))}
         </ul>
       </figcaption>

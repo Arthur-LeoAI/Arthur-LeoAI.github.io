@@ -667,35 +667,6 @@ export const skills: Record<Lang, [string, string][]> = {
   ],
 };
 
-/**
- * Skills listed under the Sunflowers painting beside Experience. Chosen from what BA, implementation, marketing-analytics
- * and applied-AI job postings ask for most (SQL, Python, data analysis and visualisation, process
- * work, LLM integration, workflow automation), limited to skills the owner's experience or projects
- * show. `core` marks the most-requested ones (listed first, larger). Market-demanded skills without evidence
- * yet (BI tools, A/B testing, GA4, RAG/evaluation, requirements & UAT) are left out until confirmed.
- */
-export const skillList: { label: Text; core?: boolean }[] = [
-  { label: { en: 'SQL', zh: 'SQL' }, core: true },
-  { label: { en: 'Python', zh: 'Python' }, core: true },
-  { label: { en: 'Data analysis', zh: '数据分析' }, core: true },
-  { label: { en: 'Process mapping', zh: '流程梳理' }, core: true },
-  { label: { en: 'LLM API integration', zh: '大模型 API 集成' }, core: true },
-  { label: { en: 'Workflow automation', zh: '工作流自动化' }, core: true },
-  { label: { en: 'Excel', zh: 'Excel' }, core: true },
-  { label: { en: 'Data visualisation', zh: '数据可视化' } },
-  { label: { en: 'Data cleaning', zh: '数据清洗' } },
-  { label: { en: 'Competitor analysis', zh: '竞品分析' } },
-  { label: { en: 'Ad campaign optimisation', zh: '广告投放优化' } },
-  { label: { en: 'Localisation', zh: '本地化' } },
-  { label: { en: 'Decision analysis', zh: '决策分析' } },
-  { label: { en: 'Sensitivity analysis', zh: '敏感性分析' } },
-  { label: { en: 'Prompt & context design', zh: '提示与上下文设计' } },
-  { label: { en: 'Human-in-the-loop review', zh: '人工审核闭环' } },
-  { label: { en: 'APIs & data integration', zh: 'API 与数据集成' } },
-  { label: { en: 'React / TypeScript', zh: 'React / TypeScript' } },
-  { label: { en: 'Git', zh: 'Git' } },
-  { label: { en: 'Docker', zh: 'Docker' } },
-];
 
 /** Location line used everywhere except the hero label (About, résumé, meta, archive). */
 export const location: Text = {
@@ -969,8 +940,17 @@ export const ui = {
   },
   skillArt: {
     kicker: {
-      en: 'Core skills',
-      zh: '核心技能',
+      en: 'How I work with AI',
+      zh: '我如何用 AI',
+    },
+    // The painting itself is the point: an old masterpiece, rebuilt live by code.
+    statement: {
+      en: 'I use AI as a tool to build workflows that create real value.',
+      zh: '用 AI 做工具，搭建真正创造价值的工作流。',
+    },
+    keywords: {
+      en: ['AI tools', 'Workflow automation', 'Data analysis', 'Process design'],
+      zh: ['AI 工具', '工作流自动化', '数据分析', '流程设计'],
     },
     repaint: {
       en: 'Click to repaint',
