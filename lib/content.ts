@@ -38,7 +38,8 @@ export type Project = {
   subtitle: Text;
   summary: Text;
   stack: string;
-  // Every case follows: business problem → constraints → what I built → result → next.
+  // Every case follows: problem → constraints → contribution → build → result → limitations,
+  // then why it matters, role fit, where it could go next and who else works on this.
   problem: Text;
   constraints: Text;
   contribution: Text;
@@ -47,7 +48,14 @@ export type Project = {
   evidence: Text;
   evidencePath: string;
   result: Text;
-  next: Text;
+  /** Why the project matters to the people who would use it. */
+  value: Text;
+  /** Why it fits the target roles. */
+  fit: Text;
+  /** Realistic next features; `ref` points to a product or document that already does or asks for it. */
+  roadmap: { text: Text; ref?: { name: string; url: string } }[];
+  /** Comparable products and organisations, each checked against its own page (November 2026). */
+  landscape: { name: string; url: string; note: Text }[];
   facts: TextList;
   gallery: Image[];
 };
@@ -64,7 +72,7 @@ export const projects: Project[] = [
     cat: ['AI', 'Data'],
     repo: '',
     image: {
-      src: '/projects/mcda/mcda-overview.webp',
+      src: '/projects/mcda/mcda-live.png',
       width: 1440,
       height: 1000,
       caption: { en: 'TODO', zh: 'TODO' },
@@ -86,7 +94,10 @@ export const projects: Project[] = [
     constraints: { en: 'TODO', zh: 'TODO' },
     built: { en: 'TODO', zh: 'TODO' },
     result: { en: 'TODO', zh: 'TODO' },
-    next: { en: 'TODO', zh: 'TODO' },
+    value: { en: 'TODO', zh: 'TODO' },
+    fit: { en: 'TODO', zh: 'TODO' },
+    roadmap: [],
+    landscape: [],
     facts: { en: [], zh: [] },
     gallery: [],
     contribution: {
@@ -123,97 +134,149 @@ export const projects: Project[] = [
     tag: { en: 'Process to tool', zh: '流程工具化' },
     ctx: { en: 'MaREI · Ireland', zh: 'MaREI · 爱尔兰' },
     status: {
-      en: 'Completed research project',
-      zh: '已完成的科研项目',
+      en: 'Live tool · pre-release',
+      zh: '已上线 · 预发布阶段',
     },
     subtitle: {
-      en: 'From a spreadsheet process to a tool people can explore.',
-      zh: '从电子表格流程，到可以交互探索的工具。',
+      en: 'From a spreadsheet process to a decision people can explain.',
+      zh: '从电子表格流程，到说得清理由的决策。',
     },
     summary: {
-      en: 'Turned an Excel-based research analysis into a web decision tool where criteria, weights and trade-offs are visible and adjustable.',
-      zh: '把基于 Excel 的科研分析流程做成网页决策工具，让准则、权重与取舍清晰可见、可以调整。',
+      en: 'Rebuilt an Excel-based research analysis as a web decision tool: import a table, set criteria and weights, and get an explained, robustness-checked recommendation.',
+      zh: '把基于 Excel 的科研分析重做成网页决策工具：导入表格、设定准则与权重，得到有解释、经过稳健性检验的推荐结果。',
     },
-    stack: 'JavaScript · D3.js · Excel · Node.js',
+    stack: 'Python · FastAPI · React · TypeScript · ECharts',
     problem: {
-      en: 'How do you compare recovery options when environmental, technical and economic priorities compete?',
-      zh: '当环境、技术和经济目标互相冲突时，如何比较不同的回收方案？',
+      en: 'How do you compare options when environmental, technical and economic priorities compete, and still explain the choice?',
+      zh: '当环境、技术和经济目标互相冲突时，如何比较不同方案，并且把选择的理由讲清楚？',
     },
     constraints: {
-      en: 'The existing process lived in Excel. Researchers needed to change criteria and weights themselves, and every ranking had to stay explainable rather than a black-box score.',
-      zh: '原有流程基于 Excel。研究人员需要自己调整准则与权重，每个排序结果都必须可解释，而不是一个黑箱分数。',
+      en: 'The original process lived in an Excel workbook. Users had to change criteria and weights themselves, every ranking had to stay explainable rather than a black-box score, and the data should stay with the user.',
+      zh: '原有流程在一个 Excel 工作簿里。使用者需要自己调整准则和权重，每个排序都必须可解释而不是黑箱分数，数据也应留在使用者手里。',
+    },
+    contribution: {
+      en: 'I built the first interactive version during The End of Tire research project at MaREI, then rewrote it as a general decision tool with its own design documents, tests and roadmap.',
+      zh: '我在 MaREI 的 The End of Tire 科研项目中做出第一版交互工具，之后把它重写为通用决策工具，配有设计文档、测试和路线图。',
     },
     built: {
-      en: 'Structured Excel inputs feed adjustable criteria and weights, value locking, and weighted-sum, TOPSIS and Pareto views. Rankings update as assumptions change, so the reasoning can be inspected.',
-      zh: '把结构化 Excel 数据接入可调准则、权重与数值锁定功能，并以加权求和、TOPSIS 和帕累托视图呈现结果。假设变化时排序同步更新，便于检查推理过程。',
+      en: 'One Python calculation core (weighted sum, TOPSIS, compromise programming, Pareto analysis, weight-stability intervals and robustness checks) serves both an API and the web app. A guided seven-step flow — scenario, import, columns, check, criteria, weights, conclusion — sits beside an expert mode. Criteria can be benefits or costs with linear, logarithmic or ordinal scoring and hard conditions; weights can be set directly, by ranking or by pairwise comparison. The conclusion says which option wins, why, and how stable that is, and exports to an Excel report.',
+      zh: '一个 Python 计算核心（加权求和、TOPSIS、折中规划、帕累托分析、权重稳定区间与稳健性检验）同时服务 API 和网页。引导模式分七步——场景、导入、列映射、检查、准则、权重、结论——另有专家模式。准则可设为效益型或成本型，支持线性、对数或序数评分及硬性条件；权重可直接输入、按排序生成或两两比较。结论说明哪个方案胜出、原因以及结果有多稳定，并可导出 Excel 报告。',
     },
     result: {
-      en: 'The completed tool exposes editable inputs and live rankings in a web interface. The public source and synthetic-data screenshots demonstrate the analysis workflow; commercial adoption and time savings have not been measured.',
-      zh: '已完成的工具提供可编辑输入和实时排序。公开源码与模拟数据截图展示了分析流程；尚未测量商业采用情况或节省的时间。',
+      en: 'The tool is live and open source (Apache-2.0). Its test suite compares results with the original Excel workbook. Commercial adoption and time savings have not been measured.',
+      zh: '工具已上线并开源（Apache-2.0）。测试会把计算结果与原 Excel 工作簿对比。尚未测量商业采用情况或节省的时间。',
     },
-    next: {
-      en: 'Extend the case study with documented validation and additional sensitivity scenarios.',
-      zh: '补充有记录的验证过程，并增加更多敏感性分析场景。',
+    limitations: {
+      en: 'Rankings still depend on the data, criteria and weights people enter. The screenshots use the built-in e-commerce example, so they don’t validate a real recovery decision. Release checks and usability testing for v0.1.0 are still to come.',
+      zh: '排序仍取决于使用者输入的数据、准则和权重。截图使用内置的电商示例，不能据此验证真实的回收决策。v0.1.0 的发布检查与可用性测试尚未完成。',
     },
-    facts: {
-      en: [
-        'Excel input workflow',
-        'Adjustable decision weights',
-        'Weighted-sum, TOPSIS & Pareto',
-      ],
-      zh: ['Excel 数据输入', '可调决策权重', '加权求和、TOPSIS 与帕累托分析'],
+    value: {
+      en: 'Many teams still make option decisions in spreadsheets where the weights and reasons are hard to see. This tool makes the trade-offs explicit: each recommendation says why it wins, where it loses, and whether it survives changes in the weights. That matches what UK Government Green Book guidance asks of MCDA: scored criteria, explicit weights and a sensitivity test.',
+      zh: '很多团队仍在电子表格里做方案决策，权重和理由都不透明。这个工具把取舍摆到台面上：每个推荐都说明为什么胜出、在哪些方面吃亏、权重变化后是否依然成立。这与英国政府 Green Book 指南对多准则分析的要求一致：准则打分、权重明确，并做敏感性检验。',
     },
-    gallery: [
+    fit: {
+      en: 'It is the core loop of implementation and business-systems work: take a process that lives in Excel, pin down what its users need, and turn it into a configurable tool with validation, tests and documentation. For data and technical BA roles, it shows I can work from the calculation model through the API to the interface.',
+      zh: '这正是系统实施与业务系统岗位的核心工作：把放在 Excel 里的流程梳理清楚，明确使用者的需求，再做成可配置、有校验、有测试和文档的工具。对数据/技术型业务分析岗位，它说明我能从计算模型一路做到 API 和界面。',
+    },
+    roadmap: [
       {
-        src: '/projects/mcda/mcda-input-ranking.webp',
-        width: 696,
-        height: 699,
-        caption: {
-          en: 'Synthetic inputs beside the live weighted ranking.',
-          zh: '模拟输入数据与实时加权排序。',
+        text: {
+          en: 'Swing weighting — weights from the gap between the best and worst option on each criterion — as the Green Book guidance prescribes.',
+          zh: '摆幅赋权（swing weighting）：按各准则最好与最差方案的差距确定权重，即 Green Book 指南规定的方法。',
+        },
+        ref: { name: 'HM Treasury · Green Book MCDA guidance', url: 'https://www.gov.uk/government/publications/green-book-supplementary-guidance-multi-criteria-decision-analysis/use-of-multi-criteria-decision-analysis-in-options-appraisal-of-economic-cases' },
+      },
+      {
+        text: {
+          en: 'Group input: collect several stakeholders’ scores and weights, then compare or combine them.',
+          zh: '多人输入：收集多位相关方的打分与权重，再进行比较或汇总。',
+        },
+        ref: { name: '1000minds', url: 'https://www.1000minds.com/decision-making/what-is-mcdm-mcda' },
+      },
+      {
+        text: {
+          en: 'A workshop view that shows where stakeholders disagree before the weights are fixed.',
+          zh: '研讨会视图：在确定权重之前，先展示相关方之间的分歧所在。',
+        },
+        ref: { name: 'TransparentChoice', url: 'https://www.transparentchoice.com/project-prioritization-software' },
+      },
+      {
+        text: {
+          en: 'Data connectors already on the project roadmap: Amazon SP-API and Google Sheets imports.',
+          zh: '项目路线图中已列出的数据接入：Amazon SP-API 与 Google Sheets 导入。',
+        },
+        ref: { name: 'Project roadmap', url: 'https://github.com/Arthur-LeoAI/MCDA-Tool-2.0/blob/main/docs/ROADMAP.md' },
+      },
+    ],
+    landscape: [
+      {
+        name: 'HM Treasury Green Book',
+        url: 'https://www.gov.uk/government/publications/green-book-supplementary-guidance-multi-criteria-decision-analysis/use-of-multi-criteria-decision-analysis-in-options-appraisal-of-economic-cases',
+        note: {
+          en: 'UK Government guidance (updated May 2024) that uses MCDA to appraise long lists of options, with stakeholder workshops, swing weighting and a sensitivity test.',
+          zh: '英国政府指南（2024 年 5 月更新），用多准则分析评估长名单方案，包含相关方研讨、摆幅赋权和敏感性检验。',
         },
       },
       {
-        src: '/projects/mcda/mcda-weight-settings.webp',
-        width: 696,
-        height: 469,
-        caption: {
-          en: 'Criterion-weight controls for a synthetic scenario.',
-          zh: '模拟场景下的准则权重控制。',
+        name: '1000minds',
+        url: 'https://www.1000minds.com/decision-making/what-is-mcdm-mcda',
+        note: {
+          en: 'Decision software built on pairwise ranking questions (PAPRIKA), with surveys that collect and combine many decision-makers’ ratings.',
+          zh: '基于两两排序问题（PAPRIKA 方法）的决策软件，可通过问卷收集并汇总多位决策者的评分。',
         },
       },
       {
-        src: '/projects/mcda/mcda-pareto-analysis.webp',
-        width: 696,
-        height: 673,
-        caption: {
-          en: 'Pareto view for identifying trade-offs beyond a single score.',
-          zh: '帕累托视图，用于识别单一得分之外的取舍。',
-        },
-      },
-      {
-        src: '/projects/mcda/mcda-topsis-method.webp',
-        width: 696,
-        height: 493,
-        caption: {
-          en: 'TOPSIS and sensitivity controls on synthetic data.',
-          zh: '基于模拟数据的 TOPSIS 与敏感性分析控制。',
+        name: 'TransparentChoice',
+        url: 'https://www.transparentchoice.com/project-prioritization-software',
+        note: {
+          en: 'Project-prioritisation software where leaders compare criteria in pairs and departments score projects against them.',
+          zh: '项目优先级排序软件：管理层两两比较准则，各部门据此给项目打分。',
         },
       },
     ],
-    contribution: {
-      en: 'I developed the interactive analysis tool during The End of Tire research project at MaREI, translating an Excel-based analysis process into a web interface.',
-      zh: '我在 MaREI 的 The End of Tire 科研项目中开发交互分析工具，将基于 Excel 的分析流程转为网页界面。',
+    facts: {
+      en: [
+        'Guided and expert modes',
+        'Weighted sum, TOPSIS, CP & Pareto',
+        'Robustness check on the weights',
+        'Excel/CSV in, Excel report out',
+      ],
+      zh: ['引导与专家双模式', '加权求和、TOPSIS、折中规划与帕累托', '权重稳健性检验', 'Excel/CSV 导入，Excel 报告导出'],
     },
-    limitations: {
-      en: 'Rankings depend on input quality, chosen criteria and weights. Public screenshots use synthetic alternatives; they do not establish an optimal real-world recovery decision or independently validate the research.',
-      zh: '排序依赖输入质量、准则和权重。公开截图使用模拟方案，不能据此认定真实回收决策的最优解，也不构成对研究结果的独立验证。',
-    },
+    gallery: [
+      {
+        src: '/projects/mcda/mcda-criteria.jpg',
+        width: 1440,
+        height: 1020,
+        caption: {
+          en: 'Step 5: how each criterion is scored — benefit or cost, linear, logarithmic or ordinal (built-in example data).',
+          zh: '第 5 步：每个准则如何评分——效益型或成本型，线性、对数或序数（内置示例数据）。',
+        },
+      },
+      {
+        src: '/projects/mcda/mcda-weights.jpg',
+        width: 1440,
+        height: 920,
+        caption: {
+          en: 'Step 6: weights between groups by ranking, within groups directly; pairwise comparison is one click away.',
+          zh: '第 6 步：组间按排序生成权重，组内直接输入；也可切换为两两比较。',
+        },
+      },
+      {
+        src: '/projects/mcda/mcda-conclusion.jpg',
+        width: 1440,
+        height: 800,
+        caption: {
+          en: 'Step 7: a plain-language conclusion with the reasons, a confidence level and options excluded by hard conditions.',
+          zh: '第 7 步：用平实语言给出结论、理由、置信度，以及因硬性条件被排除的方案。',
+        },
+      },
+    ],
     evidence: {
-      en: 'README.txt documents Excel input, value locking and weighted ranking; app.js contains TOPSIS and Pareto implementations. Screenshots below show synthetic examples.',
-      zh: 'README.txt 记录了 Excel 输入、数值锁定与加权排序；app.js 包含 TOPSIS 和帕累托实现。下方截图使用模拟示例。',
+      en: 'The README documents the calculation core, API, guided and expert modes and the tests, including comparisons with the old Excel results; docs/ROADMAP.md lists the milestones. Screenshots use the tool’s built-in example data.',
+      zh: 'README 说明了计算核心、API、引导与专家模式以及测试（含与旧 Excel 结果的对比）；docs/ROADMAP.md 列出了里程碑。截图使用工具内置的示例数据。',
     },
-    evidencePath: 'blob/main/README.txt',
+    evidencePath: 'blob/main/README.md',
   },
   {
     id: 'drone',
@@ -222,12 +285,12 @@ export const projects: Project[] = [
     cat: ['Data'],
     repo: 'Drone-monitoring-platform-demo',
     image: {
-      src: '/projects/drone/drone-dashboard.webp',
+      src: '/projects/drone/drone-sim.jpg',
       width: 1440,
-      height: 1000,
+      height: 900,
       caption: {
-        en: 'Drone monitoring dashboard displaying simulated telemetry.',
-        zh: '无人机监控看板（模拟遥测数据）。',
+        en: 'UAV Telemetry Console in simulation mode: live map, track and flight snapshot (simulated data).',
+        zh: '模拟模式下的无人机遥测控制台：实时地图、航迹与飞行快照（模拟数据）。',
       },
     },
     title: { en: 'Drone Monitoring', zh: '无人机监控平台' },
@@ -241,78 +304,102 @@ export const projects: Project[] = [
       zh: '可运行演示 · 模拟遥测',
     },
     subtitle: {
-      en: 'From telemetry to a clearer picture.',
-      zh: '从遥测数据到一目了然的画面。',
+      en: 'From raw telemetry to one live picture.',
+      zh: '从原始遥测，到一张实时画面。',
     },
     summary: {
-      en: 'Connects an HTTP API, time-series storage and a WebSocket feed into a live monitoring dashboard (simulated telemetry).',
-      zh: '把 HTTP API、时序存储和 WebSocket 推送串成一个实时监控看板（模拟遥测数据）。',
+      en: 'Connects an HTTP API, time-series storage and a WebSocket feed into a live monitoring console (simulated telemetry).',
+      zh: '把 HTTP API、时序存储和 WebSocket 推送串成一个实时监控控制台（模拟遥测数据）。',
     },
-    stack: 'React · WebSocket · InfluxDB · Docker',
+    stack: 'Node.js · Express · WebSocket · InfluxDB · React · Leaflet · Docker',
     problem: {
-      en: 'How can incoming drone telemetry become a useful, continuously updated monitoring view?',
-      zh: '如何把源源不断的无人机遥测数据变成有用、持续更新的监控视图？',
+      en: 'How can a stream of drone telemetry become a monitoring view that updates by itself and that people can act on?',
+      zh: '如何把源源不断的无人机遥测，变成能自动刷新、可以据此行动的监控视图？',
     },
     constraints: {
-      en: 'Telemetry needs to update without page reloads. The public demo uses simulated data and is separate from the university platform I co-developed.',
-      zh: '遥测数据需要在不刷新页面的情况下持续更新。公开演示使用模拟数据，与我参与开发的高校平台分开。',
+      en: 'Telemetry must update without page reloads and still work when the live feed is down. The public demo uses simulated data and is separate from the university platform I co-developed.',
+      zh: '遥测要在不刷新页面的情况下持续更新，并且在实时数据中断时依然可用。公开演示使用模拟数据，与我参与开发的高校平台分开。',
+    },
+    contribution: {
+      en: 'I built this personal telemetry demo end to end. Separately, I co-developed a monitoring platform at Sun Yat-sen University; this case shows the demo, not the university deployment.',
+      zh: '我独立完成了这个个人遥测演示。另外，我在中山大学参与开发了一个监控平台；本案例展示的是演示版，不代表高校平台的部署情况。',
     },
     built: {
-      en: 'An HTTP API accepts telemetry, stores it in InfluxDB and broadcasts updates over WebSocket. A React and Leaflet dashboard displays flight status, position and trajectory; Docker Compose supports local setup.',
-      zh: 'HTTP API 接收遥测数据，存入 InfluxDB，再通过 WebSocket 广播更新。React 与 Leaflet 看板展示飞行状态、位置和轨迹；Docker Compose 支持本地启动。',
+      en: 'A POST endpoint accepts standard JSON telemetry, writes it to InfluxDB and broadcasts it to WebSocket subscribers (token-checked, rate-limited to one message per 250 ms). The React and Leaflet console shows the track on a map and a flight snapshot — speed, altitude, heading, battery, voltage, temperature, wind — and switches between the live stream and a built-in simulation. Docker Compose starts the API, front end and a pre-seeded InfluxDB with one command.',
+      zh: 'POST 接口接收标准 JSON 遥测，写入 InfluxDB 并广播给 WebSocket 订阅者（带令牌校验，默认每 250 毫秒限流一次）。React 与 Leaflet 控制台在地图上显示航迹，并展示飞行快照——速度、高度、航向、电量、电压、温度、风速——可在实时数据流与内置模拟之间切换。Docker Compose 一条命令即可启动 API、前端和预置数据的 InfluxDB。',
     },
     result: {
-      en: 'The repository provides a simulator, sample payloads, a dashboard and local startup instructions. The public evidence demonstrates a monitoring workflow with simulated telemetry.',
-      zh: '仓库提供模拟器、示例数据、看板和本地启动说明。公开材料展示的是基于模拟遥测的监控流程。',
+      en: 'The repository includes the API, simulator, sample payloads and scripts, the console and Docker setup. The public evidence shows the full pipeline working on simulated telemetry.',
+      zh: '仓库包含 API、模拟器、示例载荷与脚本、控制台和 Docker 配置。公开材料展示的是整条链路在模拟遥测上的运行。',
     },
-    next: {
-      en: 'Add documented load tests and clearer operational diagnostics.',
-      zh: '补充有记录的压力测试，并提供更清晰的运行诊断信息。',
+    limitations: {
+      en: 'Simulated telemetry doesn’t prove field reliability, production security or scale. History playback is marked “coming soon”, and no load-test results are included.',
+      zh: '模拟遥测不能证明实地可靠性、生产安全性或规模。历史回放标注为“即将推出”，也未包含压力测试结果。',
     },
-    facts: {
-      en: ['HTTP → WebSocket', 'Time-series storage', 'Map visualisation'],
-      zh: ['HTTP → WebSocket', '时序数据存储', '地图可视化'],
+    value: {
+      en: 'Operators need one live picture of where a vehicle is and whether it is healthy, without refreshing pages or querying databases. The demo covers the whole path that makes this possible: ingest, store, stream and display.',
+      zh: '操作人员需要一张实时画面，看清飞行器在哪里、状态是否正常，而不必刷新页面或查数据库。这个演示覆盖了实现它的完整链路：接入、存储、推送与展示。',
     },
-    gallery: [
+    fit: {
+      en: 'Technical BA and implementation roles spend much of their time on these hand-offs: an API contract, a data store, a real-time feed and the screen people act on. Having built each piece, I can talk with engineers about integration points and with operators about what the screen must show.',
+      zh: '技术型业务分析与系统实施岗位，大量时间都花在这些衔接上：API 约定、数据存储、实时推送，以及使用者据以行动的界面。每一环我都亲手做过，因此既能和工程师讨论集成点，也能和使用者讨论界面该显示什么。',
+    },
+    roadmap: [
       {
-        src: '/projects/drone/drone-flight-snapshot.webp',
-        width: 494,
-        height: 658,
-        caption: {
-          en: 'Simulated flight status and changing telemetry.',
-          zh: '模拟飞行状态与实时遥测。',
+        text: {
+          en: 'History playback of past flights from the time-series store, already reserved in the console as “coming soon”.',
+          zh: '基于时序数据的历史航迹回放，控制台里已预留为“即将推出”。',
         },
       },
       {
-        src: '/projects/drone/drone-map-trajectory.webp',
-        width: 741,
-        height: 658,
-        caption: {
-          en: 'Simulated route and current position.',
-          zh: '模拟航线与当前位置。',
+        text: {
+          en: 'A multi-vehicle view: every aircraft’s position and status on one live map.',
+          zh: '多机视图：在一张实时地图上显示每架飞行器的位置与状态。',
+        },
+        ref: { name: 'Auterion Suite', url: 'https://docs.auterion.com/vehicle-operation/auterion-suite-fleet-management/vehicles/cloud-features' },
+      },
+      {
+        text: {
+          en: 'Threshold alerts — low battery, lost link, altitude or speed limits — pushed over the same WebSocket feed.',
+          zh: '阈值告警——低电量、链路中断、高度或速度越限——通过同一条 WebSocket 推送。',
         },
       },
       {
-        src: '/projects/drone/drone-tablet.webp',
-        width: 768,
-        height: 1431,
-        caption: {
-          en: 'The monitoring flow at tablet width.',
-          zh: '平板宽度下的监控界面。',
+        text: {
+          en: 'A live camera feed beside the telemetry.',
+          zh: '在遥测旁边接入实时摄像头画面。',
+        },
+        ref: { name: 'Auterion Suite', url: 'https://docs.auterion.com/vehicle-operation/auterion-suite-fleet-management/vehicles/cloud-features' },
+      },
+    ],
+    landscape: [
+      {
+        name: 'Auterion Suite',
+        url: 'https://docs.auterion.com/vehicle-operation/auterion-suite-fleet-management/vehicles/cloud-features',
+        note: {
+          en: 'Fleet-management software showing live vehicle position and status on a map, with live video from the onboard camera.',
+          zh: '机队管理软件，在地图上显示飞行器的实时位置与状态，并提供机载摄像头的实时视频。',
         },
       },
     ],
-    contribution: {
-      en: 'I built the personal telemetry demo. Separately, I co-developed a monitoring platform at Sun Yat-sen University; this public case demonstrates the demo implementation, not the university deployment.',
-      zh: '我独立开发了个人遥测演示版，另在中山大学参与开发监控平台。本公开案例展示演示版的实现，不代表高校平台的部署情况。',
+    facts: {
+      en: ['HTTP → InfluxDB → WebSocket', 'Live map & flight snapshot', 'Live stream or simulation'],
+      zh: ['HTTP → InfluxDB → WebSocket', '实时地图与飞行快照', '实时数据流或模拟'],
     },
-    limitations: {
-      en: 'Simulated telemetry does not prove field reliability, production security, scale or operational impact. No deployment evidence or load-test results for the separate university platform are included here.',
-      zh: '模拟遥测不能证明实地可靠性、生产安全性、规模或运营影响。此处未提供另一套高校平台的部署证据或压力测试结果。',
-    },
+    gallery: [
+      {
+        src: '/projects/drone/drone-tablet.jpg',
+        width: 820,
+        height: 1180,
+        caption: {
+          en: 'The same console at tablet width, in simulation mode.',
+          zh: '平板宽度下的同一控制台（模拟模式）。',
+        },
+      },
+    ],
     evidence: {
-      en: 'The public README describes the HTTP API, WebSocket stream, InfluxDB setup, simulator and local run instructions. All portfolio captures use simulated telemetry.',
-      zh: '公开 README 说明了 HTTP API、WebSocket 数据流、InfluxDB 配置、模拟器和本地运行方式。作品集截图全部使用模拟遥测数据。',
+      en: 'The README describes the HTTP API, WebSocket stream, InfluxDB setup, simulator and local and Docker run instructions. All captures use simulated telemetry.',
+      zh: 'README 说明了 HTTP API、WebSocket 数据流、InfluxDB 配置、模拟器以及本地和 Docker 运行方式。所有截图均使用模拟遥测。',
     },
     evidencePath: 'blob/main/README.md',
   },
@@ -323,98 +410,150 @@ export const projects: Project[] = [
     cat: ['AI', 'Product'],
     repo: 'MoTai-Story',
     image: {
-      src: '/projects/motai/motai-writing-workspace.webp',
+      src: '/projects/motai/motai-ai.jpg',
       width: 1440,
       height: 900,
       caption: {
-        en: 'Earlier MoTai interface with fictional content; the current repository has a revised workspace.',
-        zh: 'MoTai 早期界面（虚构内容）；当前仓库已更新工作台。',
+        en: 'MoTai 1.1: the AI workspace beside the story materials (fictional demo story; AI not connected).',
+        zh: '墨台 1.1：AI 创作区与右侧创作资料（虚构示例作品，未连接 AI）。',
       },
     },
-    title: { en: 'MoTai', zh: 'MoTai' },
+    title: { en: 'MoTai', zh: 'MoTai 墨台' },
     tag: { en: 'Human-centred AI', zh: '以人为本的 AI' },
     ctx: { en: 'Independent collaboration', zh: '独立合作项目' },
     status: {
-      en: 'Working desktop prototype',
-      zh: '可运行桌面原型',
+      en: 'Desktop app · local beta',
+      zh: '桌面应用 · 本地内测',
     },
     subtitle: {
-      en: 'More structure. More room to create.',
-      zh: '结构更清晰，创作空间更大。',
+      en: 'AI that drafts. An author who decides.',
+      zh: 'AI 起草，作者拍板。',
     },
     summary: {
-      en: 'A local-first writing prototype that connects story context, LLM APIs and author review in one workflow.',
-      zh: '本地优先的写作原型，把故事上下文、大模型 API 与作者审核连接到同一流程。',
+      en: 'A local-first novel-writing app where AI drafts are checked against the story’s own canon and nothing is written in without the author’s approval.',
+      zh: '本地优先的小说创作应用：AI 草稿会对照作品自身设定检查，未经作者确认，任何内容都不会写入。',
     },
-    stack: 'Electron · JavaScript · Local JSON · AI APIs',
+    stack: 'Node.js · Electron · Quill · DeepSeek / OpenAI APIs',
     problem: {
-      en: 'How can AI support a long story without losing its characters, context or the writer’s control?',
-      zh: 'AI 如何辅助长篇创作，同时不丢失人物、上下文和作者的掌控？',
+      en: 'How can AI help with a long novel without losing its characters and timeline, or taking control away from the writer?',
+      zh: 'AI 如何帮助写长篇，同时不丢失人物和时间线，也不夺走作者的掌控？',
     },
     constraints: {
-      en: 'Manuscripts stay local. AI access depends on a configured runtime and provider; generated content needs author review before it becomes part of a story.',
-      zh: '文稿保存在本地。AI 依赖运行环境及服务商配置；生成内容需经作者审核后才能写入作品。',
+      en: 'Manuscripts stay on the author’s computer. API keys are managed by the local runtime, never typed into the app. When AI is unavailable the app says so instead of faking an answer.',
+      zh: '文稿保存在作者自己的电脑上。API 密钥由本地运行环境管理，不在应用里填写。AI 不可用时会明确提示，不用预设内容冒充回答。',
+    },
+    contribution: {
+      en: 'I started MoTai with a friend and developed its AI-assisted writing workflows: connecting structured story context to model APIs and keeping the author in control of what is accepted.',
+      zh: '我与朋友一起发起墨台，负责开发 AI 辅助写作流程：把结构化的故事资料接入模型 API，并让作者掌控哪些内容被接受。',
     },
     built: {
-      en: 'Story materials and chapter context feed LLM-assisted planning and writing. The current repository documents draft review before writing, local storage, exports and backups, with AI credentials managed by the local runtime.',
-      zh: '将故事资料与章节上下文用于大模型辅助规划和写作。当前仓库记录了写入前草案审核、本地存储、导出及备份功能；AI 凭据由本地运行环境管理。',
+      en: 'Version 1.1 is organised around “discuss the story with AI → confirm the story materials → write”. AI suggestions for the story materials arrive as drafts the author confirms before anything changes. For prose, the server re-reads the work and combines the story bible, author-confirmed canon facts and recent chapter memory. It then checks the draft for repeated passages and for conflicts in characters, events, timeline and cause and effect. Hard conflicts are rewritten at most twice; if they remain, the text can’t be saved. New facts the model finds become proposals the author approves one by one.',
+      zh: '1.1 版围绕“和 AI 讨论故事 → 确认创作资料 → 写正文”组织。AI 对创作资料的建议先成为草案，作者确认后才会修改作品。生成正文时，服务端重新读取作品，组合设定库、作者已确认的 Canon 事实和最近章节记忆，再检查重复段落以及人物、事件、时间线和因果冲突；硬冲突最多自动重写两次，仍有冲突则不能写入。模型提取出的新事实会成为提案，由作者逐条确认。',
     },
     result: {
-      en: 'A desktop prototype and source code are available. The current README describes planning, chapter writing and review before accepting generated material. Local beta work is ongoing; no user adoption or productivity gain is claimed.',
-      zh: '已有桌面原型与源码。当前 README 说明了规划、章节写作及生成内容接受前的审核流程。本地内测工作仍在推进；不声称用户采用规模或生产力提升。',
+      en: 'Desktop installer and source are available (v1.1.0). The beta checkpoint records 73 domain and API tests and 3 browser flows passing. Real-model quality over a long novel hasn’t been benchmarked yet, and no user adoption is claimed.',
+      zh: '已有桌面安装包和源码（v1.1.0）。内测检查点记录 73 项领域/API 测试和 3 条浏览器流程通过。真实模型在长篇上的表现尚未做基准测试，也不声称用户采用规模。',
     },
-    next: {
-      en: 'Complete the documented local beta checks and evaluate continuity and author review with representative writing tasks.',
-      zh: '完成已记录的本地内测检查，并用有代表性的写作任务评估连贯性与作者审核流程。',
+    limitations: {
+      en: 'Tests use an isolated AI adapter, so they don’t prove the quality of real DeepSeek or OpenAI output. A ~20-chapter benchmark and a two-week author beta are planned but not done. Screenshots use a fictional demo story with AI disconnected.',
+      zh: '测试使用隔离的 AI 适配器，不能证明真实 DeepSeek 或 OpenAI 输出的质量。约 20 章的基准和两周作者内测已列入计划但尚未完成。截图使用虚构示例作品，且未连接 AI。',
     },
-    facts: {
-      en: [
-        'Local manuscript storage',
-        'LLM-assisted drafting',
-        'Author review before writing',
-      ],
-      zh: ['本地文稿存储', '大模型辅助草拟', '作者审核后写入'],
+    value: {
+      en: 'Long-form writers using AI keep hitting the same problems: the model forgets characters and earlier events, and it becomes unclear which text the author actually wrote. MoTai keeps the author in charge — every AI change is a draft, every new fact needs approval, and drafts are checked against the story’s canon before they can be saved.',
+      zh: '用 AI 写长篇的作者总会遇到同样的问题：模型忘了人物和前文，也说不清哪些文字是作者自己写的。墨台让作者始终掌控——AI 的每次改动都是草案，每个新事实都要确认，草稿在保存前还会对照作品设定检查。',
     },
-    gallery: [
+    fit: {
+      en: 'This is AI adoption in practice: deciding where the model helps, where people must review, and how errors are caught before they reach the work. Those are the questions AI adoption and AI operations roles face when putting LLMs into real workflows.',
+      zh: '这就是 AI 落地的实际工作：决定模型在哪里帮忙、哪里必须人工审核、错误如何在进入成品前被拦下。AI 落地推广与 AI 运营岗位把大模型接入真实流程时，面对的正是这些问题。',
+    },
+    roadmap: [
       {
-        src: '/projects/motai/motai-story-bible.webp',
-        width: 1440,
-        height: 900,
-        caption: {
-          en: 'Earlier interface: story bible using fictional content.',
-          zh: '早期界面：使用虚构内容的故事设定集。',
+        text: {
+          en: 'Local models, so drafts never leave the computer.',
+          zh: '支持本地模型，让草稿完全不离开电脑。',
+        },
+        ref: { name: 'Novelcrafter', url: 'https://novelcrafter.com/help/faq/ai-and-prompting/byok' },
+      },
+      {
+        text: {
+          en: 'Richer worldbuilding entries — places, lore, factions — feeding each draft.',
+          zh: '更丰富的世界观条目——地点、背景设定、势力——参与每次生成。',
+        },
+        ref: { name: 'Sudowrite Story Bible', url: 'https://docs.sudowrite.com/using-sudowrite/1ow1qkGqof9rtcyGnrWUBS/what-is-story-bible/jmWepHcQdJetNrE991fjJC' },
+      },
+      {
+        text: {
+          en: 'A clear record of which passages were AI-drafted and how the author changed them, as author groups set rules for disclosing AI use.',
+          zh: '清楚记录哪些段落由 AI 起草、作者如何修改——作者组织正在就 AI 使用的披露制定规则。',
+        },
+        ref: { name: 'Authors Guild · Human Authored', url: 'https://authorsguild.org/news/human-authored-certification-expands-to-all-authors/' },
+      },
+      {
+        text: {
+          en: 'The planned ~20-chapter continuity benchmark and a two-week author beta.',
+          zh: '已计划的约 20 章连贯性基准测试，以及两周作者内测。',
+        },
+        ref: { name: 'Beta checkpoint', url: 'https://github.com/Arthur-LeoAI/MoTai-Story/blob/main/docs/LOCAL_BETA_PROGRESS.md' },
+      },
+    ],
+    landscape: [
+      {
+        name: 'Sudowrite',
+        url: 'https://docs.sudowrite.com/using-sudowrite/1ow1qkGqof9rtcyGnrWUBS/what-is-story-bible/jmWepHcQdJetNrE991fjJC',
+        note: {
+          en: 'AI fiction tool built around a Story Bible — synopsis, characters, worldbuilding, outline — that feeds each draft.',
+          zh: '围绕 Story Bible（梗概、人物、世界观、大纲）构建的 AI 小说工具，这些资料会参与每次起草。',
         },
       },
       {
-        src: '/projects/motai/motai-ai-workspace.webp',
-        width: 1440,
-        height: 900,
-        caption: {
-          en: 'Earlier AI panel. Current provider access is managed by the local runtime.',
-          zh: '早期 AI 面板。当前服务商访问由本地运行环境管理。',
+        name: 'Novelcrafter',
+        url: 'https://novelcrafter.com/help/faq/ai-and-prompting/byok',
+        note: {
+          en: 'Writing workspace with no built-in AI credits: authors bring their own provider or a local model.',
+          zh: '写作工作台，不内置 AI 额度：作者自带服务商密钥或接入本地模型。',
         },
       },
       {
-        src: '/projects/motai/motai-export-workflow.webp',
-        width: 1440,
-        height: 900,
-        caption: {
-          en: 'Earlier interface: document export workflow.',
-          zh: '早期界面：文档导出流程。',
+        name: 'Authors Guild',
+        url: 'https://authorsguild.org/news/human-authored-certification-expands-to-all-authors/',
+        note: {
+          en: '“Human Authored” certification, opened to all US-published authors in March 2026.',
+          zh: '“Human Authored”（人类创作）认证，2026 年 3 月起向所有在美国出版的作者开放。',
         },
       },
     ],
-    contribution: {
-      en: 'I started MoTai with a friend and developed AI-assisted writing workflows, connecting structured story context to model APIs and keeping the author in control of accepted text.',
-      zh: '我与朋友一起发起 MoTai，并开发 AI 辅助写作流程，将结构化故事上下文连接到模型 API，由作者决定接受哪些文本。',
+    facts: {
+      en: [
+        'Drafts confirmed before writing',
+        'Consistency check on every draft',
+        'Canon facts the author approves',
+        'Local storage, 5 export formats',
+      ],
+      zh: ['确认后才写入的草案', '每次生成都做一致性检查', '作者确认的 Canon 事实', '本地存储，5 种导出格式'],
     },
-    limitations: {
-      en: 'Local beta checks remain in progress. Model output still needs review, and earlier interface captures do not represent every current feature. No production reliability or paid adoption is evidenced here.',
-      zh: '本地内测检查仍在进行。模型输出仍需审核，早期界面截图未覆盖当前全部功能。此处未提供生产可靠性或付费采用的证明。',
-    },
+    gallery: [
+      {
+        src: '/projects/motai/motai-writing.jpg',
+        width: 1440,
+        height: 900,
+        caption: {
+          en: 'Writing view: chapters, scene planning and history on the left; “Ask AI” and focus mode above the text (fictional content).',
+          zh: '正文视图：左侧为章节、场景规划与历史；正文上方可“问 AI”或进入专注模式（虚构内容）。',
+        },
+      },
+      {
+        src: '/projects/motai/motai-bible.jpg',
+        width: 1440,
+        height: 900,
+        caption: {
+          en: 'Story materials: outline, characters, world rules and timeline; AI edits always arrive as drafts.',
+          zh: '创作资料：故事大纲、人物关系、世界观规则与时间线；AI 的修改总是先成为草案。',
+        },
+      },
+    ],
     evidence: {
-      en: 'The linked README describes the current workflow and links to beta progress. The gallery records an earlier interface using fictional content, rather than a new acceptance test of the latest release.',
-      zh: '链接中的 README 介绍当前流程并提供内测进度入口。图库记录了使用虚构内容的早期界面，不代表对最新版本重新进行了验收。',
+      en: 'The README describes the current workflow, consistency checks and exports; docs/LOCAL_BETA_PROGRESS.md records the tests and the open beta items. Screenshots use a fictional demo story.',
+      zh: 'README 介绍了当前流程、一致性检查与导出功能；docs/LOCAL_BETA_PROGRESS.md 记录了测试情况和未完成的内测事项。截图使用虚构示例作品。',
     },
     evidencePath: 'blob/main/README.md',
   },
@@ -430,94 +569,135 @@ export const projects: Project[] = [
       width: 1440,
       height: 1000,
       caption: {
-        en: 'Home page of the live Connoisseur site (valerain.com).',
-        zh: 'Connoisseur 线上网站首页（valerain.com）。',
+        en: 'Home page of the live Connoisseur Trade House site (valerain.com).',
+        zh: 'Connoisseur Trade House 线上网站首页（valerain.com）。',
       },
     },
     title: { en: 'Connoisseur', zh: 'Connoisseur' },
     tag: { en: 'Business systems', zh: '业务系统' },
     ctx: { en: 'Independent collaboration', zh: '独立合作项目' },
     status: {
-      en: 'Working MVP · mock data',
-      zh: '可运行 MVP · 模拟数据',
+      en: 'Live MVP · in-memory data',
+      zh: '已上线 MVP · 内存数据',
     },
     subtitle: {
-      en: 'A clearer path from request to order.',
-      zh: '从需求到订单，路径更清晰。',
+      en: 'A clear, trackable path from brief to delivery.',
+      zh: '从需求到交付，清晰可追踪。',
     },
     summary: {
-      en: 'A sourcing workspace bringing requests, quotes and customer case histories together.',
-      zh: '把采购需求、报价与客户案例记录整合到一起的工作台。',
+      en: 'A commission desk for finding objects and arranging tasks: a brief, a reviewed proposal, then a private case the customer can follow.',
+      zh: '寻物与代办的委托平台：提交需求、审核提案，再通过私密案例页跟进进度。',
     },
-    stack: 'Next.js · TypeScript · Tailwind · Mock data',
+    stack: 'Next.js · TypeScript · Tailwind · In-memory store',
     problem: {
-      en: 'How can a cross-border sourcing request stay understandable as it moves through quotes and fulfilment?',
-      zh: '跨境采购需求在报价和履约过程中，如何始终保持清晰可追踪？',
+      en: 'How can a cross-border sourcing request stay clear to both sides as it moves from brief to proposal to delivery?',
+      zh: '跨境寻物需求从提交、提案到交付，如何让双方始终看得清楚？',
     },
     constraints: {
-      en: 'No production backend yet: the MVP had to prove the workflow with in-memory data and mock payments before any real persistence or payment provider.',
-      zh: '尚无生产后端：MVP 需要先用内存数据和模拟支付验证流程，再接入真实的数据存储与支付服务。',
+      en: 'No production database or payment provider yet: the MVP proves the workflow with an in-memory store that mirrors the planned Supabase schema, and development payments are mocked. Case access had to stay private without forcing customers to make an account.',
+      zh: '尚无生产数据库和支付服务：MVP 用与 Supabase 规划结构一致的内存存储验证流程，开发环境的支付为模拟。案例访问必须保持私密，同时不强制客户注册账户。',
+    },
+    contribution: {
+      en: 'I started this project with a friend to turn cross-border sourcing into a traceable brief-to-delivery workflow. This case presents our shared MVP without attributing every component to me.',
+      zh: '我与朋友一起发起项目，把跨境寻物整理成可追踪的“需求到交付”流程。本案例展示合作完成的 MVP，不把所有组件都归为个人完成。',
     },
     built: {
-      en: 'Customer cases connect requests, quotations, addresses and a timeline. A separate admin workspace supports the other side of the process, using an in-memory store and mock payments to explore the handoffs.',
-      zh: '客户案例串联需求、报价、地址和时间线。独立的后台工作台支持流程另一端，通过内存存储和模拟支付探索业务交接。',
+      en: 'Customers commission an object or a task, pay a small review fee, then receive a proposal with scope, timing and price. Each commission becomes a case with a timeline. Private case access uses a case number plus an access code that is stored hashed, never placed in the URL, and locked after five failed attempts. An account desk holds cases, quotes and addresses; an admin workspace handles orders, quotes, refunds and credits, analytics and an email outbox.',
+      zh: '客户可委托寻物或代办，支付少量审核费后收到包含范围、时间和价格的提案。每个委托都会成为带时间线的案例。私密案例访问使用案例编号加访问码，访问码以哈希存储、不出现在网址中，连续失败五次即锁定。账户中心集中管理案例、报价与地址；后台工作台处理订单、报价、退款与抵扣、数据分析和邮件发件箱。',
     },
     result: {
-      en: 'The current MVP uses in-memory data and mock payments. Supabase is a planned migration target, not a connected production database.',
-      zh: '当前 MVP 使用内存数据和模拟支付；计划迁移到 Supabase，尚未接入生产数据库。',
+      en: 'The site is live at valerain.com with the commission flow and private case access. The README notes that data still sits in an in-memory store and that Supabase is a migration target, not a connected database.',
+      zh: '网站已在 valerain.com 上线，包含委托流程和私密案例访问。README 注明数据仍存放在内存中，Supabase 是迁移目标，尚未接入数据库。',
     },
-    next: {
-      en: 'Validate the workflow, then migrate persistence and payments to production services.',
-      zh: '先验证流程，再把数据存储与支付迁移到生产服务。',
+    limitations: {
+      en: 'In-memory data resets when the server restarts. Development payments are mock captures, and production payment needs PayPal to be configured. Nothing here shows real orders, fulfilment or customer numbers.',
+      zh: '内存数据在服务器重启后重置。开发环境的支付为模拟扣款，生产环境需配置 PayPal 才能收款。此处不证明真实订单、履约或客户数量。',
     },
-    facts: {
-      en: [
-        'Request → quote → order',
-        'Customer & admin views',
-        'Mock payments',
-      ],
-      zh: ['需求 → 报价 → 订单', '客户端与后台', '模拟支付'],
+    value: {
+      en: 'Cross-border sourcing often runs through chat threads and spreadsheets, so customers lose track of what was agreed and teams lose track of what is owed. Putting the brief, proposal, payment step and timeline in one case gives both sides a single source of truth.',
+      zh: '跨境寻物常常靠聊天记录和表格推进，客户记不清约定了什么，团队也理不清该交付什么。把需求、提案、付款和时间线放进同一个案例，双方就有了唯一可信的依据。',
     },
-    gallery: [
+    fit: {
+      en: 'It is process design turned into a working system: mapping a request-to-delivery flow, defining the states and hand-offs between customer and admin, and building the screens and access rules around them — the core of business-systems and implementation work.',
+      zh: '这是把流程设计落成可用系统：梳理从需求到交付的流程，定义客户与后台之间的状态和交接，再围绕它们搭建界面和访问规则——正是业务系统与系统实施工作的核心。',
+    },
+    roadmap: [
       {
-        src: '/projects/connoisseur/connoisseur-home.webp',
-        width: 1440,
-        height: 1000,
-        caption: {
-          en: 'Sourcing proposition and entry points.',
-          zh: '采购服务首页与入口。',
+        text: {
+          en: 'Several supplier quotes per brief, compared side by side, with sample costs and lead times.',
+          zh: '同一需求下汇集多家供应商报价并排对比，含样品费用与交期。',
+        },
+        ref: { name: 'Pietra', url: 'https://help.pietrastudio.com/en/articles/11649122-deploy-sourcing-agent' },
+      },
+      {
+        text: {
+          en: 'AI help with the first search: turning a brief into supplier candidates for a person to check.',
+          zh: '用 AI 辅助第一轮搜寻：把需求转成候选供应商，再由人工核实。',
+        },
+        ref: { name: 'Alibaba Accio Agent', url: 'https://www.digitalcommerce360.com/2025/08/14/alibaba-b2b-search-engine-accio-agent/' },
+      },
+      {
+        text: {
+          en: 'Move to Supabase with row-level security, so each customer can only read their own cases.',
+          zh: '迁移到 Supabase 并启用行级安全，让每位客户只能读取自己的案例。',
+        },
+        ref: { name: 'Supabase RLS', url: 'https://supabase.com/features/row-level-security' },
+      },
+    ],
+    landscape: [
+      {
+        name: 'Pietra',
+        url: 'https://help.pietrastudio.com/en/articles/11649122-deploy-sourcing-agent',
+        note: {
+          en: 'Sourcing platform whose AI agent asks factories about cost, minimum order quantity, lead time and samples, then summarises the answers.',
+          zh: '采购平台，其 AI 代理向工厂询问成本、起订量、交期和样品，再汇总结果。',
         },
       },
       {
-        src: '/projects/connoisseur/connoisseur-request-intake.webp',
-        width: 1440,
-        height: 1000,
-        caption: {
-          en: 'Structured request flow with fictional data.',
-          zh: '结构化需求表单（虚构数据）。',
-        },
-      },
-      {
-        src: '/projects/connoisseur/connoisseur-account-overview.webp',
-        width: 1440,
-        height: 1000,
-        caption: {
-          en: 'Buyer account with fictional orders.',
-          zh: '买家账户总览（虚构订单）。',
+        name: 'Alibaba Accio',
+        url: 'https://www.digitalcommerce360.com/2025/08/14/alibaba-b2b-search-engine-accio-agent/',
+        note: {
+          en: 'Alibaba International’s AI agent for automating much of the global sourcing process (reported August 2025).',
+          zh: '阿里巴巴国际站的 AI 代理，用于自动完成全球采购的大部分流程（2025 年 8 月报道）。',
         },
       },
     ],
-    contribution: {
-      en: 'I started this project with a friend to organise cross-border sourcing information into a traceable request-to-order workflow. This case presents our shared MVP without attributing every component to me.',
-      zh: '我与朋友一起发起项目，将跨境采购信息组织为可追踪的需求到订单流程。本案例展示合作完成的 MVP，不把所有组件都归为个人完成。',
+    facts: {
+      en: ['Brief → proposal → case', 'Hashed access codes, none in URLs', 'Customer desk & admin workspace'],
+      zh: ['需求 → 提案 → 案例', '访问码哈希存储，不进网址', '客户中心与后台工作台'],
     },
-    limitations: {
-      en: 'In-memory data resets on restart. Payments are mocked and Supabase is a schema target, not a connected production database. The prototype does not establish real fulfilment or customer adoption.',
-      zh: '内存数据在重启后重置。支付为模拟流程，Supabase 只是数据库结构迁移目标，尚未接入生产数据库。原型不证明真实履约或客户采用。',
-    },
+    gallery: [
+      {
+        src: '/projects/connoisseur/connoisseur-process.jpg',
+        width: 1440,
+        height: 900,
+        caption: {
+          en: 'The process as customers see it: brief, proposal, then a case followed to delivery.',
+          zh: '客户看到的流程：提交需求、审核提案、跟进案例直至交付。',
+        },
+      },
+      {
+        src: '/projects/connoisseur/connoisseur-request.jpg',
+        width: 1440,
+        height: 900,
+        caption: {
+          en: 'Commission form: a structured brief, references, budget and quantity (empty form, public page).',
+          zh: '委托表单：结构化需求、参考图、预算与数量（空白表单，公开页面）。',
+        },
+      },
+      {
+        src: '/projects/connoisseur/connoisseur-case.jpg',
+        width: 1440,
+        height: 900,
+        caption: {
+          en: 'Private case access: case number plus access code, never in the URL, locked after five failed attempts.',
+          zh: '私密案例访问：案例编号加访问码，不进网址，连续失败五次即锁定。',
+        },
+      },
+    ],
     evidence: {
-      en: 'The README lists implemented customer and admin routes, mock payments and persistence limits. Portfolio screenshots use fictional orders.',
-      zh: 'README 列出了已实现的客户与后台路由、模拟支付及持久化限制。作品集截图使用虚构订单。',
+      en: 'The README lists the implemented routes, hashed access codes, admin workspace and the persistence and payment limits. Screenshots show public pages only.',
+      zh: 'README 列出了已实现的路由、访问码哈希、后台工作台，以及数据持久化和支付方面的限制。截图仅展示公开页面。',
     },
     evidencePath: 'blob/main/README.md',
   },
@@ -829,9 +1009,16 @@ export const ui = {
       en: 'Limitations',
       zh: '局限',
     },
-    next: {
-      en: 'Future work',
-      zh: '后续计划',
+  },
+  caseMore: {
+    value: { en: 'Why it matters', zh: '价值所在' },
+    fit: { en: 'Why it fits the roles I’m after', zh: '与目标岗位的契合' },
+    roadmap: { en: 'Where it could go next', zh: '下一步可以做什么' },
+    roadmapRef: { en: 'Seen in', zh: '参考' },
+    landscape: { en: 'Who else is working on this', zh: '谁在做类似的事' },
+    checked: {
+      en: 'Each source was checked against its own page in November 2026.',
+      zh: '以上来源均于 2026 年 11 月对照原始页面核实。',
     },
   },
   walkthrough: { en: 'Interface walkthrough', zh: '界面一览' },

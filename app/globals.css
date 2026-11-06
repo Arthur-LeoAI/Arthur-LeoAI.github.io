@@ -1819,15 +1819,6 @@ img.crop {
   isolation: isolate;
   padding: clamp(36px, 5vw, 64px) 0 clamp(32px, 4vw, 48px);
 }
-.spot {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -12vw;
-  right: -12vw;
-  z-index: -1;
-  pointer-events: none;
-}
 .back {
   font-size: 15px;
   font-weight: 500;
@@ -3525,5 +3516,174 @@ footer[id] {
 @media (max-width: 900px) {
   .hero {
     padding-bottom: 150px;
+  }
+}
+
+/* ===== Shared hand-made layer (all pages, screen only) ===== */
+/* One visual language across home, case studies, the lab and the résumé page: paper grain,
+   hand-drawn underlines, sketched card borders, hand-lettered labels and ink-circle numbers.
+   Screen only, so the printed résumé stays plain. */
+@media screen {
+  :root {
+    --clay: #c96442;
+    --sketch-radius: 18px 6px 20px 5px / 6px 18px 5px 22px;
+  }
+  body {
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27220%27%20height%3D%27220%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.85%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%200.35%200%200%200%200%200.3%200%200%200%200%200.25%200%200%200%200.07%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url(%23n)%27%2F%3E%3C%2Fsvg%3E");
+    background-size: 220px;
+  }
+  /* Hand-drawn underline under section and page titles */
+  .h2::after,
+  .case-hero h1::after,
+  .resume-head h1::after {
+    content: '';
+    display: block;
+    width: clamp(90px, 10vw, 150px);
+    height: 12px;
+    margin-top: 12px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20150%2012%27%3E%3Cpath%20d%3D%27M2%208%20C%2020%202%2C%2035%2012%2C%2052%206%20S%2085%201%2C%20100%207%20S%20130%2011%2C%20148%204%27%20fill%3D%27none%27%20stroke%3D%27%23c96442%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E") no-repeat left center / contain;
+  }
+  /* Hand-lettered labels */
+  .label,
+  .hand-label,
+  .case-tag,
+  .next-label,
+  .step-label h2 {
+    font: 600 21px/1.15 Caveat, var(--serif);
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--clay);
+  }
+  .hand-label {
+    font-size: 26px;
+    margin: 0 0 10px;
+  }
+  .case-tag {
+    font-size: 24px;
+  }
+  .step-label {
+    align-items: center;
+  }
+  .step-label h2 {
+    font-size: 24px;
+  }
+  /* Ink-circle step numbers in case studies */
+  .case-step .step-n {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border: 1.6px solid var(--ink);
+    border-radius: 52% 48% 55% 45% / 47% 55% 45% 53%;
+    font: 600 15px/1 var(--sans);
+    color: var(--ink);
+    background: var(--card);
+  }
+  /* Sketched card borders */
+  .strengths-grid .strength-card,
+  .case-roadmap li,
+  .case-landscape a,
+  .transformer-lab,
+  .supporting-card,
+  .mat {
+    border: 1.5px solid var(--ink);
+    border-radius: var(--sketch-radius);
+  }
+  .mat {
+    background: var(--card);
+  }
+  .mat-inner {
+    border-radius: 10px 4px 12px 3px / 4px 10px 3px 12px;
+  }
+  .strengths-grid .strength-card:hover,
+  .case-landscape a:hover,
+  .supporting-card:hover {
+    border-color: var(--accent);
+  }
+}
+
+/* Case study: why it matters, fit, next steps, who else works on this */
+.case-more {
+  display: grid;
+  gap: clamp(48px, 6vw, 80px);
+  padding: clamp(48px, 6vw, 88px) 0;
+}
+.case-why {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 64px);
+}
+.case-why p,
+.case-roadmap p,
+.case-landscape span {
+  color: var(--ink-2);
+}
+.case-why p {
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 620px;
+}
+.case-roadmap ol,
+.case-landscape ul {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+.case-roadmap ol {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+}
+.case-landscape ul {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+.case-roadmap li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 22px 20px;
+  background: var(--card);
+}
+.roadmap-n {
+  font: 600 30px/1 Caveat, var(--serif);
+  color: #c96442;
+}
+.case-roadmap p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.case-roadmap a {
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 500;
+}
+.case-landscape a {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 20px 22px;
+  background: var(--card);
+  color: var(--ink);
+  transition: border-color 0.2s;
+}
+.case-landscape strong {
+  font-size: 17px;
+  font-weight: 600;
+}
+.case-landscape span {
+  font-size: 15px;
+  line-height: 1.55;
+}
+.sources-note {
+  margin-top: 16px;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--subtle);
+}
+@media (max-width: 760px) {
+  .case-why {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

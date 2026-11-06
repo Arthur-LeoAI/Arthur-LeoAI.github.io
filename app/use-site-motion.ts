@@ -1,8 +1,8 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-// Scroll reveal, scroll progress, parallax, mouse follow, spotlight, card tilt and magnetic buttons.
-// Elements opt in with data-reveal, data-progress, data-speed, data-follow, data-spot, data-tilt, data-magnet.
+// Scroll reveal, scroll progress, parallax, card tilt and magnetic buttons.
+// Elements opt in with data-reveal, data-progress, data-speed, data-tilt, data-magnet.
 type Motion = { rescan: () => void; detach: () => void };
 
 function attach(root: HTMLElement): Motion {
@@ -64,17 +64,6 @@ function attach(root: HTMLElement): Motion {
   onScroll();
   on(root, 'pointermove', (e) => {
     if (e.pointerType !== 'mouse') return;
-    const x = e.clientX / innerWidth - 0.5;
-    const y = e.clientY / innerHeight - 0.5;
-    root.querySelectorAll<HTMLElement>('[data-follow]').forEach((el) => {
-      const k = +(el.dataset.follow || 0);
-      el.style.transition = `translate .6s ${ease}`;
-      el.style.translate = `${x * k}px ${y * k}px`;
-    });
-    root.querySelectorAll<HTMLElement>('[data-spot]').forEach((el) => {
-      const r = el.getBoundingClientRect();
-      el.style.background = `radial-gradient(140px circle at ${e.clientX - r.left}px ${e.clientY - r.top}px, ${el.dataset.spot}, transparent 70%)`;
-    });
     const card = (e.target as Element | null)?.closest?.('[data-tilt]');
     root.querySelectorAll<HTMLElement>('[data-tilt]').forEach((c) => {
       const img = c.querySelector('img');

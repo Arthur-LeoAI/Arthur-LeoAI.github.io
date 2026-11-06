@@ -456,7 +456,6 @@ function Case({ p }: { p: Project }) {
       'built',
       'result',
       'limitations',
-      'next',
     ] as const
   ).map((k) => ({ k, label: ui.caseSteps[k], body: p[k] }));
   return (
@@ -482,7 +481,6 @@ function Case({ p }: { p: Project }) {
         </header>
         <main id="main" tabIndex={-1}>
           <section className="case-hero">
-            <div className="spot" data-spot="rgba(47,138,100,0.12)" />
             <a className="back" href={archive ? '/#projects' : '/#work'}>
               {t(ui.allProjects)}
             </a>
@@ -564,6 +562,57 @@ function Case({ p }: { p: Project }) {
               </div>
             </section>
           )}
+
+          <section className="case-more ruled">
+            <div className="case-why">
+              <div data-reveal="0">
+                <h2 className="hand-label">{t(ui.caseMore.value)}</h2>
+                <p>{t(p.value)}</p>
+              </div>
+              <div data-reveal="120">
+                <h2 className="hand-label">{t(ui.caseMore.fit)}</h2>
+                <p>{t(p.fit)}</p>
+              </div>
+            </div>
+            {p.roadmap.length > 0 && (
+              <div className="case-roadmap">
+                <h2 className="h2" data-reveal="0">
+                  {t(ui.caseMore.roadmap)}
+                </h2>
+                <ol>
+                  {p.roadmap.map((r, i) => (
+                    <li key={r.text.en} data-reveal={String((i % 2) * 100)}>
+                      <span className="roadmap-n">{String(i + 1).padStart(2, '0')}</span>
+                      <p>{t(r.text)}</p>
+                      {r.ref && (
+                        <a href={r.ref.url} target="_blank" rel="noreferrer">
+                          {t(ui.caseMore.roadmapRef)}: {r.ref.name} ↗
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+            {p.landscape.length > 0 && (
+              <div className="case-landscape">
+                <h2 className="h2" data-reveal="0">
+                  {t(ui.caseMore.landscape)}
+                </h2>
+                <ul>
+                  {p.landscape.map((l) => (
+                    <li key={l.name} data-reveal="0">
+                      <a href={l.url} target="_blank" rel="noreferrer">
+                        <strong>{l.name} ↗</strong>
+                        <span>{t(l.note)}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="sources-note">{t(ui.caseMore.checked)}</p>
+              </div>
+            )}
+          </section>
 
           <section className="case-outcome ruled">
             <div data-reveal="0">
