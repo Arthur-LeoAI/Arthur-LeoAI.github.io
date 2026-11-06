@@ -10,12 +10,13 @@ The previous Next.js (vinext) portfolio is kept unchanged on the **`classic`** b
 - `site/resume/index.html`: the web résumé. Add `?lang=zh` for Chinese. It prints to one A4 page.
 - `site/assets/`: images and the résumé PDFs.
 - `site/_redirects`: Cloudflare Pages redirects old classic-site URLs (`/work/*`, `/lab`) to the home page.
-- `scripts/build.mjs`: copies `site/` into `outputs/<edition>/`.
 
-## Build and deploy
+## Deploy
 
-- **Cloudflare Pages:** build command `node scripts/build.mjs story`, output `outputs/story`, production branch `main`.
-- **GitHub Pages:** `.github/workflows/pages.yml` runs the same build.
+There is no build step. `site/` is published as is.
+
+- **Cloudflare Pages:** build command empty, output directory `site`, production branch `main`.
+- **GitHub Pages:** `.github/workflows/pages.yml` uploads `site/`.
 - **Local preview:** `node scripts/serve.mjs site 4175`.
 
 ## Résumé PDFs
