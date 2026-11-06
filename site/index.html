@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jiaming Li — E-commerce &amp; Data Analyst</title>
+<meta name="description" content="Jiaming Li — e-commerce and data analyst (SQL, Python, Power BI). Amazon EU &amp; NA marketplace analysis, data pipelines and applied AI." />
+<link rel="icon" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #111111;
+    --paper: #ffffff;
+    --mint: #c8e6c9;
+    --lilac: #dcc6e8;
+    --coral: #f07b73;
+    --sun: #f7d27a;
+    --sky: #bcdcf3;
+    --cream: #fbf6ea;
+    --b: 3px solid var(--ink);
+    --sh: 7px 7px 0 var(--ink);
+    --sh-sm: 4px 4px 0 var(--ink);
+    --r: 14px;
+    --font: "Space Grotesk", "Noto Sans SC", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--cream); -webkit-font-smoothing: antialiased; }
+  html[lang="zh"] body { letter-spacing: .01em; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  ::selection { background: var(--ink); color: var(--sun); }
+
+  /* ---------- shared blocks ---------- */
+  .box { background: var(--paper); border: var(--b); border-radius: var(--r); box-shadow: var(--sh); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+    font: 700 clamp(15px, 1.4vw, 19px)/1 var(--font); letter-spacing: .06em; text-transform: uppercase;
+    padding: 20px 30px; border: var(--b); border-radius: 12px; background: var(--paper); color: var(--ink);
+    box-shadow: 8px 8px 0 var(--shc, var(--ink));
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 11px 11px 0 var(--shc, var(--ink)); }
+  .btn:active { transform: translate(6px, 6px); box-shadow: 0 0 0 var(--shc, var(--ink)); }
+  .btn.dark { background: var(--ink); color: #fff; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 12px; font: 700 clamp(18px, 1.8vw, 24px)/1 var(--font);
+    padding: 16px 26px; background: var(--paper); border: var(--b); border-radius: 12px; box-shadow: 6px 6px 0 var(--ink);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .chip:hover { transform: translate(-2px, -2px) rotate(1.2deg); box-shadow: 9px 9px 0 var(--ink); }
+  .chip:active { transform: translate(5px, 5px); box-shadow: none; }
+  .chip svg { width: 22px; height: 22px; flex: none; }
+  .label { font: 700 13px/1 var(--font); letter-spacing: .14em; text-transform: uppercase; }
+  .tag { display: inline-block; font: 700 12px/1 var(--font); letter-spacing: .08em; text-transform: uppercase; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); }
+  .wrap { width: min(1240px, 100% - 2 * clamp(16px, 4vw, 48px)); margin-inline: auto; }
+  h1, h2, h3 { margin: 0; letter-spacing: -.02em; }
+  .sec-title { font-size: clamp(44px, 7vw, 96px); font-weight: 700; line-height: .95; }
+  .sec-title .hl { background: var(--ink); color: #fff; padding: 0 .16em; border-radius: 6px; display: inline-block; transform: rotate(-1.5deg); box-shadow: 6px 6px 0 rgba(0,0,0,.18); }
+  .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(36px, 5vw, 64px); }
+  .sec-head p { margin: 0; max-width: 420px; font-size: 18px; line-height: 1.55; }
+  section.band { padding: clamp(72px, 10vw, 140px) 0; border-top: var(--b); }
+
+  /* ---------- hero split ---------- */
+  .split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+  .split > div { padding: clamp(24px, 3.4vw, 48px); position: relative; }
+  .left { background: var(--mint); display: flex; flex-direction: column; }
+  .right { background: var(--lilac); display: flex; flex-direction: column; justify-content: space-between; gap: 56px; padding-left: clamp(24px, 6vw, 96px) !important; padding-top: clamp(40px, 5vw, 64px) !important; }
+
+  nav.top { position: sticky; top: clamp(12px, 2vw, 24px); z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 22px 32px; }
+  .logo { font-weight: 700; font-size: 26px; letter-spacing: .01em; white-space: nowrap; }
+  .nav-links { display: flex; gap: clamp(16px, 2.6vw, 40px); }
+  .nav-links a { font-weight: 700; font-size: 16px; letter-spacing: .04em; text-transform: uppercase; padding-bottom: 6px; border-bottom: 3px solid transparent; transition: color .15s; }
+  .nav-links a:hover, .nav-links a.on { color: var(--coral); border-color: var(--ink); }
+  .nav-links a.on { color: #e25c52; }
+  nav.top { gap: 20px; }
+  .nav-links { margin-left: auto; }
+  .lang { display: flex; border: var(--b); border-radius: 999px; overflow: hidden; flex: none; }
+  .lang button { font: 700 14px/1 var(--font); letter-spacing: .04em; padding: 9px 13px; border: 0; background: var(--paper); color: var(--ink); cursor: pointer; }
+  .lang button + button { border-left: var(--b); }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .lang button[aria-pressed="false"]:hover { background: var(--sun); }
+
+  .hero { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: clamp(48px, 7vw, 96px) clamp(0px, 2.4vw, 40px) 32px; }
+  .hello { font-size: clamp(46px, 4.9vw, 104px); font-weight: 700; line-height: 1; text-shadow: 4px 4px 0 rgba(0,0,0,.12); display: flex; flex-wrap: wrap; align-items: center; gap: .18em .26em; }
+  .namebox { background: var(--ink); color: #fff; padding: .02em .16em .08em; border-radius: 6px; transform: rotate(-1.5deg); box-shadow: 8px 8px 0 rgba(0,0,0,.18); display: inline-block; text-shadow: none; }
+  html[lang="zh"] .hello { font-weight: 900; font-size: clamp(42px, 4.3vw, 92px); }
+  @media (max-width: 1080px) { .hello { font-size: clamp(50px, 11vw, 112px); } }
+  .tagline { font-size: clamp(19px, 1.9vw, 27px); line-height: 1.4; margin: clamp(24px, 3vw, 40px) 0 0; max-width: 34ch; }
+  .tagline b { background: var(--sun); padding: 0 6px; border: 2px solid var(--ink); border-radius: 6px; white-space: nowrap; }
+  .cta { display: flex; flex-wrap: wrap; gap: 28px; margin-top: clamp(44px, 5vw, 72px); }
+  .cta .dark { --shc: var(--coral); transform: rotate(-1deg); }
+  .cta .light { --shc: var(--sun); transform: rotate(.6deg); }
+  .cta .dark:hover { transform: translate(-2px,-2px) rotate(-2deg); }
+
+  .dock { display: flex; gap: 26px; justify-content: center; padding-top: 24px; }
+  .round {
+    width: 78px; height: 78px; border-radius: 50%; display: grid; place-items: center; background: var(--paper);
+    border: var(--b); box-shadow: 5px 5px 0 var(--ink); cursor: pointer; font: 700 15px/1 var(--font); color: var(--ink);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .round:hover { transform: translate(-2px,-2px) rotate(-8deg); box-shadow: 8px 8px 0 var(--ink); }
+  .round:active { transform: translate(4px,4px); box-shadow: none; }
+  .round svg { width: 26px; height: 26px; }
+
+  .about h2, .touch h2 { font-size: clamp(38px, 4.2vw, 62px); font-weight: 700; }
+  .quote { border-left: 5px solid var(--ink); padding: 6px 0 6px clamp(20px, 3vw, 44px); margin-top: clamp(28px, 3.4vw, 48px); font-size: clamp(17px, 1.35vw, 21px); line-height: 1.7; max-width: 48ch; }
+  .portrait-row { display: flex; align-items: center; gap: 22px; margin-top: 36px; }
+  .portrait { width: 112px; height: 112px; border-radius: 50%; border: var(--b); box-shadow: var(--sh-sm); object-fit: cover; object-position: center 20%; background: var(--sun); transform: rotate(-4deg); }
+  .status { font-weight: 600; font-size: 16px; line-height: 1.45; max-width: 30ch; }
+  .status i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #2f8a64; border: 2px solid var(--ink); margin-right: 8px; vertical-align: -1px; animation: pulse 1.8s infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(47,138,100,.25); } }
+  .domain { font-weight: 700; font-size: clamp(22px, 2vw, 30px); margin: clamp(28px, 3.5vw, 44px) 0 32px; word-break: break-all; }
+  .domain a { border-bottom: 3px solid var(--ink); }
+  .domain a:hover { background: var(--ink); color: #fff; }
+  .chips { display: flex; flex-wrap: wrap; gap: 28px 30px; }
+  .chips .chip:nth-child(1) { transform: rotate(-1.2deg); }
+  .chips .chip:nth-child(2) { transform: rotate(.8deg); }
+  .chips .chip:nth-child(3) { transform: rotate(-.6deg); }
+
+  /* ---------- marquee ---------- */
+  .marquee { background: var(--ink); color: #fff; border-block: var(--b); overflow: hidden; white-space: nowrap; }
+  .marquee .track { display: inline-flex; gap: 48px; padding: 20px 0; font-weight: 700; font-size: clamp(20px, 2.4vw, 30px); letter-spacing: .04em; text-transform: uppercase; animation: slide 32s linear infinite; }
+  .marquee span::after { content: "✦"; margin-left: 48px; color: var(--sun); }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* ---------- work ---------- */
+  #work { background: var(--sun); }
+  .grid-work { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(28px, 3.4vw, 48px); }
+  .card { overflow: hidden; display: flex; flex-direction: column; transition: transform .15s ease, box-shadow .15s ease; }
+  .card:nth-child(odd) { transform: rotate(-.6deg); }
+  .card:nth-child(even) { transform: rotate(.6deg) translateY(28px); }
+  .card:hover { transform: translate(-4px, -4px) rotate(0); box-shadow: 12px 12px 0 var(--ink); }
+  .card:nth-child(even):hover { transform: translate(-4px, 24px) rotate(0); }
+  .card .shot { aspect-ratio: 16 / 10; border-bottom: var(--b); overflow: hidden; background: var(--c, var(--mint)); padding: 18px 18px 0; }
+  .card .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; border: 2px solid var(--ink); border-bottom: 0; border-radius: 8px 8px 0 0; transition: transform .4s ease; }
+  .card:hover .shot img { transform: scale(1.04); }
+  .card .body { padding: 26px 28px 30px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+  .card .meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .card .num { font-weight: 700; font-size: 15px; letter-spacing: .1em; }
+  .card h3 { font-size: clamp(28px, 2.8vw, 38px); font-weight: 700; display: flex; justify-content: space-between; gap: 12px; }
+  .card h3 .arr { display: grid; place-items: center; width: 46px; height: 46px; flex: none; border: var(--b); border-radius: 50%; background: var(--c); font-size: 22px; transition: transform .2s; }
+  .card:hover h3 .arr { transform: rotate(45deg); }
+  .card p { margin: 0; font-size: 17px; line-height: 1.55; }
+  .card .stack { margin-top: auto; padding-top: 12px; font-size: 14px; font-weight: 600; opacity: .75; }
+  .card ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* ---------- skills ---------- */
+  #skills { background: var(--sky); }
+  .grid-skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(28px, 3.4vw, 48px); }
+  .skill { padding: 30px 28px 34px; }
+  .skill:nth-child(1) { background: var(--mint); transform: rotate(-1deg); }
+  .skill:nth-child(2) { background: var(--lilac); transform: rotate(.8deg); }
+  .skill:nth-child(3) { background: var(--sun); transform: rotate(.6deg); }
+  .skill:nth-child(4) { background: var(--cream); transform: rotate(-.7deg); }
+  .roles { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .roles li { font-weight: 700; font-size: 15px; padding: 9px 14px; background: #fff; border: 2px solid var(--ink); border-radius: 8px; box-shadow: 3px 3px 0 var(--ink); }
+  .roles li:nth-child(4n+1) { background: var(--mint); }
+  .roles li:nth-child(4n+2) { background: var(--sun); }
+  .roles li:nth-child(4n+3) { background: var(--lilac); }
+  .roles li:nth-child(4n) { background: var(--sky); }
+  .contact-card p.loc { font-size: 16px; font-weight: 600; margin-top: 24px; }
+  .skill .ico { width: 64px; height: 64px; border: var(--b); border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: var(--sh-sm); margin-bottom: 26px; }
+  .skill .ico svg { width: 28px; height: 28px; }
+  .skill h3 { font-size: 28px; margin-bottom: 18px; }
+  .skill ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill li { font-weight: 700; font-size: 15px; padding: 9px 14px; background: #fff; border: 2px solid var(--ink); border-radius: 8px; box-shadow: 3px 3px 0 var(--ink); }
+
+  /* ---------- experience ---------- */
+  #experience { background: var(--cream); }
+  .timeline { display: flex; flex-direction: column; gap: 34px; }
+  .job { display: grid; grid-template-columns: 240px 1fr; overflow: hidden; }
+  .job .when { background: var(--c); border-right: var(--b); padding: 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; }
+  .job .when .label { line-height: 1.5; }
+  .job .when .big { font-size: 56px; font-weight: 700; line-height: 1; }
+  .job .what { padding: 28px 32px 30px; }
+  .job h3 { font-size: clamp(24px, 2.4vw, 32px); }
+  .job .org { font-weight: 600; margin: 8px 0 18px; opacity: .8; }
+  .job ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .job li { padding-left: 30px; position: relative; font-size: 17px; line-height: 1.55; }
+  .job li::before { content: "→"; position: absolute; left: 0; font-weight: 700; }
+  .job .rel { display: inline-block; margin-top: 18px; font-weight: 700; border-bottom: 3px solid var(--ink); }
+  .job .rel:hover { background: var(--ink); color: #fff; }
+  .edu { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 60px; }
+  .edu .box { padding: 28px 30px; }
+  .edu .box:nth-child(1) { background: var(--sky); }
+  .edu .box:nth-child(2) { background: var(--lilac); }
+  .edu h3 { font-size: 24px; margin: 14px 0 6px; }
+  .edu p { margin: 4px 0 0; font-size: 16px; line-height: 1.5; }
+  .edu .courses-l { display: block; margin-top: 22px; font-size: 12px; }
+  .courses { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .courses li { font-weight: 700; font-size: 14px; padding: 7px 11px; background: #fff; border: 2px solid var(--ink); border-radius: 8px; box-shadow: 2px 2px 0 var(--ink); }
+
+  /* ---------- contact ---------- */
+  #contact { background: var(--coral); }
+  .contact-card { padding: clamp(32px, 5vw, 72px); display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: center; background: var(--cream); }
+  .contact-card h2 { font-size: clamp(42px, 6vw, 84px); line-height: .98; }
+  .contact-card p { font-size: 19px; line-height: 1.55; margin: 22px 0 0; max-width: 40ch; }
+  .contact-actions { display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
+  .contact-actions .btn { width: 100%; justify-content: space-between; }
+  .contact-actions .btn:nth-child(1) { --shc: var(--coral); }
+  .contact-actions .btn:nth-child(2) { --shc: var(--sun); }
+  .contact-actions .btn:nth-child(3) { --shc: var(--mint); }
+  footer { background: var(--ink); color: #fff; padding: 28px 0; font-weight: 600; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* ---------- reveal ---------- */
+  .rv { opacity: 0; translate: 0 26px; transition: opacity .6s ease, translate .6s ease; }
+  .rv.in { opacity: 1; translate: 0 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .rv { opacity: 1; translate: none; }
+    .marquee .track, .status i { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1080px) {
+    .split { grid-template-columns: 1fr; min-height: 0; }
+    .right { gap: 64px; padding-bottom: 72px !important; }
+    .dock { display: none; }
+    .contact-card { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 780px) {
+    nav.top { padding: 16px 18px; }
+    .logo { font-size: 20px; }
+    .nav-links { gap: 14px; }
+    .nav-links a { font-size: 13px; }
+    .grid-work, .grid-skills { grid-template-columns: 1fr; }
+    .card:nth-child(even) { transform: rotate(.6deg); }
+    .card:nth-child(even):hover { transform: translate(-4px,-4px); }
+    .job { grid-template-columns: 1fr; }
+    .job .when { border-right: 0; border-bottom: var(--b); flex-direction: row; align-items: center; }
+    .job .when .big { font-size: 40px; }
+    .edu { grid-template-columns: 1fr; }
+    .btn { padding: 18px 22px; }
+    .cta { gap: 20px; }
+  }
+  @media (max-width: 560px) {
+    .nav-links { display: none; }
+    .lang { margin-left: auto; }
+    .chips { gap: 20px; }
+    .chip { padding: 14px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="split">
+  <!-- LEFT: nav + hero -->
+  <div class="left">
+    <nav class="top box" aria-label="Main">
+      <a class="logo" href="#top" id="top">Jiaming Li</a>
+      <div class="nav-links">
+        <a href="#work" data-i="nav.work">Work</a>
+        <a href="#skills" data-i="nav.skills">Skills</a>
+        <a href="#experience" data-i="nav.exp">Experience</a>
+        <a href="#contact" data-i="nav.contact">Contact</a>
+      </div>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <h1 class="hello"><span data-i="hero.hi">Hi, I’m</span> <span class="namebox" data-i="hero.name">JIAMING</span></h1>
+      <p class="tagline" data-i="hero.tag" data-html>E-commerce &amp; data analyst who works <b>AI-first</b>. I combine SQL, Python and AI tools to turn marketplace data into decisions — and to get done what simply wouldn’t scale by hand.</p>
+      <div class="cta">
+        <a class="btn dark" href="#work" data-i="hero.see">See my work</a>
+        <a class="btn light" href="#contact" data-i="hero.contact">Contact me</a>
+      </div>
+    </header>
+
+    <div class="dock">
+      <a class="round" id="cvBtn" href="assets/jiaming-li-resume.pdf" target="_blank" rel="noopener" aria-label="Résumé PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M12 11v6M9 14l3 3 3-3"/></svg>
+      </a>
+      <a class="round" href="mailto:arthur.jiaming.li@gmail.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- RIGHT: about + get in touch -->
+  <div class="right">
+    <section class="about" id="about">
+      <h2 data-i="about.h">About Me</h2>
+      <p class="quote" data-i="about.p">I analyse Amazon performance across 8 European and 3 North American marketplaces, each with 2,000+ ASINs — finding where sales, traffic, fees and ads really break, then fixing them. I work in SQL, Python, Excel and Power BI, and build the pipelines, dashboards and AI-assisted steps that turn one-off analysis into a process. MSc Interactive Media, University College Cork.</p>
+      <div class="portrait-row">
+        <img class="portrait" src="assets/portrait.jpg" alt="Portrait of Jiaming Li" />
+        <p class="status"><i></i><span data-i="about.status">Based in China · Open to Europe &amp; the UK, North America, Australia &amp; New Zealand · Visa sponsorship required</span></p>
+      </div>
+    </section>
+
+    <section class="touch">
+      <h2 data-i="touch.h">Get In Touch</h2>
+      <p class="domain"><a href="mailto:arthur.jiaming.li@gmail.com">arthur.jiaming.li@gmail.com</a></p>
+      <div class="chips">
+        <a class="chip" href="https://github.com/Arthur-LeoAI" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+          GitHub
+        </a>
+        <a class="chip" href="https://www.linkedin.com/in/arthurjiamingli" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg>
+          LinkedIn
+        </a>
+        <a class="chip" id="cvChip" href="assets/jiaming-li-resume.pdf" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+          <span data-i="touch.cv">Résumé</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="marq"></div></div>
+
+<!-- WORK -->
+<section class="band" id="work">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 class="sec-title"><span data-i="work.h1">Selected</span> <span class="hl" data-i="work.h2">Work</span></h2>
+      <p data-i="work.p">A spreadsheet process turned into a decision tool, live data wired into one view, and AI kept under human review.</p>
+    </div>
+    <div class="grid-work" id="projects"></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="band" id="skills">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 class="sec-title"><span data-i="skills.h1">My</span> <span class="hl" data-i="skills.h2">Toolkit</span></h2>
+      <p data-i="skills.p">The analyst stack these roles ask for — SQL, Python, Power BI — plus the engineering to automate it.</p>
+    </div>
+    <div class="grid-skills" id="skillGrid"></div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="band" id="experience">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <h2 class="sec-title"><span data-i="exp.h1">Where I’ve</span> <span class="hl" data-i="exp.h2">Worked</span></h2>
+      <p data-i="exp.p">Marketplace operations, data platform engineering and research analysis.</p>
+    </div>
+    <div class="timeline" id="jobs"></div>
+    <div class="edu" id="edu"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="band" id="contact">
+  <div class="wrap">
+    <div class="contact-card box rv">
+      <div>
+        <span class="tag" data-i="contact.tag">Open to</span>
+        <h2 style="margin-top:22px" data-i="contact.h">Need someone to make sense of your data?</h2>
+        <ul class="roles" id="roles"></ul>
+        <p class="loc" data-i="contact.p">Based in China · open to Europe & the UK, North America, Australia & New Zealand · visa sponsorship required. Email is the fastest way to reach me.</p>
+      </div>
+      <div class="contact-actions">
+        <a class="btn dark" href="mailto:arthur.jiaming.li@gmail.com"><span data-i="contact.mail">Email me</span> <span>→</span></a>
+        <a class="btn" href="https://www.linkedin.com/in/arthurjiamingli" target="_blank" rel="noopener">LinkedIn <span>↗</span></a>
+        <a class="btn" id="cvBtn2" href="assets/jiaming-li-resume.pdf" target="_blank" rel="noopener"><span data-i="contact.cv">Résumé PDF</span> <span>↓</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jiaming Li</span>
+    <a href="#top" data-i="foot.top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+const ICONS = {
+  data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.7 12.4a1 1 0 0 0 1 .8h9.6a1 1 0 0 0 1-.8L21 7H6"/></svg>',
+  flow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>',
+  ai: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>',
+  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>'
+};
+
+const T = {
+  en: {
+    'nav.work':'Work','nav.skills':'Skills','nav.exp':'Experience','nav.contact':'Contact',
+    'hero.hi':'Hi, I’m','hero.name':'JIAMING',
+    'hero.tag':'E-commerce &amp; data analyst who works <b>AI-first</b>. I combine SQL, Python and AI tools to turn marketplace data into decisions — and to get done what simply wouldn’t scale by hand.',
+    'hero.see':'See my work','hero.contact':'Contact me',
+    'about.h':'About Me',
+    'about.p':'I analyse Amazon performance across 8 European and 3 North American marketplaces, each with 2,000+ ASINs — finding where sales, traffic, fees and ads really break, then fixing them. I work in SQL, Python, Excel and Power BI, and build the pipelines, dashboards and AI-assisted steps that turn one-off analysis into a process. MSc Interactive Media, University College Cork.',
+    'about.status':'Based in China · Open to Europe & the UK, North America, Australia & New Zealand · Visa sponsorship required',
+    'touch.h':'Get In Touch','touch.cv':'Résumé',
+    'work.h1':'Selected','work.h2':'Work','work.p':'A spreadsheet process turned into a decision tool, live data wired into one view, and AI kept under human review.',
+    'skills.h1':'My','skills.h2':'Toolkit','skills.p':'The analyst stack these roles ask for — SQL, Python, Power BI — plus the engineering to automate it.',
+    'exp.h1':'Where I’ve','exp.h2':'Worked','exp.p':'Marketplace operations, data platform engineering and research analysis.',
+    'contact.tag':'Open to','contact.h':'Need someone to make sense of your data?',
+    'contact.p':'Based in China · open to Europe & the UK, North America, Australia & New Zealand · visa sponsorship required. Email is the fastest way to reach me.',
+    'contact.mail':'Email me','contact.cv':'Résumé PDF','foot.top':'Back to top ↑',
+    rel:'Related project →', src:'View source', edu:'Education', courses:'Key courses',
+    roles:['E-commerce Analyst','Marketplace / Amazon Analyst','Data / BI Analyst','Business Systems Analyst','Business Process Analyst','ICT Business Analyst','Supply Chain Analyst','Applied AI / AI Automation Engineer'],
+    marquee:['SQL','Python','Power BI','Excel','Amazon EU + NA','Seller Central','Helium 10','LLM APIs','Data pipelines','Dashboards'],
+    cv:'assets/jiaming-li-resume.pdf'
+  },
+  zh: {
+    'nav.work':'作品','nav.skills':'技能','nav.exp':'经历','nav.contact':'联系',
+    'hero.hi':'你好，我是','hero.name':'李嘉铭',
+    'hero.tag':'以 <b>AI 为先</b>的电商与数据分析师。我把 SQL、Python 和 AI 工具结合起来，把平台数据变成决策，完成靠人力根本铺不开的工作。',
+    'hero.see':'看看作品','hero.contact':'联系我',
+    'about.h':'关于我',
+    'about.p':'我负责 Amazon 欧洲 8 个站点和北美 3 个站点的数据分析，每个站点 2,000+ ASIN：从销售、流量、费用和广告数据里找出业绩真正卡住的地方，再动手解决。常用 SQL、Python、Excel 和 Power BI，也会搭建数据管道、看板和 AI 辅助环节，把一次性的分析变成固定流程。爱尔兰科克大学交互媒体硕士。',
+    'about.status':'现居中国 · 意向欧洲及英国、北美、澳大利亚与新西兰 · 需要工作签证担保',
+    'touch.h':'联系方式','touch.cv':'简历',
+    'work.h1':'精选','work.h2':'作品','work.p':'把表格流程做成决策工具，把实时数据接成一张视图，让 AI 始终处在人工审核之下。',
+    'skills.h1':'我的','skills.h2':'工具箱','skills.p':'目标岗位要求的分析技能——SQL、Python、Power BI——以及把它自动化的工程能力。',
+    'exp.h1':'工作','exp.h2':'经历','exp.p':'电商平台运营、数据平台开发与科研数据分析。',
+    'contact.tag':'求职方向','contact.h':'需要有人帮你读懂数据吗？',
+    'contact.p':'现居中国 · 意向欧洲及英国、北美、澳大利亚与新西兰 · 需要工作签证担保。邮件是最快的联系方式。',
+    'contact.mail':'发邮件','contact.cv':'简历 PDF','foot.top':'回到顶部 ↑',
+    rel:'相关项目 →', src:'查看源码', edu:'教育背景', courses:'主修课程',
+    roles:['电商分析师','平台 / Amazon 分析师','数据 / BI 分析师','业务系统分析师','业务流程分析师','ICT 业务分析师','供应链分析师','应用 AI / AI 自动化工程师'],
+    marquee:['SQL','Python','Power BI','Excel','Amazon 欧洲 + 北美','Seller Central','Helium 10','大模型 API','数据管道','数据看板'],
+    cv:'assets/jiaming-li-resume-zh.pdf'
+  }
+};
+
+const PROJECTS = [
+  { id:'mcda', n:'01', repo:'MCDA-Tool-2.0', img:'assets/mcda-live.png', c:'var(--mint)',
+    title:{en:'MCDA Tool',zh:'MCDA 决策工具'}, tag:{en:'Process to tool',zh:'流程工具化'}, status:{en:'Live tool · pre-release',zh:'已上线 · 预发布阶段'},
+    summary:{en:'Rebuilt an Excel-based research analysis as a web decision tool: import a table, set criteria and weights, and get an explained, robustness-checked recommendation.',zh:'把基于 Excel 的科研分析重做成网页决策工具：导入表格、设定准则与权重，得到有解释、经过稳健性检验的推荐结果。'},
+    facts:{en:['Weighted sum, TOPSIS & Pareto','Robustness check on weights','Excel/CSV in, Excel report out'],zh:['加权求和、TOPSIS 与帕累托','权重稳健性检验','Excel/CSV 导入，Excel 报告导出']}, stack:'Python · FastAPI · React · TypeScript · ECharts' },
+  { id:'drone', n:'02', repo:'Drone-monitoring-platform-demo', img:'assets/drone-sim.jpg', c:'var(--sky)',
+    title:{en:'Drone Monitoring',zh:'无人机监控平台'}, tag:{en:'Data flow & integration',zh:'数据流与系统集成'}, status:{en:'Working demo · simulated telemetry',zh:'可运行演示 · 模拟遥测'},
+    summary:{en:'Connects an HTTP API, time-series storage and a WebSocket feed into a live monitoring console (simulated telemetry).',zh:'把 HTTP API、时序存储和 WebSocket 推送串成一个实时监控控制台（模拟遥测数据）。'},
+    facts:{en:['HTTP → InfluxDB → WebSocket','Live map & flight snapshot','Live stream or simulation'],zh:['HTTP → InfluxDB → WebSocket','实时地图与飞行快照','实时数据流或模拟']}, stack:'Node.js · Express · WebSocket · InfluxDB · React · Leaflet · Docker' },
+  { id:'motai', n:'03', repo:'MoTai-Story', img:'assets/motai-writing.jpg', c:'var(--lilac)',
+    title:{en:'MoTai',zh:'MoTai 墨台'}, tag:{en:'Human-centred AI',zh:'以人为本的 AI'}, status:{en:'Desktop app · local beta',zh:'桌面应用 · 本地内测'},
+    summary:{en:'A local-first novel-writing app where AI drafts are checked against the story’s own canon and nothing is written in without the author’s approval.',zh:'本地优先的小说创作应用：AI 草稿会对照作品自身设定检查，未经作者确认，任何内容都不会写入。'},
+    facts:{en:['Drafts confirmed before writing','Consistency check on every draft','Local storage, 5 export formats'],zh:['确认后才写入的草案','每次生成都做一致性检查','本地存储，5 种导出格式']}, stack:'Node.js · Electron · Quill · DeepSeek / OpenAI APIs' },
+  { id:'connoisseur', n:'04', repo:'connoisseur', img:'assets/connoisseur-live.jpg', c:'var(--coral)',
+    title:{en:'Connoisseur',zh:'Connoisseur'}, tag:{en:'Business systems',zh:'业务系统'}, status:{en:'Live MVP · in-memory data',zh:'已上线 MVP · 内存数据'},
+    summary:{en:'A commission desk for finding objects and arranging tasks: a brief, a reviewed proposal, then a private case the customer can follow.',zh:'寻物与代办的委托平台：提交需求、审核提案，再通过私密案例页跟进进度。'},
+    facts:{en:['Brief → proposal → case','Hashed access codes, none in URLs','Customer desk & admin workspace'],zh:['需求 → 提案 → 案例','访问码哈希存储，不进网址','客户中心与后台工作台']}, stack:'Next.js · TypeScript · Tailwind · In-memory store' }
+];
+
+const JOBS = [
+  { big:'26', c:'var(--sun)', date:{en:'May 2026 — Present',zh:'2026.05 — 至今'}, role:{en:'Cross-border E-commerce Operations',zh:'跨境电商运营'}, org:{en:'Triple A internetshops GmbH · Shenzhen',zh:'Triple A internetshops GmbH · 深圳'},
+    points:{en:['Run Amazon operations for 8 European marketplaces (incl. UK, DE, FR, IT, ES) and 3 in North America (US, CA, MX), each with 2,000+ ASINs, in a business with eight-figure annual revenue (USD).','Analyse sales, traffic, fees and competitor data to find the store’s real problems, then fix them through listing copy, localisation and advertising campaigns.','Use Seller Central, Helium 10, Keepa and Amalytix for keyword, competitor and product research.'],
+            zh:['负责 Amazon 欧洲 8 个站点（含英、德、法、意、西）及北美 3 个站点（美、加、墨）的运营，每个站点管理 2,000+ ASIN；所在业务年营收达数千万美元级别。','分析销售、流量、费用及竞品数据，找出店铺的实际问题，并通过编写 listing、本地化商品信息和创建广告来优化解决、提升销量。','使用 Seller Central、Helium 10、Keepa 和 Amalytix 开展关键词、竞品与产品研究。']} },
+  { big:'26', c:'var(--sky)', project:'drone', date:{en:'Jan — Apr 2026',zh:'2026.01 — 2026.04'}, role:{en:'Data Platform Full-stack Engineer',zh:'数据平台全栈工程师'}, org:{en:'Sun Yat-sen University · Shenzhen',zh:'中山大学 · 深圳'},
+    points:{en:['Co-developed a real-time monitoring platform connecting data ingestion, storage and reporting.','Worked with InfluxDB and MySQL time-series data for monitoring and anomaly analysis.','Built interactive map and status dashboards to make incoming telemetry easier to inspect.'],
+            zh:['参与开发实时监控平台，连接数据接入、存储与报表流程。','使用 InfluxDB 与 MySQL 时序数据支持监控和异常分析。','开发交互式地图与状态看板，让持续接入的遥测数据更易检查。']} },
+  { big:'25', c:'var(--mint)', project:'mcda', date:{en:'May — Sep 2025',zh:'2025.05 — 2025.09'}, role:{en:'Data Analyst & Research Assistant',zh:'数据分析师 / 研究助理'}, org:{en:'MaREI, University College Cork · Ireland',zh:'MaREI 研究中心，科克大学 · 爱尔兰'},
+    points:{en:['Developed MCDA models to compare tyre-recovery alternatives and make decision criteria explicit.','Used Python for data cleaning, validation and sensitivity analysis.','Translated an Excel-based analysis process into an interactive web tool with adjustable weights and rankings.'],
+            zh:['开发 MCDA 模型比较轮胎回收方案，明确决策准则。','使用 Python 进行数据清洗、校验与敏感性分析。','将基于 Excel 的分析流程转为交互网页工具，支持调整权重和查看排序。']} }
+];
+
+const EDU = [
+  { deg:{en:'MSc Interactive Media',zh:'交互媒体硕士（MSc Interactive Media）'}, school:{en:'University College Cork · School of Computer Science & IT',zh:'爱尔兰科克大学 · 计算机科学与信息技术学院'}, date:{en:'Sep 2024 – Mar 2026',zh:'2024.09 – 2026.03'},
+    courses:{en:['Web Application Development','iOS Agile Development','Virtual Reality','3D Graphics & Modelling','Audio & Sound Engineering','Digital Video Engineering'],
+             zh:['Web 应用开发','iOS 敏捷开发','虚拟现实技术','3D 图形与建模','音频工程','视频工程']} },
+  { deg:{en:'BSc Applied Mathematics (Data Computation)',zh:'应用数学学士（数据计算及应用）'}, school:{en:'Taiyuan University of Science and Technology',zh:'太原科技大学'}, date:{en:'Sep 2020 – Jun 2024',zh:'2020.09 – 2024.06'},
+    courses:{en:['Machine Learning','Deep Learning','Neural Network Algorithms','Image Recognition','SQL','Python','Java','Probability & Statistics','Linear Algebra','Optimisation Methods','Mathematical Analysis'],
+             zh:['机器学习','深度学习','神经网络算法','图像识别','SQL','Python','Java','概率论与数理统计','线性代数','最优化方法','数学分析']} }
+];
+
+const SKILLS = {
+  en:[['data','Data & BI',['SQL','Python','Power BI','Excel','Data cleaning','Sensitivity analysis']],
+      ['cart','E-commerce & marketplaces',['Seller Central','Helium 10','Keepa','Amalytix','Listing localisation','Advertising']],
+      ['flow','Systems & data flow',['MySQL','InfluxDB','HTTP APIs','WebSocket','Docker','Git']],
+      ['ai','Applied AI & automation',['LLM API integration','Structured context','Human review','Workflow prototyping','JavaScript / TypeScript','React']]],
+  zh:[['data','数据与 BI',['SQL','Python','Power BI','Excel','数据清洗','敏感性分析']],
+      ['cart','电商与平台运营',['Seller Central','Helium 10','Keepa','Amalytix','Listing 本地化','广告投放']],
+      ['flow','系统与数据流程',['MySQL','InfluxDB','HTTP API','WebSocket','Docker','Git']],
+      ['ai','应用 AI 与自动化',['大模型 API 集成','结构化上下文','人工审核','工作流原型','JavaScript / TypeScript','React']]]
+};
+
+const esc = s => String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+let lang = 'en';
+try { const s = localStorage.getItem('jl-neo-lang'); if (s === 'zh' || s === 'en') lang = s; } catch (e) {}
+
+function render() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i]').forEach(el => {
+    const v = t[el.dataset.i]; if (v == null) return;
+    if (el.hasAttribute('data-html')) el.innerHTML = v; else el.textContent = v;
+  });
+  document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+  ['cvBtn','cvChip','cvBtn2'].forEach(id => document.getElementById(id).href = t.cv);
+
+  document.getElementById('roles').innerHTML = t.roles.map(r => `<li>${esc(r)}</li>`).join('');
+  document.title = lang === 'en' ? 'Jiaming Li — E-commerce & Data Analyst' : '李嘉铭 — 电商与数据分析';
+  const words = t.marquee.map(w => `<span>${esc(w)}</span>`).join('');
+  document.getElementById('marq').innerHTML = words + words;
+
+  document.getElementById('projects').innerHTML = PROJECTS.map(p => `
+    <a class="card box rv" id="p-${p.id}" style="--c:${p.c}" href="https://github.com/Arthur-LeoAI/${p.repo}" target="_blank" rel="noopener">
+      <div class="shot"><img src="${p.img}" alt="${esc(p.title[lang])}" loading="lazy" /></div>
+      <div class="body">
+        <div class="meta"><span class="num">${p.n} · ${esc(p.tag[lang])}</span><span class="tag">${esc(p.status[lang])}</span></div>
+        <h3>${esc(p.title[lang])}<span class="arr" aria-label="${esc(t.src)}">↗</span></h3>
+        <p>${esc(p.summary[lang])}</p>
+        <ul>${p.facts[lang].map(f => `<li class="tag" style="background:var(--c)">${esc(f)}</li>`).join('')}</ul>
+        <div class="stack">${esc(p.stack)}</div>
+      </div>
+    </a>`).join('');
+
+  document.getElementById('skillGrid').innerHTML = SKILLS[lang].map(([ic, h, items]) => `
+    <div class="skill box rv"><div class="ico">${ICONS[ic]}</div><h3>${esc(h)}</h3>
+      <ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`).join('');
+
+  document.getElementById('jobs').innerHTML = JOBS.map(j => `
+    <article class="job box rv" style="--c:${j.c}">
+      <div class="when"><span class="label">${esc(j.date[lang])}</span><span class="big">’${j.big}</span></div>
+      <div class="what">
+        <h3>${esc(j.role[lang])}</h3>
+        <div class="org">${esc(j.org[lang])}</div>
+        <ul>${j.points[lang].map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        ${j.project ? `<a class="rel" href="#p-${j.project}">${esc(t.rel)}</a>` : ''}
+      </div>
+    </article>`).join('');
+
+  document.getElementById('edu').innerHTML = EDU.map(e => `
+    <div class="box rv"><span class="label">${esc(t.edu)} · ${esc(e.date[lang])}</span>
+      <h3>${esc(e.deg[lang])}</h3><p>${esc(e.school[lang])}</p>
+      <span class="label courses-l">${esc(t.courses)}</span>
+      <ul class="courses">${e.courses[lang].map(c => `<li>${esc(c)}</li>`).join('')}</ul></div>`).join('');
+
+  observeReveal();
+}
+
+let io;
+function observeReveal() {
+  if (!('IntersectionObserver' in window)) { document.querySelectorAll('.rv').forEach(el => el.classList.add('in')); return; }
+  io ??= new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.rv:not(.in)').forEach(el => io.observe(el));
+}
+
+function setLang(l) {
+  if (l === lang) return;
+  lang = l;
+  try { localStorage.setItem('jl-neo-lang', lang); } catch (e) {}
+  render();
+}
+document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+// active nav link on scroll
+const links = [...document.querySelectorAll('.nav-links a')];
+const secs = links.map(a => document.querySelector(a.getAttribute('href')));
+addEventListener('scroll', () => {
+  const y = scrollY + innerHeight * .4;
+  let cur = -1;
+  secs.forEach((s, i) => { if (s.offsetTop <= y) cur = i; });
+  links.forEach((a, i) => a.classList.toggle('on', i === cur));
+}, { passive: true });
+
+render();
+</script>
+</body>
+</html>

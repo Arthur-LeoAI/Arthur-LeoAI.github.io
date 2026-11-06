@@ -1,43 +1,19 @@
-import { spawnSync } from 'node:child_process';
-import {
-  mkdirSync,
-  copyFileSync,
-  cpSync,
-  existsSync,
-  writeFileSync,
-  rmSync,
-} from 'node:fs';
-import { resolve } from 'node:path';
+// Static build: copies site/ into outputs/<edition>/.
+// Cloudflare Pages runs `node scripts/build.mjs story` and serves outputs/story,
+// so the command and output folder match the settings used by the old version.
+import { cpSync, rmSync, existsSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const edition = process.argv[2] || 'story';
-if (!['story', 'archive'].includes(edition))
-  throw new Error('Use story or archive');
-const result = spawnSync(
-  process.execPath,
-  ['node_modules/vinext/dist/cli.js', 'build'],
-  { stdio: 'inherit', env: { ...process.env, PORTFOLIO_EDITION: edition } },
-);
-if (result.status !== 0) process.exit(result.status || 1);
-// vinext beta exports flat case files; directory entries make native static-host links portable.
-for (const page of [
-  'work/mcda',
-  'work/drone',
-  'work/motai',
-  'work/connoisseur',
-  'resume',
-  'lab',
-]) {
-  const target = `dist/client/${page}`;
-  mkdirSync(target, { recursive: true });
-  copyFileSync(`dist/client/${page}.html`, `${target}/index.html`);
+const src = path.join(root, 'site');
+const out = path.join(root, 'outputs', edition);
+
+if (!existsSync(path.join(src, 'index.html'))) {
+  console.error('site/index.html is missing');
+  process.exit(1);
 }
-writeFileSync('dist/client/.nojekyll', '');
-const target = resolve(`outputs/${edition}`);
-if (
-  !target.startsWith(resolve('outputs') + '/') &&
-  !target.startsWith(resolve('outputs') + '\\')
-)
-  throw new Error('Invalid output path');
-if (existsSync(target)) rmSync(target, { recursive: true });
-mkdirSync(target, { recursive: true });
-cpSync('dist/client', target, { recursive: true });
-console.log(`Ready: outputs/${edition}`);
+rmSync(out, { recursive: true, force: true });
+cpSync(src, out, { recursive: true });
+console.log(`Copied site/ to outputs/${edition}/`);

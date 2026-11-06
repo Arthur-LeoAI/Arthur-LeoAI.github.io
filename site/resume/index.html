@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jiaming Li — Résumé</title>
+<link rel="icon" href="../assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700&display=swap" rel="stylesheet" />
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --ink: #1c1c1c; --muted: #5b5b5b; --accent: #2b4c9b; --rule: #1c1c1c; }
+  * { box-sizing: border-box; }
+  html { background: #e9e9e9; }
+  body { margin: 0; font: 9.4pt/1.42 "IBM Plex Sans", "Noto Sans SC", system-ui, sans-serif; color: var(--ink); }
+  html[lang="zh"] body { font-size: 9.2pt; line-height: 1.5; }
+  .page { width: 210mm; min-height: 297mm; margin: 16px auto; padding: 13mm 15mm 11mm; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.12); }
+  @media print { html { background: #fff; } .page { margin: 0; box-shadow: none; } .bar { display: none; } }
+  a { color: inherit; text-decoration: none; }
+  header { display: flex; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--rule); padding-bottom: 9px; }
+  h1 { font: 600 25pt/1.05 "Source Serif 4", "Noto Serif SC", serif; margin: 0; letter-spacing: -.01em; }
+  .title { color: var(--accent); font-weight: 600; font-size: 10.6pt; margin-top: 5px; }
+  .sub { color: var(--muted); font-size: 8.6pt; margin-top: 3px; max-width: 70mm; line-height: 1.35; }
+  .contact { text-align: right; font-size: 8.6pt; line-height: 1.55; padding-top: 4px; }
+  .contact a { color: var(--accent); }
+  .summary { margin: 9px 0 0; }
+  h2 { font-size: 8.4pt; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 12px 0 5px; font-weight: 600; }
+  html[lang="zh"] h2 { letter-spacing: .08em; font-size: 9pt; }
+  .row { display: flex; justify-content: space-between; gap: 12px; font-weight: 600; margin-top: 6px; }
+  .row:first-of-type { margin-top: 0; }
+  .row .when { font-weight: 400; color: var(--muted); white-space: nowrap; }
+  ul { margin: 2px 0 0; padding-left: 15px; }
+  li { margin: 1px 0; }
+  .proj { margin: 3px 0; }
+  .proj b { font-weight: 600; }
+  .proj .stack { color: var(--muted); }
+  .note { color: var(--muted); }
+  .skills { display: grid; grid-template-columns: 34mm 1fr; gap: 2px 10px; }
+  .skills dt { font-weight: 600; }
+  .skills dd { margin: 0; }
+  .bar { position: fixed; top: 12px; right: 12px; display: flex; gap: 8px; font: 600 13px/1 "IBM Plex Sans", sans-serif; }
+  .bar a { padding: 9px 13px; border: 2px solid #111; border-radius: 8px; background: #fff; box-shadow: 3px 3px 0 #111; }
+  @media screen { .page { margin-top: 64px; } }
+  @media screen and (max-width: 820px) { .page { width: auto; min-height: 0; margin: 64px 8px 16px; padding: 20px 16px; } header { flex-direction: column; } .contact { text-align: left; } .skills { grid-template-columns: 1fr; } }
+  @media print { .bar { display: none !important; } }
+</style>
+</head>
+<body>
+<nav class="bar"><a href="../">← Jiaming Li</a><a id="sw" href="?lang=zh">中文</a><a id="pdf" href="../assets/jiaming-li-resume.pdf">PDF ↓</a></nav>
+<main class="page" id="cv"></main>
+<script>
+const SITE = 'https://jiaming-li-portfolio.pages.dev';
+const R = {
+  en: {
+    title: 'Applied AI Engineer & Business Analyst',
+    sub: 'Implementation · Business Systems / Process · Technical Business Analysis · AI Adoption',
+    loc: ['Based in China · Open to EU/UK, North America, ANZ', 'Visa sponsorship required'],
+    summary: 'MSc Interactive Media (University College Cork) with an applied-mathematics background. I map how a business process really runs, then design and build the tool, integration or AI-assisted step that improves it, and help people adopt it. My current Amazon operations work in Europe and North America keeps me close to the systems those must fit.',
+    h: ['Experience', 'Selected projects', 'Education', 'Skills'],
+    jobs: [
+      ['E-commerce Operator Specialist · Triple A internetshops GmbH', 'May 2026 – Present · Shenzhen', [
+        'Run Amazon operations for 8 European marketplaces (incl. UK, DE, FR, IT, ES) and 3 in North America (US, CA, MX), each with 2,000+ ASINs, in a business with eight-figure annual revenue (USD).',
+        'Analyse sales, traffic, fee and competitor data to locate the real problems in the store, then act on them through listing copy, localisation and advertising campaigns.']],
+      ['Data Platform Full-stack Engineer · Sun Yat-sen University', 'Jan 2026 – Apr 2026 · Shenzhen', [
+        'Co-developed a real-time monitoring platform connecting data ingestion, storage, analysis and reporting.',
+        'Integrated InfluxDB and MySQL time-series data for monitoring and anomaly analysis, surfaced in map and status dashboards.']],
+      ['Data Analyst & Research Assistant · MaREI, University College Cork', 'May 2025 – Sep 2025 · Cork, Ireland', [
+        'Turned an Excel-based research process into a web decision tool with adjustable criteria, weights and live rankings, used by a 7+ person research team to compare five tyre-recovery alternatives.',
+        'Built MCDA models and Python pipelines for data cleaning, validation and sensitivity analysis, making decision criteria explicit for non-technical stakeholders.']]
+    ],
+    projects: [
+      ['MCDA Tool — process to tool', 'JavaScript, D3.js, Excel, Node.js', 'Replaced a spreadsheet workflow with a web tool where trade-offs are visible; weighted ranking, TOPSIS, Pareto and sensitivity views.'],
+      ['Drone Monitoring — data flow & integration', 'React, WebSocket, InfluxDB, Docker', 'Connects an HTTP API, time-series storage and a WebSocket feed into a live dashboard; personal demo alongside the co-developed production platform.'],
+      ['Connoisseur — business systems', 'Next.js, TypeScript', 'Sourcing workflow MVP linking requests, quotes, payment states and customer case histories, with customer and admin views.'],
+      ['MoTai — applied AI workflow', 'Electron, LLM APIs', 'Local-first desktop prototype combining structured context, LLM generation and author review in one workflow.']
+    ],
+    edu: [
+      ['MSc Interactive Media · University College Cork', 'Sep 2024 – Mar 2026', 'Second Class Honours (2:1), top 10% · Web application development, iOS agile development, virtual reality, 3D modelling, audio and video engineering'],
+      ['BSc Applied Mathematics (Data Computation) · Taiyuan University of Science and Technology', 'Sep 2020 – Jun 2024', 'Top 10% of cohort · Machine learning, deep learning, neural networks, image recognition, SQL, Python, Java, probability & statistics, linear algebra, optimisation']
+    ],
+    skills: [
+      ['Process & analysis', 'Process mapping (current / future state), requirements and acceptance criteria, stakeholder walkthroughs, KPI analysis'],
+      ['Data & BI', 'SQL, MySQL, Python, Power BI, Excel, data cleaning, sensitivity analysis, InfluxDB'],
+      ['Systems & integration', 'JavaScript/TypeScript, React, Node.js, HTTP APIs, WebSocket, Docker, Git'],
+      ['Applied AI', 'LLM API integration, structured context, human-in-the-loop review, workflow prototyping'],
+      ['Marketplace tools', 'Amazon Seller Central, Helium 10, Keepa, Amalytix'],
+      ['Languages', 'English (IELTS 6.5; studied and worked in Ireland), Chinese (native)']
+    ]
+  },
+  zh: {
+    title: '应用 AI 工程师 & 业务分析师',
+    sub: '系统实施 · 业务系统 / 流程 · 技术型业务分析 · AI 落地',
+    loc: ['现居中国 · 意向欧洲及英国、北美、澳新', '需要工作签证担保'],
+    summary: '爱尔兰科克大学交互媒体硕士，本科应用数学。我先弄清业务流程实际如何运转，再设计并搭建改进它的工具、系统集成或 AI 辅助环节，并帮助团队用起来。目前负责欧洲与北美 Amazon 运营，始终贴近这些系统要服务的日常业务。',
+    h: ['工作经历', '精选项目', '教育背景', '专业技能'],
+    jobs: [
+      ['电商运营专员 · Triple A internetshops GmbH', '2026.05 – 至今 · 深圳', [
+        '负责 Amazon 欧洲 8 个站点（含英、德、法、意、西）及北美 3 个站点（美、加、墨）的运营，每个站点 2,000+ ASIN，所在业务年营收达数千万美元级别。',
+        '分析销售、流量、费用与竞品数据，定位店铺的实际问题，并通过 listing 文案、本地化与广告投放加以解决。']],
+      ['数据平台全栈工程师 · 中山大学', '2026.01 – 2026.04 · 深圳', [
+        '参与开发实时监控平台，打通数据接入、存储、分析与报表。',
+        '整合 InfluxDB 与 MySQL 时序数据用于监控与异常分析，并呈现在地图与状态看板中。']],
+      ['数据分析师 / 研究助理 · MaREI 研究中心，科克大学', '2025.05 – 2025.09 · 爱尔兰科克', [
+        '将基于 Excel 的科研流程改造为网页决策工具，支持调整准则、权重并实时查看排序；7 人以上研究团队用它比较 5 种轮胎回收方案。',
+        '构建 MCDA 模型与 Python 数据管道，完成数据清洗、校验与敏感性分析，让非技术背景的相关方也能看清决策依据。']]
+    ],
+    projects: [
+      ['MCDA 决策工具 — 流程工具化', 'JavaScript, D3.js, Excel, Node.js', '用网页工具替代电子表格流程，让取舍一目了然；支持加权排序、TOPSIS、帕累托与敏感性视图。'],
+      ['无人机监控 — 数据流与系统集成', 'React, WebSocket, InfluxDB, Docker', '把 HTTP API、时序存储与 WebSocket 推送串成实时看板；个人演示项目，另参与开发了生产平台。'],
+      ['Connoisseur — 业务系统', 'Next.js, TypeScript', '采购流程 MVP，串联需求、报价、支付状态与客户案例记录，包含客户端与后台视图。'],
+      ['MoTai 墨台 — 应用 AI 工作流', 'Electron, 大模型 API', '本地优先的桌面原型，在同一工作流中结合结构化上下文、大模型生成与作者审核。']
+    ],
+    edu: [
+      ['交互媒体硕士（MSc Interactive Media）· 爱尔兰科克大学', '2024.09 – 2026.03', '二等一荣誉（2:1），前 10% · Web 应用开发、iOS 敏捷开发、虚拟现实、3D 建模、音频与视频工程'],
+      ['应用数学学士（数据计算及应用）· 太原科技大学', '2020.09 – 2024.06', '专业前 10% · 机器学习、深度学习、神经网络、图像识别、SQL、Python、Java、概率论与数理统计、线性代数、最优化方法']
+    ],
+    skills: [
+      ['流程与分析', '流程梳理（现状 / 目标流程）、需求与验收标准、相关方走查、KPI 分析'],
+      ['数据与 BI', 'SQL、MySQL、Python、Power BI、Excel、数据清洗、敏感性分析、InfluxDB'],
+      ['系统与集成', 'JavaScript/TypeScript、React、Node.js、HTTP API、WebSocket、Docker、Git'],
+      ['应用 AI', '大模型 API 集成、结构化上下文、人工审核（human-in-the-loop）、工作流原型'],
+      ['电商工具', 'Amazon Seller Central、Helium 10、Keepa、Amalytix'],
+      ['语言', '英语（雅思 6.5，曾在爱尔兰学习和工作）、中文（母语）']
+    ]
+  }
+};
+const esc = s => String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const lang = new URLSearchParams(location.search).get('lang') === 'zh' ? 'zh' : 'en';
+const r = R[lang];
+document.documentElement.lang = lang;
+document.title = lang === 'zh' ? '李嘉铭 — 简历' : 'Jiaming Li — Résumé';
+document.getElementById('sw').textContent = lang === 'zh' ? 'EN' : '中文';
+document.getElementById('sw').href = lang === 'zh' ? '?lang=en' : '?lang=zh';
+document.getElementById('pdf').href = lang === 'zh' ? '../assets/jiaming-li-resume-zh.pdf' : '../assets/jiaming-li-resume.pdf';
+document.getElementById('cv').innerHTML = `
+  <header>
+    <div><h1>${lang === 'zh' ? '李嘉铭 Jiaming Li' : 'Jiaming Li'}</h1><div class="title">${esc(r.title)}</div><div class="sub">${esc(r.sub)}</div></div>
+    <div class="contact">
+      <a href="mailto:arthur.jiaming.li@gmail.com">arthur.jiaming.li@gmail.com</a><br>
+      <a href="https://www.linkedin.com/in/arthurjiamingli">linkedin.com/in/arthurjiamingli</a> · <a href="${SITE}">jiaming-li-portfolio.pages.dev</a><br>
+      ${esc(r.loc[0])}<br>${esc(r.loc[1])}
+    </div>
+  </header>
+  <p class="summary">${esc(r.summary)}</p>
+  <h2>${esc(r.h[0])}</h2>
+  ${r.jobs.map(([t, w, pts]) => `<div class="row"><span>${esc(t)}</span><span class="when">${esc(w)}</span></div><ul>${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul>`).join('')}
+  <h2>${esc(r.h[1])}</h2>
+  ${r.projects.map(([t, s, d]) => `<p class="proj"><b>${esc(t)}</b> · <span class="stack">${esc(s)}</span> — ${esc(d)}</p>`).join('')}
+  <h2>${esc(r.h[2])}</h2>
+  ${r.edu.map(([t, w, n]) => `<div class="row"><span>${esc(t)}</span><span class="when">${esc(w)}</span></div><div class="note">${esc(n)}</div>`).join('')}
+  <h2>${esc(r.h[3])}</h2>
+  <dl class="skills">${r.skills.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`;
+</script>
+</body>
+</html>
